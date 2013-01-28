@@ -16,7 +16,7 @@
 
 	</cffunction>
 
-	<cffunction name="send" access="public" output="false" returntype="void">
+	<cffunction name="send" access="public" output="false" returntype="struct">
 
 		<cfargument name="issueDataStruct" type="struct" required="yes">
 
@@ -42,6 +42,7 @@
 			<cfhttpparam type="body" value="#jSONData#"/>
 		</cfhttp>
 
+		<cfreturn postResult>
 	</cffunction>
 
 
