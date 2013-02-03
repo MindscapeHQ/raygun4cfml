@@ -1,4 +1,4 @@
-<cfcomponent output="false">
+<cfcomponent output="true">
 
 	<cfscript>
 		variables.apiKey = "";
@@ -16,7 +16,7 @@
 
 	</cffunction>
 
-	<cffunction name="send" access="public" output="false" returntype="struct">
+	<cffunction name="send" access="public" output="true" returntype="struct">
 
 		<cfargument name="issueDataStruct" type="struct" required="yes">
 
@@ -34,6 +34,8 @@
 			message = createObject("component", "RaygunMessage").init();
 			messageContent = message.build(arguments.issueDataStruct);
 			jSONData = serializeJSON(messageContent);
+
+			WriteDump(jSONData);
 		</cfscript>
 
 		<cfhttp url="https://api.raygun.io/entries" method="post" charset="utf-8" result="postResult">
@@ -47,3 +49,11 @@
 
 
 </cfcomponent>
+
+
+{ occurredOn,
+details {
+    machineName,
+
+
+}}

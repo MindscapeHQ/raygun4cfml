@@ -17,8 +17,10 @@
 
 			returnContent["Data"] = {};
 			returnContent["ClassName"] = "System.IndexOutOfRangeException";
+			returnContent["CatchingMethod"] = "";
 			returnContent["Message"] = "IndexOutOfRangeException: Message99";
 			returnContent["StackTrace"] = [];
+			returnContent["FileName"] = "";
 			returnContent["InnerError"] = "";
 
 			return returnContent;

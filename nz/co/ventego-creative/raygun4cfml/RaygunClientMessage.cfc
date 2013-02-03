@@ -16,6 +16,7 @@
 			returnContent["name"] = "raygun4cfml";
 			returnContent["version"] = "1.0.0.0";
 			returnContent["clientUrl"] = "https://github.com/MindscapeHQ/raygun4cfml";
+			returnContent["apiVersion"] = 1;
 
 			return returnContent;
 		</cfscript>
