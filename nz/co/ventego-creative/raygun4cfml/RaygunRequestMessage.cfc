@@ -24,7 +24,7 @@
 			returnContent["data"] = getHttpRequestData().content;
 			returnContent["statusCode"] = JavaCast("null","");
 			returnContent["form"] = JavaCast("null","");
-			returnContent["rawData"] = JavaCast("null",null);
+			returnContent["rawData"] = JavaCast("null","");
 
 			return returnContent;
 		</cfscript>

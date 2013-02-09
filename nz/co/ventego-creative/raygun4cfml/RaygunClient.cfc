@@ -21,7 +21,7 @@
 		<cfargument name="issueDataStruct" type="struct" required="yes">
 
 		<cfscript>
-			var message = "";
+			var message = CreateObject("component", "RaygunMessage").init();
 			var messageContent = "";
 			var jSONData = "";
 			var postResult = "";
@@ -31,11 +31,12 @@
 				throw("API integration not valid, cannot send message to Raygun");
 			}
 
-			message = createObject("component", "RaygunMessage").init();
 			messageContent = message.build(arguments.issueDataStruct);
 			jSONData = serializeJSON(messageContent);
 
 			WriteDump(jSONData);
+			WriteDump(messageContent);
+			abort;
 		</cfscript>
 
 		<cfhttp url="https://api.raygun.io/entries" method="post" charset="utf-8" result="postResult">

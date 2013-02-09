@@ -17,7 +17,7 @@
 			var messageErrorDetails = createObject("component", "RaygunExceptionMessage").init();
 			var messageRequestDetails = createObject("component", "RaygunRequestMessage").init();
 			var messageClientDetails = createObject("component", "RaygunClientMessage").init();
-			var messageEnvironmentDetails = createODBCDate("component", "RaygunEnvironmentMessage").init();
+			var messageEnvironmentDetails = createObject("component", "RaygunEnvironmentMessage").init();
 
 			returnContent["Version"] = "Not Supplied";
 			returnContent["MachineName"] = CGI.SERVER_NAME;

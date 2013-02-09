@@ -1,4 +1,4 @@
-<cfcomponent output="false">
+<cfcomponent output="true">
 
 	<cffunction name="init" access="public" output="false" returntype="any">
 
@@ -8,9 +8,7 @@
 
 	</cffunction>
 
-	<cffunction name="build" access="package" output="false" returntype="struct">
-
-		<cfargument name="issueDataStruct" type="struct" required="yes">
+	<cffunction name="build" access="package" output="true" returntype="struct">
 
 		<cfscript>
 			var returnContent = {};
@@ -27,8 +25,8 @@
 			returnContent["diskSpaceFree"] = JavaCast("null","");
 			returnContent["deviceName"] = JavaCast("null","");
 			returnContent["location"] = JavaCast("null","");
-			returnContent["osVersion"] = props["os.version"];
-			returnContent["packageVersion"] = JavaCast("null","");
+			returnContent["osVersion"] = props["os.name"] & "|" & props["os.version"];
+			returnContent["packageVersion"] = props["java.vm.vendor"] & "|" & props["java.runtime.version"] & "|" & props["java.vm.name"];
 			returnContent["processorCount"] = JavaCast("null","");
 			returnContent["resolutionScale"] = JavaCast("null","");
 			returnContent["totalPhysicalMemory"] = osbean.getTotalPhysicalMemorySize();
