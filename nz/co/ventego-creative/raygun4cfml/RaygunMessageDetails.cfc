@@ -25,6 +25,8 @@
 			returnContent["Request"] = messageRequestDetails.build();
 			returnContent["Client"] = messageClientDetails.build();
 			returnContent["Environment"] = messageEnvironmentDetails.build();
+			returnContent["UserCustomData"] = JavaCast("null","");
+			returnContent["Tags"] = JavaCast("null","");
 
 			return returnContent;
 		</cfscript>
