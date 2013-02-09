@@ -25,6 +25,7 @@
 			returnContent["cpu"] = JavaCast("null","");
 			returnContent["currentOrientation"] = JavaCast("null","");
 			returnContent["diskSpaceFree"] = JavaCast("null","");
+			returnContent["deviceName"] = JavaCast("null","");
 			returnContent["location"] = JavaCast("null","");
 			returnContent["osVersion"] = props["os.version"];
 			returnContent["packageVersion"] = JavaCast("null","");
