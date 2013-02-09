@@ -14,22 +14,26 @@
 
 		<cfscript>
 			var returnContent = {};
+			var runtime = createObject("java", "java.lang.System");
+			var props = runtime.getProperties();
+			var mf = createObject("java", "java.lang.management.ManagementFactory");
+			var osbean = mf.getOperatingSystemMXBean();
 
-			returnContent["architecture"] = "";
-			returnContent["availablePhysicalMemory"] = "";
-			returnContent["availableVirtualMemory"] = "";
-			returnContent["cpu"] = "";
-			returnContent["currentOrientation"] = "";
-			returnContent["diskSpaceFree"] = "";
-			returnContent["location"] = "";
-			returnContent["osVersion"] = "";
-			returnContent["packageVersion"] = "";
-			returnContent["processorCount"] = "";
-			returnContent["resolutionScale"] = "";
-			returnContent["totalPhysicalMemory"] = "";
-			returnContent["totalVirtualMemory"] = "";
-			returnContent["windowBoundsHeight"] = "";
-			returnContent["windowBoundsWidth"] = "";
+			returnContent["architecture"] = props["os.arch"];
+			returnContent["availablePhysicalMemory"] = osbean.getFreePhysicalMemorySize();
+			returnContent["availableVirtualMemory"] = JavaCast("null","");
+			returnContent["cpu"] = JavaCast("null","");
+			returnContent["currentOrientation"] = JavaCast("null","");
+			returnContent["diskSpaceFree"] = JavaCast("null","");
+			returnContent["location"] = JavaCast("null","");
+			returnContent["osVersion"] = props["os.version"];
+			returnContent["packageVersion"] = JavaCast("null","");
+			returnContent["processorCount"] = JavaCast("null","");
+			returnContent["resolutionScale"] = JavaCast("null","");
+			returnContent["totalPhysicalMemory"] = osbean.getTotalPhysicalMemorySize();
+			returnContent["totalVirtualMemory"] = JavaCast("null","");
+			returnContent["windowBoundsHeight"] = JavaCast("null","");
+			returnContent["windowBoundsWidth"] = JavaCast("null","");
 
 			return returnContent;
 		</cfscript>

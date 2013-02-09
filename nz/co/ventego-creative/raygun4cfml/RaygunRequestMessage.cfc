@@ -13,14 +13,14 @@
 		<cfscript>
 			var returnContent = {};
 
-			returnContent["hostName"] = "123";
-			returnContent["url"] = "456";
-			returnContent["httpMethod"] = "789;";
-			returnContent["ipAddress"] = "111.111.111.111";
-			returnContent["queryString"] = "gdfgfdf";
-			returnContent["headers"] = "gfdgfgfd";
-			returnContent["data"] = "gfgfgfd";
-			returnContent["statusCode"] ="402";
+			returnContent["hostName"] = CGI.HTTP_HOST;
+			returnContent["url"] = CGI.SCRIPT_NAME;
+			returnContent["httpMethod"] = CGI.REQUEST_METHOD;
+			returnContent["ipAddress"] = CGI.REMOTE_ADDR;
+			returnContent["queryString"] = CGI.QUERY_STRING;
+			returnContent["headers"] = getHttpRequestData().headers;
+			returnContent["data"] = getHttpRequestData().content;
+			returnContent["statusCode"] = JavaCast("null","");
 
 			return returnContent;
 		</cfscript>

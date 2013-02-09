@@ -19,7 +19,7 @@
 			var messageClientDetails = createObject("component", "RaygunClientMessage").init();
 			var messageEnvironmentDetails = createODBCDate("component", "RaygunEnvironmentMessage").init();
 
-			returnContent["MachineName"] = "kaitest";
+			returnContent["MachineName"] = CGI.SERVER_NAME;
 			returnContent["Error"] = messageErrorDetails.build(arguments.issueDataStruct);
 			returnContent["Request"] = messageRequestDetails.build();
 			returnContent["Client"] = messageClientDetails.build();
