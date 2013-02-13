@@ -33,10 +33,6 @@
 
 			messageContent = message.build(arguments.issueDataStruct);
 			jSONData = serializeJSON(messageContent);
-
-			WriteDump(jSONData);
-			WriteDump(messageContent);
-			abort;
 		</cfscript>
 
 		<cfhttp url="https://api.raygun.io/entries" method="post" charset="utf-8" result="postResult">
@@ -48,13 +44,4 @@
 		<cfreturn postResult>
 	</cffunction>
 
-
 </cfcomponent>
-
-
-{ occurredOn,
-details {
-    machineName,
-
-
-}}

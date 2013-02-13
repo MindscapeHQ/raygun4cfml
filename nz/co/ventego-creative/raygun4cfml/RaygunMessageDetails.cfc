@@ -19,14 +19,14 @@
 			var messageClientDetails = createObject("component", "RaygunClientMessage").init();
 			var messageEnvironmentDetails = createObject("component", "RaygunEnvironmentMessage").init();
 
-			returnContent["Version"] = "Not Supplied";
-			returnContent["MachineName"] = CGI.SERVER_NAME;
-			returnContent["Error"] = messageErrorDetails.build(arguments.issueDataStruct);
-			returnContent["Request"] = messageRequestDetails.build();
-			returnContent["Client"] = messageClientDetails.build();
-			returnContent["Environment"] = messageEnvironmentDetails.build();
-			returnContent["UserCustomData"] = JavaCast("null","");
-			returnContent["Tags"] = JavaCast("null","");
+			returnContent["version"] = JavaCast("null","");
+			returnContent["machineName"] = CGI.SERVER_NAME;
+			returnContent["error"] = messageErrorDetails.build(arguments.issueDataStruct);
+			returnContent["request"] = messageRequestDetails.build();
+			returnContent["client"] = messageClientDetails.build();
+			returnContent["environment"] = messageEnvironmentDetails.build();
+			returnContent["userCustomData"] = JavaCast("null","");
+			returnContent["tags"] = JavaCast("null","");
 
 			return returnContent;
 		</cfscript>

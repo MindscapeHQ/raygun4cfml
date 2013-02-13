@@ -21,17 +21,17 @@
 			{
 				if (StructKeyExists(arguments.issueDataStruct["RootCause"],"Type") and arguments.issueDataStruct["RootCause"]["Type"] eq "expression")
 				{
-					returnContent["Data"]["Type"] = arguments.issueDataStruct["RootCause"]["Type"];
-					returnContent["Data"]["Name"] = arguments.issueDataStruct["RootCause"]["Name"];
+					returnContent["data"]["type"] = arguments.issueDataStruct["RootCause"]["Type"];
+					returnContent["data"]["name"] = arguments.issueDataStruct["RootCause"]["Name"];
 				}
 			}
 
-			returnContent["ClassName"] = arguments.issueDataStruct.type;
-			returnContent["CatchingMethod"] = "error struct";
-			returnContent["Message"] = arguments.issueDataStruct.diagnostics;
-			returnContent["StackTrace"] = [arguments.issueDataStruct.stacktrace];
-			returnContent["FileName"] = "";
-			returnContent["InnerError"] = "";
+			returnContent["className"] = arguments.issueDataStruct.type;
+			returnContent["catchingMethod"] = "error struct";
+			returnContent["message"] = arguments.issueDataStruct.diagnostics;
+			returnContent["stackTrace"] = [arguments.issueDataStruct.stacktrace];
+			returnContent["fileName"] = "";
+			returnContent["innerError"] = "";
 
 			return returnContent;
 		</cfscript>

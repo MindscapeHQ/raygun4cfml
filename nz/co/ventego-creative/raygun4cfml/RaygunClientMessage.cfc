@@ -14,7 +14,7 @@
 			var returnContent = {};
 
 			returnContent["name"] = "raygun4cfml";
-			returnContent["version"] = "1.0.0.0";
+			returnContent["version"] = "0.5.0.0alpha";
 			returnContent["clientUrl"] = "https://github.com/MindscapeHQ/raygun4cfml";
 			returnContent["apiVersion"] = 1;
 

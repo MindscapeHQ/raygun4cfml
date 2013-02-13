@@ -17,13 +17,13 @@
 			returnContent["url"] = CGI.SCRIPT_NAME;
 			returnContent["httpMethod"] = CGI.REQUEST_METHOD;
 			returnContent["ipAddress"] = CGI.REMOTE_ADDR;
-			// TODO: passing in the string might be wrong, key/value pairs instead?
+			// TODO: passing in the string is technically be wrong, API needs to change to accept string-only query strings - right now it's expecting a dictionary
 			returnContent["queryString"] = CGI.QUERY_STRING;
 			returnContent["headers"] = getHttpRequestData().headers;
-			// TODO: Alternatively throw the whole CGI scope in here
-			returnContent["data"] = getHttpRequestData().content;
+			returnContent["data"] = CGI;
 			returnContent["statusCode"] = JavaCast("null","");
 			returnContent["form"] = JavaCast("null","");
+			// TODO: check .net API - not form encoded body content
 			returnContent["rawData"] = JavaCast("null","");
 
 			return returnContent;

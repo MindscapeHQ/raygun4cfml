@@ -17,8 +17,8 @@
 			var messageDetails = createObject("component", "RaygunMessageDetails").init();
 			var ts = now();
 
-			returnContent["OccurredOn"] = "#DateFormat(ts,'yyyy-mm-dd')#T#timeFormat(ts,'HH:mm:ss')#Z";
-			returnContent["Details"] = messageDetails.build(arguments.issueDataStruct);
+			returnContent["occurredOn"] = "#DateFormat(ts,'yyyy-mm-dd')#T#timeFormat(ts,'HH:mm:ss')#Z";
+			returnContent["details"] = messageDetails.build(arguments.issueDataStruct);
 
 			return returnContent;
 		</cfscript>
