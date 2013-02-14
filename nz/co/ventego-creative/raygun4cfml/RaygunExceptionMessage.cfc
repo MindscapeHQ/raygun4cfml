@@ -14,6 +14,24 @@
 
 		<cfscript>
 			var returnContent = {};
+			var stackTraceData = [];
+			var stackTraceLines = [];
+			var lenStackTraceLines = 0;
+			var stackTraceLineElements = [];
+			var j = 0;
+
+			stackTraceLines = arguments.issueDataStruct.stacktrace.split("\sat");
+			lenStackTraceLines = ArrayLen(stackTraceLines);
+
+			for (j=2;j<=lenStackTraceLines;j++)
+			{
+				stackTraceLineElements = stackTraceLines[j].split("\(");
+				stackTraceData[j-1] = {};
+				stackTraceData[j-1]["methodName"] = ListLast(stackTraceLineElements[1],".");
+				stackTraceData[j-1]["className"] = ListDeleteAt(stackTraceLineElements[1],ListLen(stackTraceLineElements[1],"."),".");
+				stackTraceData[j-1]["fileName"] = stackTraceLineElements[2].split(":")[1];
+				stackTraceData[j-1]["lineNumber"] = ReplaceNoCase(stackTraceLineElements[2].split(":")[2],")","");
+			}
 
 			returnContent["Data"] = {"TagContext" = arguments.issueDataStruct.TagContext};
 
@@ -29,7 +47,7 @@
 			returnContent["className"] = arguments.issueDataStruct.type;
 			returnContent["catchingMethod"] = "error struct";
 			returnContent["message"] = arguments.issueDataStruct.diagnostics;
-			returnContent["stackTrace"] = [arguments.issueDataStruct.stacktrace];
+			returnContent["stackTrace"] = stackTraceData;
 			returnContent["fileName"] = "";
 			returnContent["innerError"] = "";
 
