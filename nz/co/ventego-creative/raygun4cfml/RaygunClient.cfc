@@ -1,4 +1,4 @@
-<cfcomponent output="true">
+<cfcomponent output="false">
 
 	<cfscript>
 		variables.apiKey = "";
@@ -16,7 +16,7 @@
 
 	</cffunction>
 
-	<cffunction name="send" access="public" output="true" returntype="struct">
+	<cffunction name="send" access="public" output="false" returntype="struct">
 
 		<cfargument name="issueDataStruct" type="struct" required="yes">
 
