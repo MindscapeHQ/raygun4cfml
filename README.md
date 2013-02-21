@@ -5,7 +5,14 @@ Raygun.io client for CFML.
 
 
 
+
 Version: 0.1.0.0alpha (Feb 15 2013)
+
+History
+0.1.0.0alpha (Feb 15 2013)
+Initial Release, tested on ACF 9.
+
+
 
 
 
