@@ -4,21 +4,21 @@ raygun4cfml
 Raygun.io client for CFML.
 
 
+## Versions
 
-Version: 0.1.0.0alpha (Feb 15 2013)
+Current Version: 0.1.0.0alpha (Feb 15 2013)
 
+### History
 
+0.1.0.0alpha (Feb 15 2013): Initial Release, tested on ACF 9.
 
-Known issues:
+## How to contribute
 
-- Query String doesn't get pushed into the dashboard properly (issue with the data structure)
-- No support for userCustomData and tags yet
-- Only tested on Adobe ColdFusion 9 at this stage
-- Doesn't support cfcatch's catch data structure properly yet, use for error processing via cferror, onError etc only
+The main repository of this project is https://github.com/MindscapeHQ/raygun4cfml. Please fork from there, create a local develop branch and merge changes back to your local master branch to submit a pull request. Even better, get in touch with me on Twitter (@AgentK) or here on Github before you undertake any work so that it can be coordinated with what I'm doing.
 
+Most of the active development happens in my own fork: https://github.com/TheRealAgentK/raygun4cfml - feel free to peek around in there.
 
-
-
+## License
 
 Copyright 2013 Kai Koenig, Ventego Creative Ltd
 
