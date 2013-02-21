@@ -4,24 +4,21 @@ raygun4cfml
 Raygun.io client for CFML.
 
 
+## Versions
 
+Current Version: 0.1.0.0alpha (Feb 15 2013)
 
-Version: 0.1.0.0alpha (Feb 15 2013)
+### History
 
-History
-0.1.0.0alpha (Feb 15 2013)
-Initial Release, tested on ACF 9.
+0.1.0.0alpha (Feb 15 2013): Initial Release, tested on ACF 9.
 
-
-How to contribute
------------------
+## How to contribute
 
 The main repository of this project is https://github.com/MindscapeHQ/raygun4cfml. Please fork from there, create a local develop branch and merge changes back to your local master branch to submit a pull request. Even better, get in touch with me on Twitter (@AgentK) or here on Github before you undertake any work so that it can be coordinated with what I'm doing.
 
 Most of the active development happens in my own fork: https://github.com/TheRealAgentK/raygun4cfml - feel free to peek around in there.
 
-
-
+## License
 
 Copyright 2013 Kai Koenig, Ventego Creative Ltd
 
