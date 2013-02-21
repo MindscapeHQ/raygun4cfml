@@ -9,17 +9,6 @@ Version: 0.1.0.0alpha (Feb 15 2013)
 
 
 
-Known issues:
-
-- Query String doesn't get pushed into the dashboard properly (issue with the data structure)
-- No support for userCustomData and tags yet
-- Only tested on Adobe ColdFusion 9 at this stage
-- Doesn't support cfcatch's catch data structure properly yet, use for error processing via cferror, onError etc only
-
-
-
-
-
 Copyright 2013 Kai Koenig, Ventego Creative Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
