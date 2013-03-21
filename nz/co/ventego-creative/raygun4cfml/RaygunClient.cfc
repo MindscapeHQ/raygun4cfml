@@ -18,14 +18,21 @@ limitations under the License.
 
 	<cfscript>
 		variables.apiKey = "";
+        variables.contentFilter = "";
 	</cfscript>
 
 	<cffunction name="init" access="public" output="false" returntype="any">
 
 		<cfargument name="apiKey" type="string" required="yes">
+        <cfargument name="contentFilter" type="RaygunContentFilter" required="no">
 
 		<cfscript>
 			variables.apiKey = arguments.apiKey;
+
+            if (structKeyExists(arguments,"contentFilter"))
+            {
+                variables.contentFilter = arguments.contentFilter;
+            }
 
 			return this;
 		</cfscript>
@@ -46,6 +53,9 @@ limitations under the License.
 			{
 				throw("API integration not valid, cannot send message to Raygun");
 			}
+
+            // plug in content filtering here
+
 
 			messageContent = message.build(arguments.issueDataStruct);
 			jSONData = serializeJSON(messageContent);
