@@ -16,27 +16,27 @@ limitations under the License.
 
 <cfcomponent output="false">
 
+	<cfscript>
+		variables.filter = [];
+	</cfscript>
+
 	<cffunction name="init" access="public" output="false" returntype="any">
 
+		<cfargument name="filter" type="array" required="yes">
+
 		<cfscript>
+			variables.filter = arguments.filter;
+
 			return this;
 		</cfscript>
 
 	</cffunction>
 
-	<cffunction name="build" access="package" output="false" returntype="struct">
+    <cffunction name="getFilter" access="public" output="false" returntype="array">
 
-		<cfscript>
-			var returnContent = {};
+        <cfreturn variables.filter>
 
-			returnContent["name"] = "raygun4cfml";
-			returnContent["version"] = "0.2.1.0alpha";
-			returnContent["clientUrl"] = "https://github.com/MindscapeHQ/raygun4cfml";
-			returnContent["apiVersion"] = 1;
+    </cffunction>
 
-			return returnContent;
-		</cfscript>
-
-	</cffunction>
 
 </cfcomponent>

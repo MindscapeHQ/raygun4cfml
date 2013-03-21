@@ -14,25 +14,32 @@ See the License for the specific language governing permissions and
 limitations under the License.
 --->
 
-<cfcomponent output="false">
+<cfcomponent output="true">
 
 	<cfscript>
 		variables.apiKey = "";
+        variables.contentFilter = "";
 	</cfscript>
 
 	<cffunction name="init" access="public" output="false" returntype="any">
 
 		<cfargument name="apiKey" type="string" required="yes">
+        <cfargument name="contentFilter" type="RaygunContentFilter" required="no">
 
 		<cfscript>
 			variables.apiKey = arguments.apiKey;
+
+            if (structKeyExists(arguments,"contentFilter"))
+            {
+                variables.contentFilter = arguments.contentFilter;
+            }
 
 			return this;
 		</cfscript>
 
 	</cffunction>
 
-	<cffunction name="send" access="public" output="false" returntype="struct">
+	<cffunction name="send" access="public" output="true" returntype="struct">
 
 		<cfargument name="issueDataStruct" type="struct" required="yes">
 
@@ -47,6 +54,11 @@ limitations under the License.
 				throw("API integration not valid, cannot send message to Raygun");
 			}
 
+            if (isStruct(variables.contentFilter))
+            {
+                applyFilter(variables.contentFilter);
+            }
+
 			messageContent = message.build(arguments.issueDataStruct);
 			jSONData = serializeJSON(messageContent);
 		</cfscript>
@@ -59,5 +71,40 @@ limitations under the License.
 
 		<cfreturn postResult>
 	</cffunction>
+
+    <cffunction name="applyFilter" access="private" output="true" returntype="void">
+
+		<cfargument name="contentFilter" type="RaygunContentFilter" required="yes">
+
+		<cfscript>
+		    var defaultScopes = [url,form];
+            var filter = arguments.contentFilter.getFilter();
+            var match = {};
+            var matchResult = "";
+
+            for (var i=1; i<=ArrayLen(filter); i++)
+            {
+                // current filter object (filter,replacement)
+                match = filter[i];
+
+                // loop over scopes
+                for (var j=1; j<=ArrayLen(defaultScopes); j++)
+                {
+                    // for each scope loop over keys
+                    for (var key in defaultScopes[j])
+                    {
+                        matchResult = reMatchNoCase(match.filter,key);
+
+                        if (isArray(matchResult) && ArrayLen(matchResult))
+                        {
+                            defaultScopes[j][key] = match.replacement;
+                        }
+                    }
+                }
+            }
+		</cfscript>
+
+	</cffunction>
+
 
 </cfcomponent>
