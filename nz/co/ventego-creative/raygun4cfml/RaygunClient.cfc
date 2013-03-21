@@ -56,6 +56,7 @@ limitations under the License.
 
             // plug in content filtering here
 
+            //
 
 			messageContent = message.build(arguments.issueDataStruct);
 			jSONData = serializeJSON(messageContent);
