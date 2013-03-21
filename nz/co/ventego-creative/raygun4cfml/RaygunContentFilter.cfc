@@ -32,4 +32,11 @@ limitations under the License.
 
 	</cffunction>
 
+    <cffunction name="getFilter" access="public" output="false" returntype="array">
+
+        <cfreturn variables.filter>
+
+    </cffunction>
+
+
 </cfcomponent>
