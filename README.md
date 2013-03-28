@@ -6,9 +6,11 @@ Raygun.io client for CFML.
 
 ## Versions
 
-Current Version: 0.2.1.0alpha (Mar 22 2013)
+Current Version: 0.2.1.1alpha (Mar 28 2013)
 
 ### History
+
+0.2.1.1alpha (Mar 28 2013): Merged PR from possum888, added sample for using RG in a global errorhandler or via cferror
 
 0.2.1.0alpha (Mar 22 2013): Added support for POST rawData, CFML Form-Scope and implemented a scope-based content filtering allowing to replace sensitive scope data before it is being sent to Raygun.io
 
