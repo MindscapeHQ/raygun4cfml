@@ -62,7 +62,10 @@ limitations under the License.
 
 			returnContent["className"] = arguments.issueDataStruct.type;
 			returnContent["catchingMethod"] = "error struct";
-			returnContent["message"] = arguments.issueDataStruct.diagnostics;
+			returnContent["message"] = "";
+			if (StructKeyExists(arguments.issueDataStruct,"diagnostics")) {
+				returnContent["message"] = arguments.issueDataStruct.diagnostics;
+			}
 			returnContent["stackTrace"] = stackTraceData;
 			returnContent["fileName"] = "";
 			returnContent["innerError"] = "";
