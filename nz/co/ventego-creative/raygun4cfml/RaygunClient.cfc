@@ -41,7 +41,7 @@ limitations under the License.
 
 	<cffunction name="send" access="public" output="true" returntype="struct">
 
-		<cfargument name="issueDataStruct" type="struct" required="yes">
+		<cfargument name="issueDataStruct" type="any" required="yes">
 
 		<cfscript>
 			var message = CreateObject("component", "RaygunMessage").init();
@@ -58,8 +58,7 @@ limitations under the License.
             {
                 applyFilter(variables.contentFilter);
             }
-
-			messageContent = message.build(arguments.issueDataStruct);
+            messageContent = message.build(duplicate(arguments.issueDataStruct));
 			jSONData = serializeJSON(messageContent);
 		</cfscript>
 
