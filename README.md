@@ -6,9 +6,11 @@ Raygun.io client for CFML.
 
 ## Versions
 
-Current Version: 0.2.1.1alpha (Mar 28 2013)
+Current Version: 0.2.2.0alpha (Mar 29 2013)
 
 ### History
+
+0.2.2.0alpha (Mar 29 2013): Various fixes, better support for cfcatch (Expression) vs error structs
 
 0.2.1.1alpha (Mar 28 2013): Merged PR from possum888, added sample for using RG in a global errorhandler or via cferror
 
