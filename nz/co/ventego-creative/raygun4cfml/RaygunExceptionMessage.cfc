@@ -49,26 +49,31 @@ limitations under the License.
 				stackTraceData[j-1]["lineNumber"] = ReplaceNoCase(stackTraceLineElements[2].split(":")[2],")","");
 			}
 
-			returnContent["Data"] = {"TagContext" = arguments.issueDataStruct.TagContext};
+			returnContent["data"] = {"TagContext" = arguments.issueDataStruct.TagContext};
 
+            // if we deal with an error struct, there'll be a root cause
 			if (StructKeyExists(arguments.issueDataStruct,"RootCause"))
 			{
 				if (StructKeyExists(arguments.issueDataStruct["RootCause"],"Type") and arguments.issueDataStruct["RootCause"]["Type"] eq "expression")
 				{
 					returnContent["data"]["type"] = arguments.issueDataStruct["RootCause"]["Type"];
-					returnContent["data"]["name"] = arguments.issueDataStruct["RootCause"]["Name"];
 				}
-			}
+                if (StructKeyExists(arguments.issueDataStruct["RootCause"],"Message"))
+                {
+                    returnContent["message"] =  arguments.issueDataStruct["RootCause"]["Message"];
+                }
+			    returnContent["catchingMethod"] = "error struct";
+            }
+            // otherwise there's no root cause and the specific data has to be grabbed from somewhere else
+            else
+            {
+                returnContent["data"]["type"] = arguments.issueDataStruct.type;
+                returnContent["message"] = arguments.issueDataStruct.message;
+			    returnContent["catchingMethod"] = "cfcatch struct";
+            }
 
-			returnContent["className"] = arguments.issueDataStruct.type;
-			returnContent["catchingMethod"] = "error struct";
-			returnContent["message"] = "";
-			if (StructKeyExists(arguments.issueDataStruct,"diagnostics")) {
-				returnContent["message"] = arguments.issueDataStruct.diagnostics;
-			}
+            returnContent["className"] = arguments.issueDataStruct.type;
 			returnContent["stackTrace"] = stackTraceData;
-			returnContent["fileName"] = "";
-			returnContent["innerError"] = "";
 
 			return returnContent;
 		</cfscript>
