@@ -32,11 +32,13 @@ limitations under the License.
 			var returnContent = {};
 			var stackTraceData = [];
 			var stackTraceLines = [];
+            var tagContextData = [];
 			var lenStackTraceLines = 0;
+            var lenTagContext = 0;
 			var stackTraceLineElements = [];
 			var j = 0;
 
-			stackTraceLines = arguments.issueDataStruct.stacktrace.split("\sat");
+            stackTraceLines = arguments.issueDataStruct.stacktrace.split("\sat");
 			lenStackTraceLines = ArrayLen(stackTraceLines);
 
 			for (j=2;j<=lenStackTraceLines;j++)
@@ -49,7 +51,7 @@ limitations under the License.
 				stackTraceData[j-1]["lineNumber"] = ReplaceNoCase(stackTraceLineElements[2].split(":")[2],")","");
 			}
 
-			returnContent["data"] = {"TagContext" = arguments.issueDataStruct.TagContext};
+			returnContent["data"] = {"JavaStrackTrace" = stackTraceData};
 
             // if we deal with an error struct, there'll be a root cause
 			if (StructKeyExists(arguments.issueDataStruct,"RootCause"))
@@ -73,7 +75,19 @@ limitations under the License.
             }
 
             returnContent["className"] = arguments.issueDataStruct.type;
-			returnContent["stackTrace"] = stackTraceData;
+
+            lenTagContext = arraylen(arguments.issueDataStruct.tagcontext);
+
+            for (j=1;j<=lenTagContext;j++)
+            {
+                tagContextData[j] = {};
+				tagContextData[j]["methodName"] = "";
+				tagContextData[j]["className"] = arguments.issueDataStruct.tagcontext[j]["id"];
+				tagContextData[j]["fileName"] = arguments.issueDataStruct.tagcontext[j]["template"];
+                tagContextData[j]["lineNumber"] = arguments.issueDataStruct.tagcontext[j]["line"];
+            }
+
+            returnContent["stackTrace"] = tagContextData;
 
 			return returnContent;
 		</cfscript>
