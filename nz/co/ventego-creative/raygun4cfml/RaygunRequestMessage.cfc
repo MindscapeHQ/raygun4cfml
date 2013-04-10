@@ -26,21 +26,53 @@ limitations under the License.
 
 	<cffunction name="build" access="package" output="false" returntype="struct">
 
+        <cfargument name="issueDataStruct" type="struct" required="yes">
+
 		<cfscript>
 			var returnContent = {};
+            var length = 4096;
 
 			returnContent["hostName"] = CGI.HTTP_HOST;
 			returnContent["url"] = CGI.SCRIPT_NAME;
 			returnContent["httpMethod"] = CGI.REQUEST_METHOD;
 			returnContent["ipAddress"] = CGI.REMOTE_ADDR;
-			// TODO: passing in the string is technically be wrong, API needs to change to accept string-only query strings - right now it's expecting a dictionary
 			returnContent["queryString"] = CGI.QUERY_STRING;
 			returnContent["headers"] = getHttpRequestData().headers;
 			returnContent["data"] = CGI;
 			returnContent["statusCode"] = JavaCast("null","");
-			returnContent["form"] = JavaCast("null","");
-			// TODO: check .net API - not form encoded body content
-			returnContent["rawData"] = JavaCast("null","");
+            returnContent["form"] = FORM;
+
+            if (structKeyExists(arguments.issueDataStruct,"customRequestData") && isStruct(arguments.issueDataStruct.customRequestData))
+            {
+                var sessionData = arguments.issueDataStruct.customRequestData.getSession();
+                var paramsData = arguments.issueDataStruct.customRequestData.getParams();
+
+                if (isStruct(sessionData))
+                {
+                    returnContent["session"] = sessionData;
+                }
+                if (isStruct(paramsData))
+                {
+                    returnContent["params"] = paramsData;
+                }
+            }
+
+            // TODO: proper testing of this block
+            if (CGI.CONTENT_TYPE != "text/html" && CGI.CONTENT_TYPE != "application/x-www-form-urlencoded" && CGI.REQUEST_METHOD != "GET")
+            {
+                var temp = getHttpRequestData().content;
+
+                if (rawDataMaxLength > Len(temp))
+                {
+                    length = Len(temp);
+                }
+
+                returnContent["rawData"] = Left(temp,length);
+            }
+            else
+            {
+                returnContent["rawData"] = JavaCast("null","");
+            }
 
 			return returnContent;
 		</cfscript>

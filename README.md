@@ -6,9 +6,18 @@ Raygun.io client for CFML.
 
 ## Versions
 
-Current Version: 0.1.0.0alpha (Feb 15 2013)
+Current Version: 0.3.0.0alpha (Apr 10 2013)
 
 ### History
+
+
+0.3.0.0alpha (Apr 10 2013): Switched Stracktrace with TagContext data to make it more relevant for Dashboard display of CFML errors, implemented support for the session and param structures within request, updated sample files to reflect the changes
+
+0.2.2.0alpha (Mar 29 2013): Various fixes, better support for cfcatch (Expression) vs error structs
+
+0.2.1.1alpha (Mar 28 2013): Merged PR from possum888, added sample for using RG in a global errorhandler or via cferror
+
+0.2.1.0alpha (Mar 22 2013): Added support for POST rawData, CFML Form-Scope and implemented a scope-based content filtering allowing to replace sensitive scope data before it is being sent to Raygun.io
 
 0.1.0.0alpha (Feb 15 2013): Initial Release, tested on ACF 9.
 
