@@ -6,9 +6,12 @@ Raygun.io client for CFML.
 
 ## Versions
 
-Current Version: 0.2.2.0alpha (Mar 29 2013)
+Current Version: 0.3.0.0alpha (Apr 10 2013)
 
 ### History
+
+
+0.3.0.0alpha (Apr 10 2013): Switched Stracktrace with TagContext data to make it more relevant for Dashboard display of CFML errors, implemented support for the session and param structures within request, updated sample files to reflect the changes
 
 0.2.2.0alpha (Mar 29 2013): Various fixes, better support for cfcatch (Expression) vs error structs
 

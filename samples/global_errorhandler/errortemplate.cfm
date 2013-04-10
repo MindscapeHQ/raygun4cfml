@@ -18,7 +18,7 @@ limitations under the License.
     // This is an example for using Raygun.io in a global error handler template,
     // e.g. cferror or a template that's hooked into the ColdFusion Administrator
 
-	// 1. With content filter
+	// 1. Using a content filter
     //
     // The actual filter is an array of structs containing two properties: filer, replacement
     // filter: regExp to find key in URL or FORM scopes
@@ -26,19 +26,50 @@ limitations under the License.
     //
     // Sample with filter (error is the CF error structure provided to the error template(s), YOURAPIKEYHERE is the Raygun.io API key)
     //
-	// filter = [{filter="password",replacement="__password__"},{filter="creditcard",replacement="__ccnumber__"}];
+	// filter = [{filter = "password", replacement = "__password__"}, {filter = "creditcard", replacement = "__ccnumber__"}];
     // contentFilter = createObject("nz.co.ventego-creative.raygun4cfml.RaygunContentFilter").init(filter);
-    // raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init("YOURAPIKEYHERE",contentFilter);
+    //
+    // raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(
+    //      apiKey = "YOURAPIKEYHERE",
+    //      contentFilter = contentFilter
+    // );
+    //
 	// result = raygun.send(error)
 
     // 2. No content filter
     //
     // Sample without filter (error is the CF error structure provided to the error template(s), YOURAPIKEYHERE is the Raygun.io API key)
     //
-    // raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init("YOURAPIKEYHERE");
+    // raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(
+    //      apiKey = "YOURAPIKEYHERE"
+    // );
+    //
 	// result = raygun.send(error)
 
-    raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init("YOURAPIKEYHERE");
+    // 3. Sending custom data
+    //
+    // Sample with passing in session and params data structures (error is the CF error structure provided to the error template(s), YOURAPIKEYHERE is the Raygun.io API key)
+    //
+    // sessionData = {"memberID" = "5747854", "memberFirstName" = "Kai"};
+    // paramsData = {"currentAction" = "IwasDoingThis", "justAnotherParam" = "test"};
+    // customRequestData = createObject("nz.co.ventego-creative.raygun4cfml.RaygunCustomData").init(sessionData,paramsData);
+    //
+    // raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(
+    //      apiKey = "YOURAPIKEYHERE",
+    //      customRequestData = customRequestData
+    // );
+	//
+	// result = raygun.send(error);
+
+    sessionData = {"memberID" = "5747854", "memberFirstName" = "Kai"};
+    paramsData = {"currentAction" = "IwasDoingThis", "justAnotherParam" = "test"};
+    customRequestData = createObject("nz.co.ventego-creative.raygun4cfml.RaygunCustomData").init(sessionData,paramsData);
+
+    raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(
+        apiKey = "YOURAPIKEYHERE",
+        customRequestData = customRequestData
+    );
+
 	result = raygun.send(error);
 </cfscript>
 
