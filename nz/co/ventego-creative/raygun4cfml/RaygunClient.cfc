@@ -14,17 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 --->
 
-<cfcomponent output="true">
+<cfcomponent output="false">
 
 	<cfscript>
 		variables.apiKey = "";
         variables.contentFilter = "";
+        variables.customRequestData = "";
 	</cfscript>
 
 	<cffunction name="init" access="public" output="false" returntype="any">
 
 		<cfargument name="apiKey" type="string" required="yes">
         <cfargument name="contentFilter" type="RaygunContentFilter" required="no">
+        <cfargument name="customRequestData" type="RaygunCustomData" required="no">
 
 		<cfscript>
 			variables.apiKey = arguments.apiKey;
@@ -34,12 +36,17 @@ limitations under the License.
                 variables.contentFilter = arguments.contentFilter;
             }
 
+            if (structKeyExists(arguments,"customRequestData"))
+            {
+                variables.customRequestData = arguments.customRequestData;
+            }
+
 			return this;
 		</cfscript>
 
 	</cffunction>
 
-	<cffunction name="send" access="public" output="true" returntype="struct">
+	<cffunction name="send" access="public" output="false" returntype="struct">
 
 		<cfargument name="issueDataStruct" type="any" required="yes">
 
@@ -48,17 +55,24 @@ limitations under the License.
 			var messageContent = "";
 			var jSONData = "";
 			var postResult = "";
+            var issueData = duplicate(arguments.issueDataStruct);
 
 			if (not Len(variables.apiKey))
 			{
 				throw("API integration not valid, cannot send message to Raygun");
 			}
 
-            if (isStruct(variables.contentFilter))
+            if (isObject(variables.contentFilter))
             {
                 applyFilter(variables.contentFilter);
             }
-            messageContent = message.build(duplicate(arguments.issueDataStruct));
+
+            if (isObject(variables.customRequestData))
+            {
+                issueData["customRequestData"] = variables.customRequestData;
+            }
+
+            messageContent = message.build(duplicate(issueData));
 			jSONData = serializeJSON(messageContent);
 		</cfscript>
 
@@ -71,7 +85,7 @@ limitations under the License.
 		<cfreturn postResult>
 	</cffunction>
 
-    <cffunction name="applyFilter" access="private" output="true" returntype="void">
+    <cffunction name="applyFilter" access="private" output="false" returntype="void">
 
 		<cfargument name="contentFilter" type="RaygunContentFilter" required="yes">
 
