@@ -32,11 +32,13 @@ limitations under the License.
 			var returnContent = {};
 			var stackTraceData = [];
 			var stackTraceLines = [];
+            var tagContextData = [];
 			var lenStackTraceLines = 0;
+            var lenTagContext = 0;
 			var stackTraceLineElements = [];
 			var j = 0;
 
-			stackTraceLines = arguments.issueDataStruct.stacktrace.split("\sat");
+            stackTraceLines = arguments.issueDataStruct.stacktrace.split("\sat");
 			lenStackTraceLines = ArrayLen(stackTraceLines);
 
 			for (j=2;j<=lenStackTraceLines;j++)
@@ -49,23 +51,43 @@ limitations under the License.
 				stackTraceData[j-1]["lineNumber"] = ReplaceNoCase(stackTraceLineElements[2].split(":")[2],")","");
 			}
 
-			returnContent["Data"] = {"TagContext" = arguments.issueDataStruct.TagContext};
+			returnContent["data"] = {"JavaStrackTrace" = stackTraceData};
 
+            // if we deal with an error struct, there'll be a root cause
 			if (StructKeyExists(arguments.issueDataStruct,"RootCause"))
 			{
 				if (StructKeyExists(arguments.issueDataStruct["RootCause"],"Type") and arguments.issueDataStruct["RootCause"]["Type"] eq "expression")
 				{
 					returnContent["data"]["type"] = arguments.issueDataStruct["RootCause"]["Type"];
-					returnContent["data"]["name"] = arguments.issueDataStruct["RootCause"]["Name"];
 				}
-			}
+                if (StructKeyExists(arguments.issueDataStruct["RootCause"],"Message"))
+                {
+                    returnContent["message"] =  arguments.issueDataStruct["RootCause"]["Message"];
+                }
+			    returnContent["catchingMethod"] = "error struct";
+            }
+            // otherwise there's no root cause and the specific data has to be grabbed from somewhere else
+            else
+            {
+                returnContent["data"]["type"] = arguments.issueDataStruct.type;
+                returnContent["message"] = arguments.issueDataStruct.message;
+			    returnContent["catchingMethod"] = "cfcatch struct";
+            }
 
-			returnContent["className"] = arguments.issueDataStruct.type;
-			returnContent["catchingMethod"] = "error struct";
-			returnContent["message"] = arguments.issueDataStruct.diagnostics;
-			returnContent["stackTrace"] = stackTraceData;
-			returnContent["fileName"] = "";
-			returnContent["innerError"] = "";
+            returnContent["className"] = arguments.issueDataStruct.type;
+
+            lenTagContext = arraylen(arguments.issueDataStruct.tagcontext);
+
+            for (j=1;j<=lenTagContext;j++)
+            {
+                tagContextData[j] = {};
+				tagContextData[j]["methodName"] = "";
+				tagContextData[j]["className"] = arguments.issueDataStruct.tagcontext[j]["id"];
+				tagContextData[j]["fileName"] = arguments.issueDataStruct.tagcontext[j]["template"];
+                tagContextData[j]["lineNumber"] = arguments.issueDataStruct.tagcontext[j]["line"];
+            }
+
+            returnContent["stackTrace"] = tagContextData;
 
 			return returnContent;
 		</cfscript>

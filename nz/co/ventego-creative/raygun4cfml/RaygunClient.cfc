@@ -18,14 +18,28 @@ limitations under the License.
 
 	<cfscript>
 		variables.apiKey = "";
+        variables.contentFilter = "";
+        variables.customRequestData = "";
 	</cfscript>
 
 	<cffunction name="init" access="public" output="false" returntype="any">
 
 		<cfargument name="apiKey" type="string" required="yes">
+        <cfargument name="contentFilter" type="RaygunContentFilter" required="no">
+        <cfargument name="customRequestData" type="RaygunCustomData" required="no">
 
 		<cfscript>
 			variables.apiKey = arguments.apiKey;
+
+            if (structKeyExists(arguments,"contentFilter"))
+            {
+                variables.contentFilter = arguments.contentFilter;
+            }
+
+            if (structKeyExists(arguments,"customRequestData"))
+            {
+                variables.customRequestData = arguments.customRequestData;
+            }
 
 			return this;
 		</cfscript>
@@ -34,20 +48,31 @@ limitations under the License.
 
 	<cffunction name="send" access="public" output="false" returntype="struct">
 
-		<cfargument name="issueDataStruct" type="struct" required="yes">
+		<cfargument name="issueDataStruct" type="any" required="yes">
 
 		<cfscript>
 			var message = CreateObject("component", "RaygunMessage").init();
 			var messageContent = "";
 			var jSONData = "";
 			var postResult = "";
+            var issueData = duplicate(arguments.issueDataStruct);
 
 			if (not Len(variables.apiKey))
 			{
 				throw("API integration not valid, cannot send message to Raygun");
 			}
 
-			messageContent = message.build(arguments.issueDataStruct);
+            if (isObject(variables.contentFilter))
+            {
+                applyFilter(variables.contentFilter);
+            }
+
+            if (isObject(variables.customRequestData))
+            {
+                issueData["customRequestData"] = variables.customRequestData;
+            }
+
+            messageContent = message.build(duplicate(issueData));
 			jSONData = serializeJSON(messageContent);
 		</cfscript>
 
@@ -59,5 +84,40 @@ limitations under the License.
 
 		<cfreturn postResult>
 	</cffunction>
+
+    <cffunction name="applyFilter" access="private" output="false" returntype="void">
+
+		<cfargument name="contentFilter" type="RaygunContentFilter" required="yes">
+
+		<cfscript>
+		    var defaultScopes = [url,form];
+            var filter = arguments.contentFilter.getFilter();
+            var match = {};
+            var matchResult = "";
+
+            for (var i=1; i<=ArrayLen(filter); i++)
+            {
+                // current filter object (filter,replacement)
+                match = filter[i];
+
+                // loop over scopes
+                for (var j=1; j<=ArrayLen(defaultScopes); j++)
+                {
+                    // for each scope loop over keys
+                    for (var key in defaultScopes[j])
+                    {
+                        matchResult = reMatchNoCase(match.filter,key);
+
+                        if (isArray(matchResult) && ArrayLen(matchResult))
+                        {
+                            defaultScopes[j][key] = match.replacement;
+                        }
+                    }
+                }
+            }
+		</cfscript>
+
+	</cffunction>
+
 
 </cfcomponent>

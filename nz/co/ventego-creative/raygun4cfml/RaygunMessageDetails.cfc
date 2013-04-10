@@ -38,7 +38,7 @@ limitations under the License.
 			returnContent["version"] = JavaCast("null","");
 			returnContent["machineName"] = CGI.SERVER_NAME;
 			returnContent["error"] = messageErrorDetails.build(arguments.issueDataStruct);
-			returnContent["request"] = messageRequestDetails.build();
+			returnContent["request"] = messageRequestDetails.build(arguments.issueDataStruct);
 			returnContent["client"] = messageClientDetails.build();
 			returnContent["environment"] = messageEnvironmentDetails.build();
 			returnContent["userCustomData"] = JavaCast("null","");
