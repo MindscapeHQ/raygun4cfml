@@ -36,7 +36,16 @@ limitations under the License.
 			var messageEnvironmentDetails = createObject("component", "RaygunEnvironmentMessage").init();
 
 			returnContent["version"] = JavaCast("null","");
-			returnContent["machineName"] = CGI.SERVER_NAME;
+
+            try
+            {
+                returnContent["machineName"] = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostAddress();
+            }
+            catch (any e)
+            {
+                returnContent["machineName"] = CGI.SERVER_NAME;
+            }
+
 			returnContent["error"] = messageErrorDetails.build(arguments.issueDataStruct);
 			returnContent["request"] = messageRequestDetails.build(arguments.issueDataStruct);
 			returnContent["client"] = messageClientDetails.build();
