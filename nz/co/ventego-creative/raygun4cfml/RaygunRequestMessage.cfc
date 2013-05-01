@@ -35,7 +35,7 @@ limitations under the License.
 			returnContent["hostName"] = CGI.HTTP_HOST;
 			returnContent["url"] = CGI.SCRIPT_NAME;
 			returnContent["httpMethod"] = CGI.REQUEST_METHOD;
-			returnContent["ipAddress"] = CGI.REMOTE_ADDR;
+			returnContent["iPAddress"] = CGI.REMOTE_ADDR;
 			returnContent["queryString"] = CGI.QUERY_STRING;
 			returnContent["headers"] = getHttpRequestData().headers;
 			returnContent["data"] = CGI;
