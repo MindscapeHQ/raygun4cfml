@@ -1,5 +1,7 @@
 Installation instructions for ColdBox 3.6.0 (should work in most versions of ColdBox, but that is what I'm running.)
 
+Understand this is just a sample to get you started, not a full implementation.
+
 Please direct questions to the GitHub repository: https://github.com/MindscapeHQ/raygun4cfml
 
 ------------------------------------------------------------------------------------------------------------------------
