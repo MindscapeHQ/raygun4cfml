@@ -1,0 +1,53 @@
+Installation instructions for ColdBox 3.6.0 (should work in most versions of ColdBox, but that is what I'm running.)
+
+Understand this is just a sample to get you started, not a full implementation.
+
+Please direct questions to the GitHub repository: https://github.com/MindscapeHQ/raygun4cfml
+
+------------------------------------------------------------------------------------------------------------------------
+
+1. Copy raygun2cfml/nz/co/ventego-creative/raygun4cfml into your model folder
+
+2. Append the following to config/coldbox.cfc:
+
+  coldbox = {
+		exceptionHandler		= "Main.onException",
+		onInvalidEvent			= "Main.invalidEvent"
+	}
+
+3. Append the following to config/wirebox.cfc
+	
+	map("RayGunClient").to("model.raygun4cfml.RayGunClient")
+		.asSingleton()
+		.initArg(name="apiKey",value="****YOUR-API-KEY-GOES-HERE****");
+
+4. To catch exceptions, create or append the following to handlers/main.cfc (or wherever you want, I use error.cfc, but then you have to change the path in 
+
+step 2)
+
+	<cfscript>
+
+	property name="RayGunClient" inject="id:RayGunClient";
+
+	public void function onException (event, rc, prc) {
+		var exceptionBean = event.getValue("ExceptionBean");
+		sendExceptionToRayGun(exceptionBean);
+		//Do whatever other error handling you want here
+	}
+
+	private void function sendExceptionToRayGun (required exception) {
+		RayGunClient.send(exception);
+	}
+
+
+	public void function invalidEvent (event,rc,prc) {
+		try {
+			throw (message="Invalid Event: #event.getCurrentEvent()#", type="Application", errorCode="404");
+		}
+		catch (any e) {
+			sendExceptionToRayGun(e);
+		}
+		//Render whatever message you want here
+	}
+
+	</cfscript>
