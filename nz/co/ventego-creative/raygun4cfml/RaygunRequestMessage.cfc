@@ -30,7 +30,7 @@ limitations under the License.
 
 		<cfscript>
 			var returnContent = {};
-            var length = 4096;
+            		var rawDataMaxLength = 4096;
 
 			returnContent["hostName"] = CGI.HTTP_HOST;
 			returnContent["url"] = CGI.SCRIPT_NAME;
@@ -40,7 +40,7 @@ limitations under the License.
 			returnContent["headers"] = getHttpRequestData().headers;
 			returnContent["data"] = CGI;
 			returnContent["statusCode"] = JavaCast("null","");
-            returnContent["form"] = FORM;
+        		returnContent["form"] = FORM;
 
             if (structKeyExists(arguments.issueDataStruct,"customRequestData") && isStruct(arguments.issueDataStruct.customRequestData))
             {
@@ -61,13 +61,7 @@ limitations under the License.
             if (CGI.CONTENT_TYPE != "text/html" && CGI.CONTENT_TYPE != "application/x-www-form-urlencoded" && CGI.REQUEST_METHOD != "GET")
             {
                 var temp = getHttpRequestData().content;
-
-                if (rawDataMaxLength > Len(temp))
-                {
-                    length = Len(temp);
-                }
-
-                returnContent["rawData"] = Left(temp,length);
+                returnContent["rawData"] = Left(temp, rawDataMaxLength);
             }
             else
             {
