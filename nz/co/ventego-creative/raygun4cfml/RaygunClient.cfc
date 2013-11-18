@@ -55,7 +55,8 @@ limitations under the License.
 			var messageContent = "";
 			var jSONData = "";
 			var postResult = "";
-            var issueData = duplicate(arguments.issueDataStruct);
+			var issueData = {};
+			structAppend( issueData, arguments.issueDataStruct );
 
 			if (not Len(variables.apiKey))
 			{
