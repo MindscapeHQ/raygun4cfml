@@ -30,7 +30,7 @@ limitations under the License.
 
 		<cfscript>
 			var returnContent = {};
-            		var rawDataMaxLength = 4096;
+            var rawDataMaxLength = 4096;
 
 			returnContent["hostName"] = CGI.HTTP_HOST;
 			returnContent["url"] = CGI.SCRIPT_NAME;
