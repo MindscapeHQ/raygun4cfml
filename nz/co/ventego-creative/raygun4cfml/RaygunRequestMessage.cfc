@@ -40,7 +40,7 @@ limitations under the License.
 			returnContent["headers"] = getHttpRequestData().headers;
 			returnContent["data"] = CGI;
 			returnContent["statusCode"] = JavaCast("null","");
-        		returnContent["form"] = FORM;
+        	returnContent["form"] = FORM;
 
             if (structKeyExists(arguments.issueDataStruct,"customRequestData") && isStruct(arguments.issueDataStruct.customRequestData))
             {
