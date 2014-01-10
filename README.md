@@ -6,9 +6,11 @@ Raygun.io client for CFML.
 
 ## Versions
 
-Current Version: 0.3.4.0alpha (May 1 2013)
+Current Version: 0.4.0.0alpha (Jan 10 2014)
 
 ### History
+
+0.4.0.0alpha (Jan 10 2014): Various small fixes, merged and edited PR10
 
 0.3.4.0alpha (May 1 2013): Various bugfixes and improvements, fix for queryString, machineName is now server's IP Address and more
 
@@ -30,7 +32,7 @@ Most of the active development happens in my own fork: https://github.com/TheRea
 
 ## License
 
-Copyright 2013 Kai Koenig, Ventego Creative Ltd
+Copyright 2013-2014 Kai Koenig, Ventego Creative Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
