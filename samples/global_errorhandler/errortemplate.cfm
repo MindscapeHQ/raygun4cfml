@@ -20,9 +20,9 @@ limitations under the License.
 
 	// 1. Using a content filter
     //
-    // The actual filter is an array of structs containing two properties: filer, replacement
+    // The actual filter is an array of structs containing two properties: filter, replacement
     // filter: regExp to find key in URL or FORM scopes
-    // replacement: replaccement value for the key's value
+    // replacement: replacement value for the key's value
     //
     // Sample with filter (error is the CF error structure provided to the error template(s), YOURAPIKEYHERE is the Raygun.io API key)
     //

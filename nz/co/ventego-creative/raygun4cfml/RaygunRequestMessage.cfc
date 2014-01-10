@@ -36,7 +36,7 @@ limitations under the License.
 			returnContent["url"] = CGI.SCRIPT_NAME;
 			returnContent["httpMethod"] = CGI.REQUEST_METHOD;
 			returnContent["iPAddress"] = CGI.REMOTE_ADDR;
-			returnContent["queryString"] = {"value"=CGI.QUERY_STRING};
+			returnContent["queryString"] = {"value"=getQueryStringFromUrlScope()};
 			returnContent["headers"] = getHttpRequestData().headers;
 			returnContent["data"] = CGI;
 			returnContent["statusCode"] = JavaCast("null","");
@@ -69,6 +69,21 @@ limitations under the License.
             }
 
 			return returnContent;
+		</cfscript>
+
+	</cffunction>
+
+	<cffunction name="getQueryStringFromUrlScope" access="private" output="false" returntype="string">
+
+		<cfscript>
+			var result = "";
+
+			for( var key in url ) 
+			{
+				result &= key & "=" & url[key] & "&";
+			}
+
+			return left( result, len( result ) - 1);
 		</cfscript>
 
 	</cffunction>
