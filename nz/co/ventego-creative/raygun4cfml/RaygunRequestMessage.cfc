@@ -36,11 +36,11 @@ limitations under the License.
 			returnContent["url"] = CGI.SCRIPT_NAME;
 			returnContent["httpMethod"] = CGI.REQUEST_METHOD;
 			returnContent["iPAddress"] = CGI.REMOTE_ADDR;
-			returnContent["queryString"] = {"value"=CGI.QUERY_STRING};
+			returnContent["queryString"] = CGI.QUERY_STRING;
 			returnContent["headers"] = getHttpRequestData().headers;
 			returnContent["data"] = CGI;
 			returnContent["statusCode"] = JavaCast("null","");
-        		returnContent["form"] = FORM;
+        	returnContent["form"] = FORM;
 
             if (structKeyExists(arguments.issueDataStruct,"customRequestData") && isStruct(arguments.issueDataStruct.customRequestData))
             {
@@ -73,4 +73,29 @@ limitations under the License.
 
 	</cffunction>
 
+    <!--- PR10: Added in PR10 - decided not to use it for determining the query string as this method would not include
+    "incomplete" query strings, such as ?a=5&b=7&c - the c would be missing --->
+	<!---
+	<cffunction name="getQueryStringFromUrlScope" access="private" output="false" returntype="string">
+
+		<cfscript>
+			var result = "";
+
+			for(var key in url)
+			{
+				result = result & key & "=" & url[key] & "&";
+			}
+
+            if (len(result))
+            {
+                return left(result,len(result)-1);
+            }
+            else
+            {
+                return "";
+            }
+		</cfscript>
+
+	</cffunction>
+    --->
 </cfcomponent>
