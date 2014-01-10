@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 --->
 
+<cferror type="exception" template="../../samples/global_errorhandler/errortemplate.cfm">
 
-<!--- This test file requires you to have a global errorhandler setup or a deal with the resulting error via cferror or onError --->
-<cfoutput>#test1234#</cfoutput>
+<!--- This test file requires you to have a global errorhandler setup or deal with the resulting error via cferror (see above) or onError --->
+<cfoutput>#test12363#</cfoutput>

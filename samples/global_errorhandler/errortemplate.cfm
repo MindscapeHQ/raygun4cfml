@@ -61,7 +61,7 @@ limitations under the License.
 	//
 	// result = raygun.send(error);
 
-    sessionData = {"memberID" = "5747854", "memberFirstName" = "Kai"};
+    sessionData = {"memberID" = "5747854", "memberFirstName" = "test"};
     paramsData = {"currentAction" = "IwasDoingThis", "justAnotherParam" = "test"};
     customRequestData = createObject("nz.co.ventego-creative.raygun4cfml.RaygunCustomData").init(sessionData,paramsData);
 

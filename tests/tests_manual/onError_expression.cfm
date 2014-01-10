@@ -1,5 +1,5 @@
 <!---
-Copyright 2013 Kai Koenig, Ventego Creative Ltd
+Copyright 2013-2014 Kai Koenig, Ventego Creative Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,12 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 --->
 
-<cferror type="exception" template="../../samples/global_errorhandler/errortemplate.cfm">
-
-<!--- This test file requires you to have a global errorhandler setup or  deal with the resulting error via cferror (see above) or onError and having a filter setup --->
-<cfset form["Kai"] = 38>
-<cfset form["Password"] = "gfgfdgfdgfdgfd">
-<cfset form["KaisSecretPasswordThing"] = "gfgfgfdfgdw432443543">
-<cfset url["myCreditcard"] = "6565654">
-
-<cfoutput>#test1234544#</cfoutput>
+<!--- This is supposed to run into the onError function in this folder's Application.cfc --->
+<cfscript>
+    a = 34;
+    b = 0;
+    c = a/b;
+</cfscript>
