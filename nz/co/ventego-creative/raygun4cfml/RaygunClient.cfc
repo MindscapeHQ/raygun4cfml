@@ -55,8 +55,10 @@ limitations under the License.
 			var messageContent = "";
 			var jSONData = "";
 			var postResult = "";
+			// PR10: In CF10, the passed in issueDataStruct is not editable in all cases anymore. It looks like a
+			// struct, but is of a different internal data type behind the scenes. This works around that issue.
 			var issueData = {};
-			structAppend( issueData, arguments.issueDataStruct );
+			structAppend(issueData, arguments.issueDataStruct);
 
 			if (not Len(variables.apiKey))
 			{
