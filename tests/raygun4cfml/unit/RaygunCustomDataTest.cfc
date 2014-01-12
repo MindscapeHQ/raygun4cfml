@@ -48,8 +48,8 @@ limitations under the License.
 
     <cffunction name="testGetProperDataOutForPopulatedStructs">
         <cfscript>
-        	mySession = {"id"=123456,"username"="tester"};
-        	myParams = {"name"="Peter","lastname"="Miller"};
+        	var mySession = {"id"=123456,"username"="tester"};
+        	var myParams = {"name"="Peter","lastname"="Miller"};
         	RaygunCustomData.init(mySession,myParams);
 
         	$assert.typeOf("struct",RaygunCustomData.getSession(),"Session not a struct");
