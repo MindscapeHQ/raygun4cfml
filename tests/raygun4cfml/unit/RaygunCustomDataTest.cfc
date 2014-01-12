@@ -48,9 +48,9 @@ limitations under the License.
 
     <cffunction name="testGetProperDataOutForPopulatedStructs">
         <cfscript>
-        	session = {"id"=123456,"username"="tester"};
-        	params = {"name"="Peter","lastname"="Miller"};
-        	RaygunCustomData.init(session,params);
+        	mySession = {"id"=123456,"username"="tester"};
+        	myParams = {"name"="Peter","lastname"="Miller"};
+        	RaygunCustomData.init(mySession,myParams);
 
         	$assert.typeOf("struct",RaygunCustomData.getSession(),"Session not a struct");
         	$assert.typeOf("struct",RaygunCustomData.getParams(),"Params not a struct");
@@ -58,8 +58,8 @@ limitations under the License.
 			$assert.isNotEmpty(RaygunCustomData.getSession(),"Returned Session struct is empty");
 			$assert.isNotEmpty(RaygunCustomData.getParams(),"Returned Params struct is empty");
 
-			$assert.isEqual(structCount(RaygunCustomData.getSession()),structCount(session),"Count in Session not equal");
-		    $assert.isEqual(structCount(RaygunCustomData.getParams()),structCount(params),"Count in Params not equal");
+			$assert.isEqual(structCount(RaygunCustomData.getSession()),structCount(mySession),"Count in Session not equal");
+		    $assert.isEqual(structCount(RaygunCustomData.getParams()),structCount(myParams),"Count in Params not equal");
         </cfscript>
     </cffunction>
 
