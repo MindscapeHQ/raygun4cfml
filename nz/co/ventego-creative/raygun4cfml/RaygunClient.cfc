@@ -49,6 +49,7 @@ limitations under the License.
 	<cffunction name="send" access="public" output="false" returntype="struct">
 
 		<cfargument name="issueDataStruct" type="any" required="yes">
+		<cfargument name="customRequestData" type="any" required="no">
 
 		<cfscript>
 			var message = CreateObject("component", "RaygunMessage").init();
@@ -70,7 +71,12 @@ limitations under the License.
                 applyFilter(variables.contentFilter);
             }
 
-            if (isObject(variables.customRequestData))
+            // favor custom data passed as an argument, if it exists
+            if (structKeyExists(arguments,"customRequestData") && isObject(arguments.customRequestData))
+            {
+                issueData["customRequestData"] = arguments.customRequestData;
+            }
+            else if (isObject(variables.customRequestData))
             {
                 issueData["customRequestData"] = variables.customRequestData;
             }
