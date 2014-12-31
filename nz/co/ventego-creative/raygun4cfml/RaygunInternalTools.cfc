@@ -1,5 +1,5 @@
 <!---
-Copyright 2013 Kai Koenig, Ventego Creative Ltd
+Copyright 2014 Kai Koenig, Ventego Creative Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,27 +16,23 @@ limitations under the License.
 
 <cfcomponent output="false">
 
-	<cffunction name="init" access="public" output="false" returntype="any">
+	<cffunction name="needsHTTPSecurityProviderHack" access="public" output="false" returntype="boolean">
 
 		<cfscript>
-			return this;
+
+			var productCheck = createObject("component","nz.co.ventego-creative.tools.ProductCheck").getServerProductInfo();
+
+			if (structCount(productCheck) && productCheck.cf_server == "ACF" && productCheck.server_main_version == 9 && ListFindNoCase("Developer,Enterprise",productCheck.product_level)) {
+				return true;
+			}
+
+			return false;
 		</cfscript>
+
 
 	</cffunction>
 
-	<cffunction name="build" access="package" output="false" returntype="struct">
 
-		<cfscript>
-			var returnContent = {};
 
-			returnContent["name"] = "raygun4cfml";
-			returnContent["version"] = "0.5.0.0";
-			returnContent["clientUrl"] = "https://github.com/MindscapeHQ/raygun4cfml";
-			returnContent["apiVersion"] = 1;
-
-			return returnContent;
-		</cfscript>
-
-	</cffunction>
 
 </cfcomponent>

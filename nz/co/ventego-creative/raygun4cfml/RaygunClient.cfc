@@ -59,6 +59,8 @@ limitations under the License.
 			// PR10: In CF10, the passed in issueDataStruct is not editable in all cases anymore. It looks like a
 			// struct, but is of a different internal data type behind the scenes. This works around that issue.
 			var issueData = {};
+			var needsHTTPSecurityHack = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunInternalTools").needsHTTPSecurityProviderHack();
+
 			structAppend(issueData, arguments.issueDataStruct);
 
 			if (not Len(variables.apiKey))
@@ -83,6 +85,12 @@ limitations under the License.
 
             messageContent = message.build(duplicate(issueData));
 			jSONData = serializeJSON(messageContent);
+
+            if (needsHTTPSecurityHack) {
+                var objSecurity = createObject("java", "java.security.Security");
+                var storeProvider = objSecurity.getProvider("JsafeJCE");
+                objSecurity.removeProvider("JsafeJCE");
+            }
 		</cfscript>
 
 		<cfhttp url="https://api.raygun.io/entries" method="post" charset="utf-8" result="postResult">
@@ -90,6 +98,12 @@ limitations under the License.
 			<cfhttpparam type="header" name="X-ApiKey" value="#variables.apiKey#"/>
 			<cfhttpparam type="body" value="#jSONData#"/>
 		</cfhttp>
+
+        <cfscript>
+            if (needsHTTPSecurityHack) {
+                objSecurity.insertProviderAt(storeProvider, 1);
+            }
+        </cfscript>
 
 		<cfreturn postResult>
 	</cffunction>

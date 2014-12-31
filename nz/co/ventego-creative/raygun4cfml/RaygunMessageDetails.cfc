@@ -59,7 +59,7 @@ limitations under the License.
 				returnContent["userCustomData"] = JavaCast("null","");
 			}
 
-			returnContent["tags"] = ArrayNew(); //TODO
+			returnContent["tags"] = ArrayNew(1); //TODO
 
 			return returnContent;
 		</cfscript>
