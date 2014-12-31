@@ -30,7 +30,7 @@ limitations under the License.
 			var returnContent = {};
 
 			returnContent["name"] = "raygun4cfml";
-			returnContent["version"] = "0.4.0.0alpha";
+			returnContent["version"] = "0.5.0.0";
 			returnContent["clientUrl"] = "https://github.com/MindscapeHQ/raygun4cfml";
 			returnContent["apiVersion"] = 1;
 
