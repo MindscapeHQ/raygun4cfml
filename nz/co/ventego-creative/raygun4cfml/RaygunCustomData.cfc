@@ -18,17 +18,24 @@ limitations under the License.
 
 	<cfscript>
 		variables.session = {};
-        variables.params = {};
+		variables.params = {};
+		variables.customData = {};
 	</cfscript>
 
 	<cffunction name="init" access="public" output="false" returntype="any">
 
-		<cfargument name="session" type="struct" required="yes">
-        <cfargument name="params" type="struct" required="yes">
+		<cfargument name="customData" type="struct" required="no" default="#structNew()#">
 
 		<cfscript>
-			variables.params = arguments.params;
-            variables.session = arguments.session;
+
+			// for backwards compatibility
+			if (structKeyExists(arguments,"params"))
+				variables.params = arguments.params;
+			if (structKeyExists(arguments,"session"))
+				variables.session = arguments.session;
+
+			variables.customData = arguments.customData;
+
 			return this;
 		</cfscript>
 
@@ -45,5 +52,27 @@ limitations under the License.
         <cfreturn variables.params>
 
     </cffunction>
+
+	<cffunction name="getCustomData" access="public" output="false" returntype="struct">
+
+		<cfreturn variables.customData>
+
+	</cffunction>
+
+	<cffunction name="build" access="public" output="false" returntype="struct">
+		<cfscript>
+
+			var structRepresentation = getCustomData();
+
+			if (StructCount(getSession()))
+				structRepresentation["session"] = getSession();
+
+			if (StructCount(getParams()))
+				structRepresentation["params"] = getParams();
+
+			return structRepresentation;
+
+		</cfscript>
+	</cffunction>
 
 </cfcomponent>
