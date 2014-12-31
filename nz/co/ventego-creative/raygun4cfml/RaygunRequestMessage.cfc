@@ -42,21 +42,6 @@ limitations under the License.
 			returnContent["statusCode"] = JavaCast("null","");
         	returnContent["form"] = FORM;
 
-            if (structKeyExists(arguments.issueDataStruct,"customRequestData") && isStruct(arguments.issueDataStruct.customRequestData))
-            {
-                var sessionData = arguments.issueDataStruct.customRequestData.getSession();
-                var paramsData = arguments.issueDataStruct.customRequestData.getParams();
-
-                if (isStruct(sessionData))
-                {
-                    returnContent["session"] = sessionData;
-                }
-                if (isStruct(paramsData))
-                {
-                    returnContent["params"] = paramsData;
-                }
-            }
-
             // TODO: proper testing of this block
             if (CGI.CONTENT_TYPE != "text/html" && CGI.CONTENT_TYPE != "application/x-www-form-urlencoded" && CGI.REQUEST_METHOD != "GET")
             {

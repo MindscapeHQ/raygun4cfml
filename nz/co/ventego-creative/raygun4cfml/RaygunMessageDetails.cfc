@@ -50,8 +50,16 @@ limitations under the License.
 			returnContent["request"] = messageRequestDetails.build(arguments.issueDataStruct);
 			returnContent["client"] = messageClientDetails.build();
 			returnContent["environment"] = messageEnvironmentDetails.build();
-			returnContent["userCustomData"] = JavaCast("null","");
-			returnContent["tags"] = JavaCast("null","");
+
+			if (structKeyExists(arguments.issueDataStruct,"customRequestData") && isObject(arguments.issueDataStruct.customRequestData))
+			{
+				returnContent["userCustomData"] = arguments.issueDataStruct.customRequestData.build();
+			}
+			else{
+				returnContent["userCustomData"] = JavaCast("null","");
+			}
+
+			returnContent["tags"] = ArrayNew(); //TODO
 
 			return returnContent;
 		</cfscript>
