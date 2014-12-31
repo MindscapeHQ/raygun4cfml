@@ -6,9 +6,11 @@ Raygun.io client for CFML.
 
 ## Versions
 
-Current Version: 0.4.0.0alpha (Jan 10 2014)
+Current Version: 0.5.0.0 (Dec 31 2014)
 
 ### History
+
+0.5.0.0 (Dec 31 2014): merged and edited PR/ISSUE 15/16 and fixed a CF 9 issue. Please be aware that samples have changed due to a new way of passing in custom data.
 
 0.4.0.0alpha (Jan 10 2014): Various small fixes, merged and edited PR10
 
@@ -32,7 +34,7 @@ Most of the active development happens in my own fork: https://github.com/TheRea
 
 ## License
 
-Copyright 2013-2014 Kai Koenig, Ventego Creative Ltd
+Copyright 2013-2015 Kai Koenig, Ventego Creative Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
