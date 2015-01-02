@@ -20,14 +20,14 @@ limitations under the License.
         <cfargument name="EventName" required="true"/>
 
         <cfscript>
-            customRequestStruct = {"session" = {"memberID" = "5747854", "memberFirstName" = "Kai"}, "params" = {"currentAction" = "IwasDoingThis", "justAnotherParam" = "test"}};
-            customRequestData = createObject("nz.co.ventego-creative.raygun4cfml.RaygunCustomData").init(customRequestStruct);
+            customUserDataStruct = {"session" = {"memberID" = "5747854", "memberFirstName" = "Kai"}, "params" = {"currentAction" = "IwasDoingThis", "justAnotherParam" = "test"}};
+            customUserData = createObject("nz.co.ventego-creative.raygun4cfml.RaygunUserCustomData").init(customUserDataStruct);
 
             raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(
                 apiKey = "YOURAPIKEYHERE"
             );
 
-	        result = raygun.send(arguments.Exception,customRequestData);
+	        result = raygun.send(arguments.Exception,customUserData);
         </cfscript>
     </cffunction>
 </cfcomponent>

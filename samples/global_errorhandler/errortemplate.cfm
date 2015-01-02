@@ -49,47 +49,30 @@ limitations under the License.
     // );
     //
 	// result = raygun.send(error)
+    
+    
 
-
-
-    // 3. Sending custom data (OLD, deprecated way of doing it, please be aware that you have to pass session and params as named arguments to RaygunCustomData)
+	// 3. Sending custom data (NEW way of doing it)
     //
     // Sample with passing in session and params data structures (error is the CF error structure provided to the error template(s), YOURAPIKEYHERE is the Raygun.io API key)
     //
-    // sessionData = {"memberID" = "5747854", "memberFirstName" = "Kai"};
-    // paramsData = {"currentAction" = "IwasDoingThis", "justAnotherParam" = "test"};
-    // customRequestData = createObject("nz.co.ventego-creative.raygun4cfml.RaygunCustomData").init(session=sessionData,params=paramsData);
-    //
-    // raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(
-    //      apiKey = "YOURAPIKEYHERE",
-    //      customRequestData = customRequestData
-    // );
-	//
-	// result = raygun.send(error);
-
-
-
-	// 4. Sending custom data (NEW way of doing it)
-    //
-    // Sample with passing in session and params data structures (error is the CF error structure provided to the error template(s), YOURAPIKEYHERE is the Raygun.io API key)
-    //
-    // customRequestStruct = {"session" = {"memberID" = "5747854", "memberFirstName" = "Kai"}, "params" = {"currentAction" = "IwasDoingThis", "justAnotherParam" = "test"}};
-    // customRequestData = createObject("nz.co.ventego-creative.raygun4cfml.RaygunCustomData").init(customRequestStruct);
-    //
+    // customUserDataStruct = {"session" = {"memberID" = "5747854", "memberFirstName" = "Kai"}, "params" = {"currentAction" = "IwasDoingThis", "justAnotherParam" = "test"}};
+    // customUserData = createObject("nz.co.ventego-creative.raygun4cfml.RaygunUserCustomData").init(customUserDataStruct);
+    // 
     // raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(
     //      apiKey = "YOURAPIKEYHERE"
     // );
 	//
-	// result = raygun.send(error,customRequestData);
+	// result = raygun.send(error,customUserData);
 
-    customRequestStruct = {"session" = {"memberID" = "5747854", "memberFirstName" = "Kai"}, "params" = {"currentAction" = "IwasDoingThis", "justAnotherParam" = "test"}};
-    customRequestData = createObject("nz.co.ventego-creative.raygun4cfml.RaygunCustomData").init(customRequestStruct);
+    customUserDataStruct = {"session" = {"memberID" = "5747854", "memberFirstName" = "Kai"}, "params" = {"currentAction" = "IwasDoingThis", "justAnotherParam" = "test"}};
+    customUserData = createObject("nz.co.ventego-creative.raygun4cfml.RaygunUserCustomData").init(customUserDataStruct);
 
     raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(
         apiKey = "YOURAPIKEYHERE"
     );
 
-	result = raygun.send(error,customRequestData);
+	result = raygun.send(error,customUserData);
 </cfscript>
 
 

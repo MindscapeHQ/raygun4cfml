@@ -51,9 +51,9 @@ limitations under the License.
 			returnContent["client"] = messageClientDetails.build();
 			returnContent["environment"] = messageEnvironmentDetails.build();
 
-			if (structKeyExists(arguments.issueDataStruct,"customRequestData") && isObject(arguments.issueDataStruct.customRequestData))
+			if (structKeyExists(arguments.issueDataStruct,"userCustomData") && isObject(arguments.issueDataStruct.userCustomData))
 			{
-				returnContent["userCustomData"] = arguments.issueDataStruct.customRequestData.build();
+				returnContent["userCustomData"] = arguments.issueDataStruct.userCustomData.build();
 			}
 			else{
 				returnContent["userCustomData"] = JavaCast("null","");
