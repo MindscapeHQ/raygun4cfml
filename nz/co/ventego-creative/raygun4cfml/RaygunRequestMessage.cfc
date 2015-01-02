@@ -39,7 +39,6 @@ limitations under the License.
 			returnContent["queryString"] = CGI.QUERY_STRING;
 			returnContent["headers"] = getHttpRequestData().headers;
 			returnContent["data"] = CGI;
-			returnContent["statusCode"] = JavaCast("null","");
         	returnContent["form"] = FORM;
 
             // TODO: proper testing of this block

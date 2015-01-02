@@ -60,7 +60,9 @@ limitations under the License.
 			}
 
 			returnContent["tags"] = ArrayNew(1); //TODO
-
+			
+			returnContent["statusCode"] = JavaCast("null","");
+			
 			return returnContent;
 		</cfscript>
 
