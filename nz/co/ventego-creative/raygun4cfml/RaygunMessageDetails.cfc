@@ -59,8 +59,14 @@ limitations under the License.
 				returnContent["userCustomData"] = JavaCast("null","");
 			}
 
-			returnContent["tags"] = ArrayNew(1); //TODO
-			
+			if (structKeyExists(arguments.issueDataStruct,"tags") && isArray(arguments.issueDataStruct.tags))
+			{
+				returnContent["tags"] = arguments.issueDataStruct.tags;
+			}
+			else{
+				returnContent["tags"] =  ArrayNew(1);
+			}
+
 			returnContent["statusCode"] = JavaCast("null","");
 			
 			return returnContent;

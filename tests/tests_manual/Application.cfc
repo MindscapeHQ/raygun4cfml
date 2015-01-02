@@ -23,11 +23,13 @@ limitations under the License.
             customUserDataStruct = {"session" = {"memberID" = "5747854", "memberFirstName" = "Kai"}, "params" = {"currentAction" = "IwasDoingThis", "justAnotherParam" = "test"}};
             customUserData = createObject("nz.co.ventego-creative.raygun4cfml.RaygunUserCustomData").init(customUserDataStruct);
 
+            tags = ["coding","db","sqlfail"];
+            
             raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(
                 apiKey = "YOURAPIKEYHERE"
             );
 
-	        result = raygun.send(arguments.Exception,customUserData);
+	        result = raygun.send(issueDataStruct=arguments.Exception,userCustomData=customUserData,tags=tags);
         </cfscript>
     </cffunction>
 </cfcomponent>
