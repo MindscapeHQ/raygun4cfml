@@ -44,6 +44,7 @@ limitations under the License.
 		<cfargument name="issueDataStruct" type="any" required="yes">
 		<cfargument name="userCustomData" type="RaygunUserCustomData" required="no">
 		<cfargument name="tags" type="array" required="no">
+		<cfargument name="user" type="RaygunIdentifierMessage" required="no">
 
 		<cfscript>
 			var message = CreateObject("component", "RaygunMessage").init();
@@ -82,6 +83,11 @@ limitations under the License.
                 issueData["tags"] = arguments.tags;
             }
             
+            // deal with user identification data passed as an argument
+            if (structKeyExists(arguments,"user") && isObject(arguments.user))
+            {
+                issueData["user"] = arguments.user;
+            }
             messageContent = message.build(duplicate(issueData));
 			jSONData = serializeJSON(messageContent);
             

@@ -55,7 +55,7 @@ limitations under the License.
 			{
 				returnContent["userCustomData"] = arguments.issueDataStruct.userCustomData.build();
 			}
-			else{
+			else {
 				returnContent["userCustomData"] = JavaCast("null","");
 			}
 
@@ -63,10 +63,18 @@ limitations under the License.
 			{
 				returnContent["tags"] = arguments.issueDataStruct.tags;
 			}
-			else{
-				returnContent["tags"] =  ArrayNew(1);
+			else {
+				returnContent["tags"] = ArrayNew(1);
 			}
-
+			
+			if (structKeyExists(arguments.issueDataStruct,"user") && isObject(arguments.issueDataStruct.user))
+			{
+				returnContent["user"] = arguments.issueDataStruct.user.build();
+			}
+			else {
+				returnContent["user"] = JavaCast("null", "");
+			}
+			
 			returnContent["statusCode"] = JavaCast("null","");
 			
 			return returnContent;

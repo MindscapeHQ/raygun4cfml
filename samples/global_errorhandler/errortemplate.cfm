@@ -78,18 +78,33 @@ limitations under the License.
     // );
 	//
 	// result = raygun.send(issueDataStruct=error,tags=tags);
+	
+	
+	
+	// 5. Sending user information
+    //
+    // Sample with passing in user information (error is the CF error structure provided to the error template(s), YOURAPIKEYHERE is the Raygun.io API key)
+    //
+    // userIdentifier = createObject("nz.co.ventego-creative.raygun4cfml.RaygunIdentifierMessage").init(Identifier="test@test.com",isAnonymous=false,UUID="47e432fff11",FirstName="Test",Fullname="Tester");
+    //
+    // raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(
+    //      apiKey = "YOURAPIKEYHERE"
+    // );
+	//
+	// result = raygun.send(issueDataStruct=error,user=userIdentifier);
 
     customUserDataStruct = {"session" = {"memberID" = "5747854", "memberFirstName" = "Kai"}, "params" = {"currentAction" = "IwasDoingThis", "justAnotherParam" = "test"}};
     customUserData = createObject("nz.co.ventego-creative.raygun4cfml.RaygunUserCustomData").init(customUserDataStruct);
 
     tags = ["coding","db","sqlfail"];
 
+    userIdentifier = createObject("nz.co.ventego-creative.raygun4cfml.RaygunIdentifierMessage").init(Identifier="test@test.com",isAnonymous=false,UUID="47e432fff11",FirstName="Test",Fullname="Tester");
+
     raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(
         apiKey = "YOURAPIKEYHERE"
     );
 
-    result = raygun.send(issueDataStruct=arguments.Exception,userCustomData=customUserData,tags=tags);
-
+    result = raygun.send(issueDataStruct=arguments.Exception,userCustomData=customUserData,tags=tags,user=userIdentifier);
 </cfscript>
 
 

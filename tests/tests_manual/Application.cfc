@@ -25,11 +25,13 @@ limitations under the License.
 
             tags = ["coding","db","sqlfail"];
             
+            userIdentifier = createObject("nz.co.ventego-creative.raygun4cfml.RaygunIdentifierMessage").init(Identifier="test@test.com",isAnonymous=false,UUID="47e432fff11",FirstName="Test",Fullname="Tester");
+
             raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(
                 apiKey = "YOURAPIKEYHERE"
             );
 
-	        result = raygun.send(issueDataStruct=arguments.Exception,userCustomData=customUserData,tags=tags);
+	        result = raygun.send(issueDataStruct=arguments.Exception,userCustomData=customUserData,tags=tags,user=userIdentifier);
         </cfscript>
     </cffunction>
 </cfcomponent>
