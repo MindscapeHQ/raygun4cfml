@@ -6,9 +6,17 @@ Raygun.io client for CFML.
 
 ## Versions
 
-Current Version: 0.5.0.0 (Dec 31 2014)
+Current Version: 1.0.0.0 (Jan 3 2015)
+
+Note: This release will break your code if you've used 0.4 and older before and have used customRequestData. Please continue reading.
 
 ### History
+
+1.0.0.0 (Jan 3 2015): 
+
+- Support for Tags and Affected User (please check samples 4 and 5 in samples/global_errorhandler/errortemplate.cfm and the code in the tests_manual directories for samples on how to use them)
+- Moves statusCode from request to details structure
+- Changed the behaviour of userCustomData. Essentially removed all the old, backwards compatibility code that came in from PR15/16 (in 0.5.0.0) --- this change had lead to much cleaner and simpler code. Note: This change will break backwards compatibility for people who have used customRequestData before (please check sample 3 samples/global_errorhandler/errortemplate.cfm)
 
 0.5.0.0 (Dec 31 2014): merged and edited PR/ISSUE 15/16 and fixed a CF 9 issue. Please be aware that samples have changed due to a new way of passing in custom data.
 

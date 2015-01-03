@@ -16,27 +16,34 @@ limitations under the License.
 
 <cfcomponent output="false">
 
+	<cfscript>
+		variables.userCustomData = {};
+	</cfscript>
+
 	<cffunction name="init" access="public" output="false" returntype="any">
 
+		<cfargument name="userCustomData" type="struct" required="yes">
+
 		<cfscript>
+			variables.userCustomData = arguments.userCustomData;
+
 			return this;
 		</cfscript>
 
 	</cffunction>
+	
+	<cffunction name="getUserCustomData" access="private" output="false" returntype="struct">
 
-	<cffunction name="build" access="package" output="false" returntype="struct">
+		<cfreturn variables.userCustomData>
 
+	</cffunction>
+
+	<cffunction name="build" access="public" output="false" returntype="struct">
+		
 		<cfscript>
-			var returnContent = {};
-
-			returnContent["name"] = "raygun4cfml";
-			returnContent["version"] = "1.0.0.0";
-			returnContent["clientUrl"] = "https://github.com/MindscapeHQ/raygun4cfml";
-			returnContent["apiVersion"] = 1;
-
-			return returnContent;
+			return getUserCustomData();
 		</cfscript>
-
+	
 	</cffunction>
 
 </cfcomponent>

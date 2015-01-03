@@ -19,14 +19,12 @@ limitations under the License.
 	<cfscript>
 		variables.apiKey = "";
         variables.contentFilter = "";
-        variables.customRequestData = "";
 	</cfscript>
 
 	<cffunction name="init" access="public" output="false" returntype="any">
 
 		<cfargument name="apiKey" type="string" required="yes">
         <cfargument name="contentFilter" type="RaygunContentFilter" required="no">
-        <cfargument name="customRequestData" type="RaygunCustomData" required="no">
 
 		<cfscript>
 			variables.apiKey = arguments.apiKey;
@@ -34,11 +32,6 @@ limitations under the License.
             if (structKeyExists(arguments,"contentFilter"))
             {
                 variables.contentFilter = arguments.contentFilter;
-            }
-
-            if (structKeyExists(arguments,"customRequestData"))
-            {
-                variables.customRequestData = arguments.customRequestData;
             }
 
 			return this;
@@ -49,16 +42,21 @@ limitations under the License.
 	<cffunction name="send" access="public" output="false" returntype="struct">
 
 		<cfargument name="issueDataStruct" type="any" required="yes">
-		<cfargument name="customRequestData" type="any" required="no">
+		<cfargument name="userCustomData" type="RaygunUserCustomData" required="no">
+		<cfargument name="tags" type="array" required="no">
+		<cfargument name="user" type="RaygunIdentifierMessage" required="no">
 
 		<cfscript>
 			var message = CreateObject("component", "RaygunMessage").init();
 			var messageContent = "";
 			var jSONData = "";
 			var postResult = "";
-			// PR10: In CF10, the passed in issueDataStruct is not editable in all cases anymore. It looks like a
+			
+			// PR10: In CF10+, the passed in issueDataStruct is not editable in all cases anymore. It looks like a
 			// struct, but is of a different internal data type behind the scenes. This works around that issue.
 			var issueData = {};
+			
+			// Fixing a CF 9 issue with JVM security providers
 			var needsHTTPSecurityHack = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunInternalTools").needsHTTPSecurityProviderHack();
 
 			structAppend(issueData, arguments.issueDataStruct);
@@ -73,19 +71,27 @@ limitations under the License.
                 applyFilter(variables.contentFilter);
             }
 
-            // favor custom data passed as an argument, if it exists
-            if (structKeyExists(arguments,"customRequestData") && isObject(arguments.customRequestData))
+            // deal with custom data passed as an argument
+            if (structKeyExists(arguments,"userCustomData") && isObject(arguments.userCustomData))
             {
-                issueData["customRequestData"] = arguments.customRequestData;
-            }
-            else if (isObject(variables.customRequestData))
-            {
-                issueData["customRequestData"] = variables.customRequestData;
+                issueData["userCustomData"] = arguments.userCustomData;
             }
 
+            // deal with tags passed as an argument
+            if (structKeyExists(arguments,"tags") && isArray(arguments.tags))
+            {
+                issueData["tags"] = arguments.tags;
+            }
+            
+            // deal with user identification data passed as an argument
+            if (structKeyExists(arguments,"user") && isObject(arguments.user))
+            {
+                issueData["user"] = arguments.user;
+            }
             messageContent = message.build(duplicate(issueData));
 			jSONData = serializeJSON(messageContent);
-
+            
+            // Fixing a CF 9 issue with JVM security providers
             if (needsHTTPSecurityHack) {
                 var objSecurity = createObject("java", "java.security.Security");
                 var storeProvider = objSecurity.getProvider("JsafeJCE");
@@ -100,6 +106,7 @@ limitations under the License.
 		</cfhttp>
 
         <cfscript>
+            // Fixing a CF 9 issue with JVM security providers
             if (needsHTTPSecurityHack) {
                 objSecurity.insertProviderAt(storeProvider, 1);
             }

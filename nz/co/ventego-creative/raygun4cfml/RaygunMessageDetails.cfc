@@ -51,16 +51,32 @@ limitations under the License.
 			returnContent["client"] = messageClientDetails.build();
 			returnContent["environment"] = messageEnvironmentDetails.build();
 
-			if (structKeyExists(arguments.issueDataStruct,"customRequestData") && isObject(arguments.issueDataStruct.customRequestData))
+			if (structKeyExists(arguments.issueDataStruct,"userCustomData") && isObject(arguments.issueDataStruct.userCustomData))
 			{
-				returnContent["userCustomData"] = arguments.issueDataStruct.customRequestData.build();
+				returnContent["userCustomData"] = arguments.issueDataStruct.userCustomData.build();
 			}
-			else{
+			else {
 				returnContent["userCustomData"] = JavaCast("null","");
 			}
 
-			returnContent["tags"] = ArrayNew(1); //TODO
-
+			if (structKeyExists(arguments.issueDataStruct,"tags") && isArray(arguments.issueDataStruct.tags))
+			{
+				returnContent["tags"] = arguments.issueDataStruct.tags;
+			}
+			else {
+				returnContent["tags"] = ArrayNew(1);
+			}
+			
+			if (structKeyExists(arguments.issueDataStruct,"user") && isObject(arguments.issueDataStruct.user))
+			{
+				returnContent["user"] = arguments.issueDataStruct.user.build();
+			}
+			else {
+				returnContent["user"] = JavaCast("null", "");
+			}
+			
+			returnContent["statusCode"] = JavaCast("null","");
+			
 			return returnContent;
 		</cfscript>
 
