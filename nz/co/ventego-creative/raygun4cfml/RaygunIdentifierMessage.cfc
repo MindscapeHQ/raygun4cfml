@@ -67,12 +67,12 @@ limitations under the License.
 		<cfscript>
 			var returnContent = {};
 
-			returnContent["Identifier"] = variables.Identifier;
-			returnContent["IsAnonymous"] = variables.IsAnonymous;
-			returnContent["Email"] = variables.Email;
-			returnContent["FullName"] = variables.FullName;
-			returnContent["FirstName"] = variables.FirstName;
-			returnContent["UUID"] = variables.UUID;
+			returnContent["identifier"] = variables.Identifier;
+			returnContent["isAnonymous"] = variables.IsAnonymous;
+			returnContent["email"] = variables.Email;
+			returnContent["fullName"] = variables.FullName;
+			returnContent["firstName"] = variables.FirstName;
+			returnContent["uuid"] = variables.UUID;
 			
 			return returnContent;
 		</cfscript>
