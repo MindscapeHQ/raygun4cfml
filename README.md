@@ -6,11 +6,15 @@ Raygun.io client for CFML.
 
 ## Versions
 
-Current Version: 1.0.0.0 (Jan 3 2015)
+Current Version: 1.0.0.1 (Jul 1 2015)
 
 Note: This release will break your code if you've used 0.4 and older before and have used customRequestData. Please continue reading.
 
 ### History
+
+1.0.0.1 (Jul 1 2015):
+
+- Merge PR21 from Alex --- fixing naming inconsistencies in the user tracking object
 
 1.0.0.0 (Jan 3 2015): 
 
