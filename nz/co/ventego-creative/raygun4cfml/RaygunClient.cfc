@@ -99,6 +99,10 @@ limitations under the License.
             }
 		</cfscript>
 
+        	<!---  Remove // in case CF is adding it when serializing JSON (which is recommended in the CF Lockdown Guide)  --->
+        	<cfset jSONData = ReplaceNoCase(trim(jSONData), "//{", "{")>
+        	<cfset jSONData = ReplaceNoCase(trim(jSONData), "//[", "[")>
+
 		<cfhttp url="https://api.raygun.io/entries" method="post" charset="utf-8" result="postResult">
 			<cfhttpparam type="header" name="Content-Type" value="application/json"/>
 			<cfhttpparam type="header" name="X-ApiKey" value="#variables.apiKey#"/>
