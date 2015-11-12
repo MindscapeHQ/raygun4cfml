@@ -29,72 +29,80 @@ limitations under the License.
 		<cfargument name="issueDataStruct" type="struct" required="yes">
 
 		<cfscript>
-			var returnContent = {};
-			var stackTraceData = [];
-			var stackTraceLines = [];
-            var tagContextData = [];
-			var lenStackTraceLines = 0;
-            var lenTagContext = 0;
+			var returnContent          = {};
+			var stackTraceData         = [];
+			var stackTraceLines        = [];
+			var tagContextData         = [];
+			var lenStackTraceLines     = 0;
+			var lenTagContext          = 0;
 			var stackTraceLineElements = [];
-			var j = 0;
+			var j                      = 0;
 
-            stackTraceLines = arguments.issueDataStruct.stacktrace.split("\sat");
+			stackTraceLines    = arguments.issueDataStruct.stacktrace.split("\sat");
 			lenStackTraceLines = ArrayLen(stackTraceLines);
 
 			for (j=2;j<=lenStackTraceLines;j++)
 			{
-				stackTraceLineElements = stackTraceLines[j].split("\(");
-				stackTraceData[j-1] = {};
-				stackTraceData[j-1]["methodName"] = ListLast(stackTraceLineElements[1],".");
-				stackTraceData[j-1]["className"] = ListDeleteAt(stackTraceLineElements[1],ListLen(stackTraceLineElements[1],"."),".");
-				stackTraceData[j-1]["fileName"] = stackTraceLineElements[2].split(":")[1];
-				stackTraceData[j-1]["lineNumber"] = ReplaceNoCase(stackTraceLineElements[2].split(":")[2],")","");
+				stackTraceLineElements            = stackTraceLines[j].split( "\(" );
+				stackTraceData[j-1]               = {};
+				stackTraceData[j-1]["methodName"] = trim( ListLast( stackTraceLineElements[1], "." ) );
+				stackTraceData[j-1]["className"]  = trim( ListDeleteAt( stackTraceLineElements[1], ListLen( stackTraceLineElements[1], "." ), "." ) );
+				// Check if a line number is present
+				// We look for a colon followed by number(s)
+				// If no line number, return 0 so it's apparent none was given.
+				if( ReFind( '\:(?!\D+)', stackTraceLineElements[2] ) ){
+					stackTraceData[j-1]["fileName"]   = trim( ReReplace( stackTraceLineElements[2].split( "\:(?!\D+)" )[1], "[\)\n\r]", "" ) );
+					stackTraceData[j-1]["lineNumber"] = trim( ReReplace( stackTraceLineElements[2].split( "\:(?!\D+)" )[2], "[\)\n\r]", "" ) );
+				}else{
+					stackTraceData[j-1]["fileName"]   = trim( ReReplace( stackTraceLineElements[2], '[\)\n\r]', '' ) );
+					stackTraceData[j-1]["lineNumber"] = 0;
+				}
 			}
 
 			returnContent["data"] = {"JavaStrackTrace" = stackTraceData};
 
-            // if we deal with an error struct, there'll be a root cause
+			// if we deal with an error struct, there'll be a root cause
 			if (StructKeyExists(arguments.issueDataStruct,"RootCause"))
 			{
 				if (StructKeyExists(arguments.issueDataStruct["RootCause"],"Type") and arguments.issueDataStruct["RootCause"]["Type"] eq "expression")
 				{
 					returnContent["data"]["type"] = arguments.issueDataStruct["RootCause"]["Type"];
 				}
-                if (StructKeyExists(arguments.issueDataStruct["RootCause"],"Message"))
-                {
-                    returnContent["message"] =  arguments.issueDataStruct["RootCause"]["Message"];
-                }
-			    returnContent["catchingMethod"] = "error struct";
-            }
-            // otherwise there's no root cause and the specific data has to be grabbed from somewhere else
-            else
-            {
-                returnContent["data"]["type"] = arguments.issueDataStruct.type;
-                returnContent["message"] = arguments.issueDataStruct.message;
-			    returnContent["catchingMethod"] = "cfcatch struct";
-            }
+				if (StructKeyExists(arguments.issueDataStruct["RootCause"],"Message"))
+				{
+					returnContent["message"] = arguments.issueDataStruct["RootCause"]["Message"];
+				}
+				returnContent["catchingMethod"] = "error struct";
+			}
+			// otherwise there's no root cause and the specific data has to be grabbed from somewhere else
+			else
+			{
+				returnContent["data"]["type"]   = arguments.issueDataStruct.type;
+				returnContent["message"]        = arguments.issueDataStruct.message;
+				returnContent["catchingMethod"] = "cfcatch struct";
+			}
 
-            // if we have a message property in the params section, we want to use that instead
-            if (structKeyExists(arguments.issueDataStruct,"customRequestData") && isStruct(arguments.issueDataStruct.customRequestData.getParams()) && structKeyExists(arguments.issueDataStruct.customRequestData.getParams(),"message"))
-            {
-                var params = arguments.issueDataStruct.customRequestData.getParams();
-                returnContent["message"] = params.message;
-            }
+			// if we have a message property in the params section, we want to use that instead
+			if (structKeyExists(arguments.issueDataStruct,"customRequestData") && isStruct(arguments.issueDataStruct.customRequestData.getParams()) && structKeyExists(arguments.issueDataStruct.customRequestData.getParams(),"message"))
+			{
+				var params = arguments.issueDataStruct.customRequestData.getParams();
+				returnContent["message"] = params.message;
+			}
 
-            returnContent["className"] = arguments.issueDataStruct.type;
+			returnContent["className"] = trim( arguments.issueDataStruct.type );
 
-            lenTagContext = arraylen(arguments.issueDataStruct.tagcontext);
+			lenTagContext = arraylen(arguments.issueDataStruct.tagcontext);
 
-            for (j=1;j<=lenTagContext;j++)
-            {
-                tagContextData[j] = {};
-				tagContextData[j]["methodName"] = "";
-				tagContextData[j]["className"] = arguments.issueDataStruct.tagcontext[j]["id"];
-				tagContextData[j]["fileName"] = arguments.issueDataStruct.tagcontext[j]["template"];
-                tagContextData[j]["lineNumber"] = arguments.issueDataStruct.tagcontext[j]["line"];
-            }
+						for (j=1;j<=lenTagContext;j++)
+						{
+							tagContextData[j]               = {};
+							tagContextData[j]["methodName"] = "";
+							tagContextData[j]["className"]  = trim( arguments.issueDataStruct.tagcontext[j]["id"] );
+							tagContextData[j]["fileName"]   = trim( arguments.issueDataStruct.tagcontext[j]["template"] );
+							tagContextData[j]["lineNumber"] = trim( arguments.issueDataStruct.tagcontext[j]["line"] );
+						}
 
-            returnContent["stackTrace"] = tagContextData;
+			returnContent["stackTrace"] = tagContextData;
 
 			return returnContent;
 		</cfscript>
