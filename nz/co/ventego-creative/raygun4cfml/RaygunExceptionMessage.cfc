@@ -51,13 +51,13 @@ limitations under the License.
 				// Check if a line number is present in the Java Stack Trace
 				// We look for a colon followed by number(s)
 				// If no line number, return 0 so it's apparent none was given.
-				if (ReFind('\:(?!\D+)',stackTraceLineElements[2])){
+				if (ReFind("\:(?!\D+)",stackTraceLineElements[2])){
 					stackTraceData[j-1]["fileName"] = Trim(ReReplace(stackTraceLineElements[2].split("\:(?!\D+)")[1],"[\)\n\r]",""));
 					stackTraceData[j-1]["lineNumber"] = Trim(ReReplace(stackTraceLineElements[2].split("\:(?!\D+)")[2],"[\)\n\r]",""));
 				}
 				else
 				{
-					stackTraceData[j-1]["fileName"] = Trim( ReReplace(stackTraceLineElements[2],'[\)\n\r]',''));
+					stackTraceData[j-1]["fileName"] = Trim(ReReplace(stackTraceLineElements[2],"[\)\n\r]",""));
 					stackTraceData[j-1]["lineNumber"] = 0;
 				}
 			}

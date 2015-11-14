@@ -6,15 +6,19 @@ Raygun.io client for CFML.
 
 ## Versions
 
-Current Version: 1.0.1.0 (Nov 14 2015)
+Current Version: 1.0.2.0 (Nov 14 2015)
 
 Notes:
 
-(1) All releases since 0.5.0.0 will break your code if you've used 0.4 and older before and have used customRequestData. Please continue reading.
+(1) All releases onwards from 0.5.0.0 will break your code if you've used 0.4 and older before and have used customRequestData. Please continue reading.
 
 (2) If you are using the ACF Administrator setting: "Prefix serialized JSON with..." with anything else but the default prefix of "//", the library will not work.
 
 ### History
+
+1.0.2.0 (Nov 14 2015):
+
+- Merged PR26 and modified/refactored it slightly
 
 1.0.1.0 (Nov 14 2015):
 
