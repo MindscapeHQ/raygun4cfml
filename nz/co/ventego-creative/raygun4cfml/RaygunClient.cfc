@@ -51,11 +51,11 @@ limitations under the License.
 			var messageContent = "";
 			var jSONData = "";
 			var postResult = "";
-			
+
 			// PR10: In CF10+, the passed in issueDataStruct is not editable in all cases anymore. It looks like a
 			// struct, but is of a different internal data type behind the scenes. This works around that issue.
 			var issueData = {};
-			
+
 			// Fixing a CF 9 issue with JVM security providers
 			var needsHTTPSecurityHack = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunInternalTools").needsHTTPSecurityProviderHack();
 
@@ -82,7 +82,7 @@ limitations under the License.
             {
                 issueData["tags"] = arguments.tags;
             }
-            
+
             // deal with user identification data passed as an argument
             if (structKeyExists(arguments,"user") && isObject(arguments.user))
             {
@@ -90,7 +90,7 @@ limitations under the License.
             }
             messageContent = message.build(duplicate(issueData));
 			jSONData = serializeJSON(messageContent);
-            
+
             // Fixing a CF 9 issue with JVM security providers
             if (needsHTTPSecurityHack) {
                 var objSecurity = createObject("java", "java.security.Security");
