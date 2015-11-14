@@ -29,32 +29,35 @@ limitations under the License.
 		<cfargument name="issueDataStruct" type="struct" required="yes">
 
 		<cfscript>
-			var returnContent          = {};
-			var stackTraceData         = [];
-			var stackTraceLines        = [];
-			var tagContextData         = [];
-			var lenStackTraceLines     = 0;
-			var lenTagContext          = 0;
+			var returnContent = {};
+			var stackTraceData = [];
+			var stackTraceLines = [];
+			var tagContextData = [];
+			var lenStackTraceLines = 0;
+			var lenTagContext = 0;
 			var stackTraceLineElements = [];
-			var j                      = 0;
+			var j = 0;
 
-			stackTraceLines    = arguments.issueDataStruct.stacktrace.split("\sat");
+			stackTraceLines = arguments.issueDataStruct.stacktrace.split("\sat");
 			lenStackTraceLines = ArrayLen(stackTraceLines);
 
 			for (j=2;j<=lenStackTraceLines;j++)
 			{
-				stackTraceLineElements            = stackTraceLines[j].split( "\(" );
-				stackTraceData[j-1]               = {};
-				stackTraceData[j-1]["methodName"] = trim( ListLast( stackTraceLineElements[1], "." ) );
-				stackTraceData[j-1]["className"]  = trim( ListDeleteAt( stackTraceLineElements[1], ListLen( stackTraceLineElements[1], "." ), "." ) );
-				// Check if a line number is present
+				stackTraceLineElements = stackTraceLines[j].split("\(");
+				stackTraceData[j-1] = {};
+				stackTraceData[j-1]["methodName"] = Trim(ListLast(stackTraceLineElements[1],"."));
+				stackTraceData[j-1]["className"] = Trim(ListDeleteAt(stackTraceLineElements[1],ListLen(stackTraceLineElements[1],"."),"."));
+				// PR 26 - It seems there are Java Strack Traces without line numbers
+				// Check if a line number is present in the Java Stack Trace
 				// We look for a colon followed by number(s)
 				// If no line number, return 0 so it's apparent none was given.
-				if( ReFind( '\:(?!\D+)', stackTraceLineElements[2] ) ){
-					stackTraceData[j-1]["fileName"]   = trim( ReReplace( stackTraceLineElements[2].split( "\:(?!\D+)" )[1], "[\)\n\r]", "" ) );
-					stackTraceData[j-1]["lineNumber"] = trim( ReReplace( stackTraceLineElements[2].split( "\:(?!\D+)" )[2], "[\)\n\r]", "" ) );
-				}else{
-					stackTraceData[j-1]["fileName"]   = trim( ReReplace( stackTraceLineElements[2], '[\)\n\r]', '' ) );
+				if (ReFind('\:(?!\D+)',stackTraceLineElements[2])){
+					stackTraceData[j-1]["fileName"] = Trim(ReReplace(stackTraceLineElements[2].split("\:(?!\D+)")[1],"[\)\n\r]",""));
+					stackTraceData[j-1]["lineNumber"] = Trim(ReReplace(stackTraceLineElements[2].split("\:(?!\D+)")[2],"[\)\n\r]",""));
+				}
+				else
+				{
+					stackTraceData[j-1]["fileName"] = Trim( ReReplace(stackTraceLineElements[2],'[\)\n\r]',''));
 					stackTraceData[j-1]["lineNumber"] = 0;
 				}
 			}
@@ -77,8 +80,8 @@ limitations under the License.
 			// otherwise there's no root cause and the specific data has to be grabbed from somewhere else
 			else
 			{
-				returnContent["data"]["type"]   = arguments.issueDataStruct.type;
-				returnContent["message"]        = arguments.issueDataStruct.message;
+				returnContent["data"]["type"] = arguments.issueDataStruct.type;
+				returnContent["message"] = arguments.issueDataStruct.message;
 				returnContent["catchingMethod"] = "cfcatch struct";
 			}
 
@@ -93,14 +96,14 @@ limitations under the License.
 
 			lenTagContext = arraylen(arguments.issueDataStruct.tagcontext);
 
-						for (j=1;j<=lenTagContext;j++)
-						{
-							tagContextData[j]               = {};
-							tagContextData[j]["methodName"] = "";
-							tagContextData[j]["className"]  = trim( arguments.issueDataStruct.tagcontext[j]["id"] );
-							tagContextData[j]["fileName"]   = trim( arguments.issueDataStruct.tagcontext[j]["template"] );
-							tagContextData[j]["lineNumber"] = trim( arguments.issueDataStruct.tagcontext[j]["line"] );
-						}
+			for (j=1;j<=lenTagContext;j++)
+			{
+				tagContextData[j] = {};
+				tagContextData[j]["methodName"] = "";
+				tagContextData[j]["className"] = trim( arguments.issueDataStruct.tagcontext[j]["id"] );
+				tagContextData[j]["fileName"] = trim( arguments.issueDataStruct.tagcontext[j]["template"] );
+				tagContextData[j]["lineNumber"] = trim( arguments.issueDataStruct.tagcontext[j]["line"] );
+			}
 
 			returnContent["stackTrace"] = tagContextData;
 
