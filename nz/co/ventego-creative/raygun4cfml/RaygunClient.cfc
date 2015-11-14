@@ -97,11 +97,12 @@ limitations under the License.
                 var storeProvider = objSecurity.getProvider("JsafeJCE");
                 objSecurity.removeProvider("JsafeJCE");
             }
-		</cfscript>
 
-        	<!---  Remove // in case CF is adding it when serializing JSON (which is recommended in the CF Lockdown Guide)  --->
-        	<cfset jSONData = ReplaceNoCase(trim(jSONData), "//{", "{")>
-        	<cfset jSONData = ReplaceNoCase(trim(jSONData), "//[", "[")>
+            // Remove '//' in case CF is adding it when serializing JSON (which is recommended in the CF Lockdown Guide)
+            // KK: This will only work if the users has setup none or the default prefix for JSON data
+            jSONData = ReplaceNoCase(trim(jSONData), "//{", "{");
+            jSONData = ReplaceNoCase(trim(jSONData), "//[", "[");
+        </cfscript>
 
 		<cfhttp url="https://api.raygun.io/entries" method="post" charset="utf-8" result="postResult">
 			<cfhttpparam type="header" name="Content-Type" value="application/json"/>
