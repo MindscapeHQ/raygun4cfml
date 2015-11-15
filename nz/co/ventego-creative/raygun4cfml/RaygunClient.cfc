@@ -57,7 +57,7 @@ limitations under the License.
 			var issueData = {};
 
 			// Fixing a CF 9 issue with JVM security providers
-			var needsHTTPSecurityHack = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunInternalTools").needsHTTPSecurityProviderHack();
+			var needsHTTPSecurityHack = createObject("component","RaygunInternalTools").needsHTTPSecurityProviderHack();
 
 			structAppend(issueData, arguments.issueDataStruct);
 
