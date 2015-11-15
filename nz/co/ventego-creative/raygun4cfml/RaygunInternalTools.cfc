@@ -20,7 +20,7 @@ limitations under the License.
 
 		<cfscript>
 
-			var productCheck = createObject("component","nz.co.ventego-creative.tools.ProductCheck").getServerProductInfo();
+			var productCheck = createObject("component","tools.ProductCheck").getServerProductInfo();
 
 			if (structCount(productCheck) && productCheck.cf_server == "ACF" && productCheck.server_main_version == 9 && ListFindNoCase("Developer,Enterprise",productCheck.product_level)) {
 				return true;
