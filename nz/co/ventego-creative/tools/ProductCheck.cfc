@@ -26,6 +26,11 @@ limitations under the License.
 				  stProductInfo.cf_server = "Railo";
 				  stProductInfo.server_version = listFirst(server.railo.version);
 
+			} else if (server.ColdFusion.ProductName CONTAINS "Lucee") {
+
+				  stProductInfo.cf_server = "Lucee";
+				  stProductInfo.server_version = listFirst(server.lucee.version);
+
 			} else if (server.ColdFusion.ProductName CONTAINS "ColdFusion") {
 
 				  stProductInfo.cf_server = "ACF";
