@@ -47,7 +47,7 @@ limitations under the License.
 		<cfargument name="user" type="RaygunIdentifierMessage" required="no">
 
 		<cfscript>
-			var message = CreateObject("component", "RaygunMessage").init();
+			var message = new RaygunMessage();
 			var messageContent = "";
 			var jSONData = "";
 			var postResult = "";
@@ -57,7 +57,7 @@ limitations under the License.
 			var issueData = {};
 
 			// Fixing a CF 9 issue with JVM security providers
-			var needsHTTPSecurityHack = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunInternalTools").needsHTTPSecurityProviderHack();
+			var needsHTTPSecurityHack = new RaygunInternalTools().needsHTTPSecurityProviderHack();
 
 			structAppend(issueData, arguments.issueDataStruct);
 

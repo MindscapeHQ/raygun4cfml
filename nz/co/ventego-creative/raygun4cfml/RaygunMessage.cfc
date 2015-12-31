@@ -30,7 +30,7 @@ limitations under the License.
 
 		<cfscript>
 			var returnContent = {};
-			var messageDetails = CreateObject("component", "RaygunMessageDetails").init();
+			var messageDetails = new RaygunMessageDetails();
 			var ts = DateConvert("Local2UTC",now());
 
 			returnContent["occurredOn"] = "#DateFormat(ts,'yyyy-mm-dd')#T#timeFormat(ts,'HH:mm:ss')#Z";
