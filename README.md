@@ -69,7 +69,7 @@ Notes:
 - Enhanced documentation
 - Changed internal code to make the CFCs independen of package paths
 - Changed internal code to instantiate CFCs using "new", therefore breaking compatibility with ACF8 (and probably Railo 3)
-- From this version onwards, raygun4cfml will use semantic versioning for the version numbers.
+- From this version onwards, raygun4cfml will use semantic versioning for the version numbers (semver.org)
 
 1.0.2.0 (Nov 14 2015):
 
