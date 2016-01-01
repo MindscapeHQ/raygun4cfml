@@ -1,12 +1,56 @@
 raygun4cfml
 ===========
 
-Raygun.io client for CFML.
+Raygun.io API client for CFML.
+
+Current Version: 2.0.0 (Jan 1 2016)
+
+Dependencies: 
+
+- Testbox 2 (for running unit and BDD tests only)
+
+## Library organisation
+
+/src contains the source code. The package structure is nz.co.ventego-creative.co.nz.raygun4cfml but the library's components themselves are independent of the package path. Therefore you can use the library in multiple ways:
+
+- Put the content of /src into your webroot and instantiate RaygunClient through something like the following:
+
+    raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(
+        apiKey = "YOURAPIKEYHERE"
+    );
+
+- Put the contents of /src into any other place of your choice and create a mapping to /nz in your server administrator or through code and then use the instantiation code as above
+
+- Put the contents of the raygun4cfml into a place of your choice where your CFML has some sort of a mapping pointing towards and and just instantiate RaygunClient like this:
+
+    raygun = createObject("component","RaygunClient").init(
+        apiKey = "YOURAPIKEYHERE"
+    );
+    
+/samples contains a set of files that show how the library can be used in your code through a global error handler as well as a contributed example for ColdBox 3.6
+
+/tests contains manual tests as well as a structure (but no tests at this stage) for Testbox unit and BDD tests.
+
+## Using raygun4cfml
+
+Option 1 (preferred):
+
+Use Commandbox and Forgebox and then follow the ideas outlined in 'Library organisation' for further setup.
+
+Option 2:
+
+Fork and clone the repo to your local system. Move the src/test directories into places of your choice and suitable for your system and follow the ideas outlined in 'Library organisation'.
+
+Option 3:
+
+Download a zip file containing the current content of the repo or a release/tag of your choice. Unzip the resulting file. Move the src/test directories into places of your choice and suitable for your system and follow the ideas outlined in 'Library organisation'.
+
+Notes:
+
+(1) Options 2 and 3 will not fulfill any necessary dependencies, you're on your own.
 
 
 ## Versions
-
-Current Version: 1.0.2.0 (Nov 14 2015)
 
 Notes:
 
@@ -14,7 +58,18 @@ Notes:
 
 (2) If you are using the ACF Administrator setting: "Prefix serialized JSON with..." with anything else but the default prefix of "//", the library will not work.
 
+(3) Version 2.0.0 and newer will not work on Adobe ColdFusion 8 and most likely not on Railo 3 (the latter not tested).
+
 ### History
+
+2.0.0 (Jan 1 2016)
+
+- Refactored packages and file/dir locations to cater for ideas in PR28 and to prepare for Forgebox packaging
+- Added Forgebox packaging
+- Enhanced documentation
+- Changed internal code to make the CFCs independen of package paths
+- Changed internal code to instantiate CFCs using "new", therefore breaking compatibility with ACF8 (and probably Railo 3)
+- From this version onwards, raygun4cfml will use semantic versioning for the version numbers.
 
 1.0.2.0 (Nov 14 2015):
 
@@ -58,7 +113,7 @@ Most of the active development happens in my own fork: https://github.com/TheRea
 
 ## License
 
-Copyright 2013-2015 Kai Koenig, Ventego Creative Ltd
+Copyright 2013-2016 Kai Koenig, Ventego Creative Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
