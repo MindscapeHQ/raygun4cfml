@@ -3,7 +3,7 @@ raygun4cfml
 
 Raygun.io API client for CFML.
 
-Current Version: 2.0.0 (Jan 1 2016)
+Current Version: 1.1.0 (Jan 2 2016)
 
 Dependencies: 
 
@@ -58,11 +58,11 @@ Notes:
 
 (2) If you are using the ACF Administrator setting: "Prefix serialized JSON with..." with anything else but the default prefix of "//", the library will not work.
 
-(3) Version 2.0.0 and newer will not work on Adobe ColdFusion 8 and most likely not on Railo 3 (the latter not tested).
+(3) Version 1.1.0 and newer will not work on Adobe ColdFusion 8 and most likely not on Railo 3 (the latter not tested).
 
 ### History
 
-2.0.0 (Jan 1 2016)
+1.1.0 (Jan 2 2016)
 
 - Refactored packages and file/dir locations to cater for ideas in PR28 and to prepare for Forgebox packaging
 - Added Forgebox packaging
