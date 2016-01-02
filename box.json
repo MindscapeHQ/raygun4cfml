@@ -20,7 +20,7 @@
         {"type":"lucee","version":">=4.5.0"},
         {"type":"adobe","version":">=9.0.0"}
     ],
-    "type":"",
+    "type":"logging",
     "projectURL":"https://github.com/MindscapeHQ/raygun4cfml/",
     "license":[
         {"type":"Apache 2.0","URL":"http://www.apache.org/licenses/LICENSE-2.0"}
