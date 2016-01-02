@@ -30,10 +30,10 @@ limitations under the License.
 
 		<cfscript>
 			var returnContent = {};
-			var messageErrorDetails = createObject("component", "RaygunExceptionMessage").init();
-			var messageRequestDetails = createObject("component", "RaygunRequestMessage").init();
-			var messageClientDetails = createObject("component", "RaygunClientMessage").init();
-			var messageEnvironmentDetails = createObject("component", "RaygunEnvironmentMessage").init();
+			var messageErrorDetails = new RaygunExceptionMessage();
+			var messageRequestDetails = new RaygunRequestMessage();
+			var messageClientDetails = new RaygunClientMessage();
+			var messageEnvironmentDetails = new RaygunEnvironmentMessage();
 
 			returnContent["version"] = JavaCast("null","");
 

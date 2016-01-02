@@ -26,15 +26,13 @@ limitations under the License.
 
 	<cffunction name="build" access="package" output="false" returntype="struct">
 
-		<cfargument name="issueDataStruct" type="struct" required="yes">
-
 		<cfscript>
 			var returnContent = {};
-			var messageDetails = CreateObject("component", "RaygunMessageDetails").init();
-			var ts = DateConvert("Local2UTC",now());
 
-			returnContent["occurredOn"] = "#DateFormat(ts,'yyyy-mm-dd')#T#timeFormat(ts,'HH:mm:ss')#Z";
-			returnContent["details"] = messageDetails.build(arguments.issueDataStruct);
+			returnContent["name"] = "raygun4cfml";
+			returnContent["version"] = "1.1.0";
+			returnContent["clientUrl"] = "https://github.com/MindscapeHQ/raygun4cfml";
+			returnContent["apiVersion"] = 1;
 
 			return returnContent;
 		</cfscript>
