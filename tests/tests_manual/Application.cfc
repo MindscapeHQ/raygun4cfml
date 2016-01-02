@@ -15,6 +15,19 @@ limitations under the License.
 --->
 
 <cfcomponent>
+
+    <cfscript>
+        this.mappings = {
+            "/nz" = expandPath("/raygun4cfml/src/nz")
+        };
+    </cfscript>
+
+    <cffunction name="onRequestStart">
+        <cfscript>
+            variables.RAYGUNAPIKEY = "YOURAPIKEYHERE";
+        </cfscript>
+    </cffunction>
+
     <cffunction name="onError">
         <cfargument name="Exception" required="true"/>
         <cfargument name="EventName" required="true"/>
@@ -28,7 +41,7 @@ limitations under the License.
             userIdentifier = createObject("nz.co.ventego-creative.raygun4cfml.RaygunIdentifierMessage").init(Identifier="test@test.com",isAnonymous=false,UUID="47e432fff11",FirstName="Test",Fullname="Tester");
 
             raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(
-                apiKey = "YOURAPIKEYHERE"
+                apiKey = variables.RAYGUNAPIKEY
             );
 
 	        result = raygun.send(issueDataStruct=arguments.Exception,userCustomData=customUserData,tags=tags,user=userIdentifier);
