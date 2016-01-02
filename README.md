@@ -45,7 +45,7 @@ To install a specific release or tag:
     
     box install git://github.com/MindscapeHQ/raygun4cfml.git#{tagname}
     
-Example tag names are 1.1.0, 1.0.2.0, 1.0.1.0 etc. Please check the list of tags on Github.
+Example tag names are 1.1.0, 1.0.2.0, 1.0.1.0 etc. Please check the list of tags on Github. Be aware that if you install any tag from before I introduced support for Commandbox and Forgebox there won't be a box.json file and therefore Commandbox will give you a warning as well as there won't be any dependency management for such an installation of the library.
     
 Shortcut for the above:
  
