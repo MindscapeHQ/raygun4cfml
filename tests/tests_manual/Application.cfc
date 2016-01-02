@@ -24,7 +24,7 @@ limitations under the License.
 
     <cffunction name="onRequestStart">
         <cfscript>
-            variables.RAYGUNAPIKEY = "YOURAPIKEYHERE";
+            variables.RAYGUNAPIKEY = "oJo2hu4/eLcNcKufRBveHQ==";
         </cfscript>
     </cffunction>
 
