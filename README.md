@@ -1,6 +1,8 @@
 raygun4cfml
 ===========
 
+Deploy under Components
+
 Raygun.io API client for CFML.
 
 Current Version: 1.1.0 (Jan 2 2016)
