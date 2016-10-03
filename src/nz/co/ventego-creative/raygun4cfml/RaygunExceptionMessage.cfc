@@ -38,7 +38,7 @@ limitations under the License.
 			var stackTraceLineElements = [];
 			var j = 0;
 
-			stackTraceLines = arguments.issueDataStruct.stacktrace.split("\sat");
+			stackTraceLines = arguments.issueDataStruct.stacktrace.split("\n\sat");
 			lenStackTraceLines = ArrayLen(stackTraceLines);
 
 			for (j=2;j<=lenStackTraceLines;j++)
