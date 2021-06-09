@@ -101,7 +101,6 @@ limitations under the License.
                 issueData["user"] = arguments.user;
             }
 
-
             messageContent = message.build(duplicate(issueData));
 			jSONData = serializeJSON(messageContent);
 

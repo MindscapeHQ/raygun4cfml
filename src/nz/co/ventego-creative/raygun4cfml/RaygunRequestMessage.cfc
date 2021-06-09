@@ -24,7 +24,7 @@ limitations under the License.
 
 	</cffunction>
 
-	<cffunction name="build" access="package" output="false" returntype="struct">
+	<cffunction name="build" access="public" output="false" returntype="struct">
 
         <cfargument name="issueDataStruct" type="struct" required="yes">
 

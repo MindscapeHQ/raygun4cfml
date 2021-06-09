@@ -32,7 +32,7 @@ limitations under the License.
 
 	</cffunction>
 	
-	<cffunction name="getUserCustomData" access="private" output="false" returntype="struct">
+	<cffunction name="getUserCustomData" access="public" output="false" returntype="struct">
 
 		<cfreturn variables.userCustomData>
 
