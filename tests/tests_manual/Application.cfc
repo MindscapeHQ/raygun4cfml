@@ -18,13 +18,13 @@ limitations under the License.
 
     <cfscript>
         this.mappings = {
-            "/nz" = expandPath("/raygun4cfml/src/nz")
+            "/nz" = expandPath("/src/nz")
         };
     </cfscript>
 
     <cffunction name="onRequestStart">
         <cfscript>
-            variables.RAYGUNAPIKEY = "oJo2hu4/eLcNcKufRBveHQ==";
+            variables.RAYGUNAPIKEY = "<your API key>";
         </cfscript>
     </cffunction>
 
@@ -34,14 +34,15 @@ limitations under the License.
 
         <cfscript>
             customUserDataStruct = {"session" = {"memberID" = "5747854", "memberFirstName" = "Kai"}, "params" = {"currentAction" = "IwasDoingThis", "justAnotherParam" = "test"}};
-            customUserData = createObject("nz.co.ventego-creative.raygun4cfml.RaygunUserCustomData").init(customUserDataStruct);
-
+            customUserData = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunUserCustomData").init(customUserDataStruct);
+            
             tags = ["coding","db","sqlfail"];
             
-            userIdentifier = createObject("nz.co.ventego-creative.raygun4cfml.RaygunIdentifierMessage").init(Identifier="test@test.com",isAnonymous=false,UUID="47e432fff11",FirstName="Test",Fullname="Tester");
+            userIdentifier = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunIdentifierMessage").init(Identifier="test@test.com",isAnonymous=false,UUID="47e432fff11",FirstName="Test",Fullname="Tester");
 
             raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(
-                apiKey = variables.RAYGUNAPIKEY
+                apiKey = variables.RAYGUNAPIKEY,
+                appVersion = "4.3.6"
             );
 
 	        result = raygun.send(issueDataStruct=arguments.Exception,userCustomData=customUserData,tags=tags,user=userIdentifier);
