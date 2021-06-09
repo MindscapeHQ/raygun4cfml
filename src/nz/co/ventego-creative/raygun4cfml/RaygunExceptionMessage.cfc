@@ -106,13 +106,6 @@ limitations under the License.
 				returnContent["catchingMethod"] = "cfcatch struct";
 			}
 
-			// if we have a message property in the params section, we want to use that instead
-			if (structKeyExists(arguments.issueDataStruct,"customRequestData") && isStruct(arguments.issueDataStruct.customRequestData.getParams()) && structKeyExists(arguments.issueDataStruct.customRequestData.getParams(),"message"))
-			{
-				var params = arguments.issueDataStruct.customRequestData.getParams();
-				returnContent["message"] = params.message;
-			}
-
 			returnContent["className"] = trim( arguments.issueDataStruct.type );
 
 			return returnContent;
