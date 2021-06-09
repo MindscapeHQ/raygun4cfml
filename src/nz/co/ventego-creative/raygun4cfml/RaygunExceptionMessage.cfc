@@ -37,6 +37,7 @@ limitations under the License.
 			var lenTagContext = 0;
 			var stackTraceLineElements = [];
 			var j = 0;
+			var isLucee = new RaygunInternalTools().isLucee();
 
 			stackTraceLines = arguments.issueDataStruct.stacktrace.split("\sat");
 			lenStackTraceLines = ArrayLen(stackTraceLines);
@@ -62,8 +63,26 @@ limitations under the License.
 				}
 			}
 
-			returnContent["data"] = {"JavaStrackTrace" = stackTraceData};
+			lenTagContext = arraylen(arguments.issueDataStruct.tagcontext);
 
+			for (j=1;j<=lenTagContext;j++)
+			{
+				tagContextData[j] = {};
+				tagContextData[j]["methodName"] = "";
+				tagContextData[j]["className"] = trim( arguments.issueDataStruct.tagcontext[j]["id"] );
+				tagContextData[j]["fileName"] = trim( arguments.issueDataStruct.tagcontext[j]["template"] );
+				tagContextData[j]["lineNumber"] = trim( arguments.issueDataStruct.tagcontext[j]["line"] );
+			}
+
+			returnContent["stackTrace"] = tagContextData;
+
+			if (isLucee) {
+				returnContent["stackTrace"] = stackTraceData;
+			} else {
+				returnContent["data"] = {"JavaStrackTrace" = stackTraceData};
+				returnContent["stackTrace"] = tagContextData;
+			}
+			
 			// if we deal with an error struct, there'll be a root cause
 			if (StructKeyExists(arguments.issueDataStruct,"RootCause"))
 			{
@@ -80,7 +99,9 @@ limitations under the License.
 			// otherwise there's no root cause and the specific data has to be grabbed from somewhere else
 			else
 			{
-				returnContent["data"]["type"] = arguments.issueDataStruct.type;
+				if (!isLucee) {
+					returnContent["data"]["type"] = arguments.issueDataStruct.type;
+				}
 				returnContent["message"] = arguments.issueDataStruct.message;
 				returnContent["catchingMethod"] = "cfcatch struct";
 			}
@@ -93,19 +114,6 @@ limitations under the License.
 			}
 
 			returnContent["className"] = trim( arguments.issueDataStruct.type );
-
-			lenTagContext = arraylen(arguments.issueDataStruct.tagcontext);
-
-			for (j=1;j<=lenTagContext;j++)
-			{
-				tagContextData[j] = {};
-				tagContextData[j]["methodName"] = "";
-				tagContextData[j]["className"] = trim( arguments.issueDataStruct.tagcontext[j]["id"] );
-				tagContextData[j]["fileName"] = trim( arguments.issueDataStruct.tagcontext[j]["template"] );
-				tagContextData[j]["lineNumber"] = trim( arguments.issueDataStruct.tagcontext[j]["line"] );
-			}
-
-			returnContent["stackTrace"] = tagContextData;
 
 			return returnContent;
 		</cfscript>

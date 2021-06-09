@@ -32,6 +32,17 @@ limitations under the License.
 
 	</cffunction>
 
+	<cffunction name="isLucee" access="public" output="false" returnformat="boolean">
+		<cfscript>
+			var productCheck = new tools.ProductCheck().getServerProductInfo();
+
+			if (structCount(productCheck) && productCheck.cf_server == "Lucee") {
+				return true;
+			}
+
+			return false;
+		</cfscript>
+	</cffunction>
 
 
 
