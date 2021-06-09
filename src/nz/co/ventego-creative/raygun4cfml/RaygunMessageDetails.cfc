@@ -78,9 +78,7 @@ limitations under the License.
 			else {
 				returnContent["user"] = JavaCast("null", "");
 			}
-			
-			returnContent["statusCode"] = JavaCast("null","");
-			
+		
 			return returnContent;
 		</cfscript>
 
