@@ -1,6 +1,10 @@
 History
 =======
 
+1.2.0 (Jun 8 2021)
+
+- Support for version (#34)
+
 1.1.0 (Jan 2 2016)
 
 - Refactored packages and file/dir locations to cater for ideas in PR28 and to prepare for Forgebox packaging
