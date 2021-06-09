@@ -106,6 +106,11 @@ limitations under the License.
 				returnContent["catchingMethod"] = "cfcatch struct";
 			}
 
+			// Look for CFML code snippet in TagContext
+			if (StructKeyExists(arguments.issueDataStruct,"TagContext") && isArray(arguments.issueDataStruct["TagContext"]) && structKeyExists(arguments.issueDataStruct["TagContext"][1],"codePrintPlain")) {
+				returnContent["data"]["code"] = arguments.issueDataStruct["TagContext"][1]["codePrintPlain"];
+			}
+
 			returnContent["className"] = trim( arguments.issueDataStruct.type );
 
 			return returnContent;
