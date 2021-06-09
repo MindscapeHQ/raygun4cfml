@@ -4,7 +4,7 @@ History
 1.2.0 (Jun 8 2021)
 
 - Support for version (#34)
-- Fixed stack traces to work better with Lucee 5
+- Fixed stack traces to work better with Lucee and ACF 2021
 
 1.1.0 (Jan 2 2016)
 
