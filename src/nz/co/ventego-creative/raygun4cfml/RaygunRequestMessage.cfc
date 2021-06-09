@@ -24,7 +24,7 @@ limitations under the License.
 
 	</cffunction>
 
-	<cffunction name="build" access="package" output="false" returntype="struct">
+	<cffunction name="build" access="public" output="false" returntype="struct">
 
         <cfargument name="issueDataStruct" type="struct" required="yes">
 
@@ -42,13 +42,10 @@ limitations under the License.
         	returnContent["form"] = FORM;
 
             // TODO: proper testing of this block
-            if (CGI.CONTENT_TYPE != "text/html" && CGI.CONTENT_TYPE != "application/x-www-form-urlencoded" && CGI.REQUEST_METHOD != "GET")
-            {
+            if (CGI.CONTENT_TYPE != "text/html" && CGI.CONTENT_TYPE != "application/x-www-form-urlencoded" && CGI.REQUEST_METHOD != "GET") {
                 var temp = getHttpRequestData().content;
                 returnContent["rawData"] = Left(temp, rawDataMaxLength);
-            }
-            else
-            {
+            } else {
                 returnContent["rawData"] = JavaCast("null","");
             }
 
@@ -57,29 +54,20 @@ limitations under the License.
 
 	</cffunction>
 
-    <!--- PR10: Added in PR10 - decided not to use it for determining the query string as this method would not include
-    "incomplete" query strings, such as ?a=5&b=7&c - the c would be missing --->
-	<!---
 	<cffunction name="getQueryStringFromUrlScope" access="private" output="false" returntype="string">
-
 		<cfscript>
 			var result = "";
 
-			for(var key in url)
-			{
+			for(var key in url) {
 				result = result & key & "=" & url[key] & "&";
 			}
 
-            if (len(result))
-            {
+            if (len(result)) {
                 return left(result,len(result)-1);
-            }
-            else
-            {
+			} else {
                 return "";
             }
 		</cfscript>
-
 	</cffunction>
-    --->
+
 </cfcomponent>

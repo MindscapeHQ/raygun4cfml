@@ -15,10 +15,8 @@ limitations under the License.
 --->
 
 <cfscript>
-    // This is an example for using Raygun.io in a global error handler template,
+    // This is a set of examples for using Raygun.io in a global error handler template,
     // e.g. cferror or a template that's hooked into the ColdFusion Administrator
-
-
 
 	// 1. Using a content filter
     //
@@ -92,19 +90,6 @@ limitations under the License.
     // );
 	//
 	// result = raygun.send(issueDataStruct=error,user=userIdentifier);
-
-    customUserDataStruct = {"session" = {"memberID" = "5747854", "memberFirstName" = "Kai"}, "params" = {"currentAction" = "IwasDoingThis", "justAnotherParam" = "test"}};
-    customUserData = createObject("nz.co.ventego-creative.raygun4cfml.RaygunUserCustomData").init(customUserDataStruct);
-
-    tags = ["coding","db","sqlfail"];
-
-    userIdentifier = createObject("nz.co.ventego-creative.raygun4cfml.RaygunIdentifierMessage").init(Identifier="test@test.com",isAnonymous=false,UUID="47e432fff11",FirstName="Test",Fullname="Tester");
-
-    raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(
-        apiKey = variables.RAYGUNAPIKEY
-    );
-
-    result = raygun.send(issueDataStruct=arguments.Exception,userCustomData=customUserData,tags=tags,user=userIdentifier);
 </cfscript>
 
 

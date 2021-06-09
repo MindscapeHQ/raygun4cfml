@@ -19,19 +19,26 @@ limitations under the License.
 	<cfscript>
 		variables.apiKey = "";
         variables.contentFilter = "";
+        variables.appVersion = "";
 	</cfscript>
 
 	<cffunction name="init" access="public" output="false" returntype="any">
 
 		<cfargument name="apiKey" type="string" required="yes">
         <cfargument name="contentFilter" type="RaygunContentFilter" required="no">
-
+        <cfargument name="appVersion" type="string" required="no">
+        
 		<cfscript>
 			variables.apiKey = arguments.apiKey;
 
             if (structKeyExists(arguments,"contentFilter"))
             {
                 variables.contentFilter = arguments.contentFilter;
+            }
+
+            if (structKeyExists(arguments,"appVersion"))
+            {
+                variables.appVersion = arguments.appVersion;
             }
 
 			return this;
@@ -71,6 +78,11 @@ limitations under the License.
                 applyFilter(variables.contentFilter);
             }
 
+            if (len(variables.appVersion))
+            {
+                issueData["appVersion"] = variables.appVersion
+            }
+
             // deal with custom data passed as an argument
             if (structKeyExists(arguments,"userCustomData") && isObject(arguments.userCustomData))
             {
@@ -88,6 +100,7 @@ limitations under the License.
             {
                 issueData["user"] = arguments.user;
             }
+
             messageContent = message.build(duplicate(issueData));
 			jSONData = serializeJSON(messageContent);
 

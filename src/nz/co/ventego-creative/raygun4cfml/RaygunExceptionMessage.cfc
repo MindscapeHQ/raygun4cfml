@@ -24,7 +24,7 @@ limitations under the License.
 
 	</cffunction>
 
-	<cffunction name="build" access="package" output="false" returntype="struct">
+	<cffunction name="build" access="public" output="false" returntype="struct">
 
 		<cfargument name="issueDataStruct" type="struct" required="yes">
 
@@ -37,6 +37,8 @@ limitations under the License.
 			var lenTagContext = 0;
 			var stackTraceLineElements = [];
 			var j = 0;
+			var isLucee = new RaygunInternalTools().isLucee();
+			var isACF2021 = new RaygunInternalTools().isACF2021();
 
 			stackTraceLines = arguments.issueDataStruct.stacktrace.split("\sat");
 			lenStackTraceLines = ArrayLen(stackTraceLines);
@@ -62,8 +64,26 @@ limitations under the License.
 				}
 			}
 
-			returnContent["data"] = {"JavaStrackTrace" = stackTraceData};
+			lenTagContext = arraylen(arguments.issueDataStruct.tagcontext);
 
+			for (j=1;j<=lenTagContext;j++)
+			{
+				tagContextData[j] = {};
+				tagContextData[j]["methodName"] = "";
+				tagContextData[j]["className"] = trim( arguments.issueDataStruct.tagcontext[j]["id"] );
+				tagContextData[j]["fileName"] = trim( arguments.issueDataStruct.tagcontext[j]["template"] );
+				tagContextData[j]["lineNumber"] = trim( arguments.issueDataStruct.tagcontext[j]["line"] );
+			}
+
+			returnContent["stackTrace"] = tagContextData;
+
+			if (isLucee || isACF2021) {
+				returnContent["stackTrace"] = stackTraceData;
+			} else {
+				returnContent["data"] = {"JavaStrackTrace" = stackTraceData};
+				returnContent["stackTrace"] = tagContextData;
+			}
+			
 			// if we deal with an error struct, there'll be a root cause
 			if (StructKeyExists(arguments.issueDataStruct,"RootCause"))
 			{
@@ -80,32 +100,19 @@ limitations under the License.
 			// otherwise there's no root cause and the specific data has to be grabbed from somewhere else
 			else
 			{
-				returnContent["data"]["type"] = arguments.issueDataStruct.type;
+				if (!isLucee || isACF2021) {
+					returnContent["data"]["type"] = arguments.issueDataStruct.type;
+				}
 				returnContent["message"] = arguments.issueDataStruct.message;
 				returnContent["catchingMethod"] = "cfcatch struct";
 			}
 
-			// if we have a message property in the params section, we want to use that instead
-			if (structKeyExists(arguments.issueDataStruct,"customRequestData") && isStruct(arguments.issueDataStruct.customRequestData.getParams()) && structKeyExists(arguments.issueDataStruct.customRequestData.getParams(),"message"))
-			{
-				var params = arguments.issueDataStruct.customRequestData.getParams();
-				returnContent["message"] = params.message;
+			// Look for CFML code snippet in TagContext
+			if (StructKeyExists(arguments.issueDataStruct,"TagContext") && isArray(arguments.issueDataStruct["TagContext"]) && structKeyExists(arguments.issueDataStruct["TagContext"][1],"codePrintPlain")) {
+				returnContent["data"]["code"] = arguments.issueDataStruct["TagContext"][1]["codePrintPlain"];
 			}
 
 			returnContent["className"] = trim( arguments.issueDataStruct.type );
-
-			lenTagContext = arraylen(arguments.issueDataStruct.tagcontext);
-
-			for (j=1;j<=lenTagContext;j++)
-			{
-				tagContextData[j] = {};
-				tagContextData[j]["methodName"] = "";
-				tagContextData[j]["className"] = trim( arguments.issueDataStruct.tagcontext[j]["id"] );
-				tagContextData[j]["fileName"] = trim( arguments.issueDataStruct.tagcontext[j]["template"] );
-				tagContextData[j]["lineNumber"] = trim( arguments.issueDataStruct.tagcontext[j]["line"] );
-			}
-
-			returnContent["stackTrace"] = tagContextData;
 
 			return returnContent;
 		</cfscript>

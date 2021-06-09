@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 --->
 
+<!--- This errorhandler is actually all commented out, the code below will use onError in Application.cfc --->
 <cferror type="exception" template="../../samples/global_errorhandler/errortemplate.cfm">
 
-<!--- This test file requires you to have a global errorhandler setup or  deal with the resulting error via cferror (see above) or onError and having a filter setup --->
+<!--- This test file requires you to have a global errorhandler setup or deal with the resulting error via cferror (see above) or onError and having a filter setup --->
 <cfset form["Kai"] = 38>
 <cfset form["Password"] = "gfgfdgfdgfdgfd">
 <cfset form["KaisSecretPasswordThing"] = "gfgfgfdfgdw432443543">

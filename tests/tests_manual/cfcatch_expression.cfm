@@ -14,17 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 --->
 
-<!--- catching an exception - in this case an Expression exception --->
+
+<!--- 
+Example: Catching an exception - in this case an Expression exception 
+
+This code will never hit an error handler but only be dealt with locally in the try/catch construct
+--->
+<cfscript>
+    variables.RAYGUNAPIKEY = "<your API key>";
+</cfscript>
 
 <cftry>
     <cfscript>
-		a = 34;
+		a = 14;
 		b = 0;
 		c = a/b;
 	</cfscript>
 <cfcatch>
 	<cfdump var="#cfcatch#"/>
-    <cfset raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(variables.RAYGUNAPIKEY)/>
+    <cfset raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(apiKey=variables.RAYGUNAPIKEY,appVersion="3.4.5")/>
     <cfset result = raygun.send(cfcatch)/>
     <cfdump var="#result#"/>
 </cfcatch>

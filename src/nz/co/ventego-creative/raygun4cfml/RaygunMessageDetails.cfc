@@ -24,7 +24,7 @@ limitations under the License.
 
 	</cffunction>
 
-	<cffunction name="build" access="package" output="false" returntype="struct">
+	<cffunction name="build" access="public" output="false" returntype="struct">
 
 		<cfargument name="issueDataStruct" type="struct" required="yes">
 
@@ -35,8 +35,12 @@ limitations under the License.
 			var messageClientDetails = new RaygunClientMessage();
 			var messageEnvironmentDetails = new RaygunEnvironmentMessage();
 
-			returnContent["version"] = JavaCast("null","");
-
+			if (structKeyExists(arguments.issueDataStruct,"appVersion")) {
+				returnContent["version"] = arguments.issueDataStruct.appVersion;
+			} else {
+				returnContent["version"] = JavaCast("null","");
+			}
+			
             try
             {
                 returnContent["machineName"] = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostAddress();
@@ -74,9 +78,7 @@ limitations under the License.
 			else {
 				returnContent["user"] = JavaCast("null", "");
 			}
-			
-			returnContent["statusCode"] = JavaCast("null","");
-			
+		
 			return returnContent;
 		</cfscript>
 

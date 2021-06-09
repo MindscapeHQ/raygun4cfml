@@ -1,17 +1,17 @@
 {
     "name":"raygun4cfml",
-    "version":"1.1.0",
-    "author":"Kai Koenig",
+    "version":"1.2.0",
+    "author":"Kai Koenig <kai@ventego-creative.co.nz>",
     "homepage":"https://github.com/MindscapeHQ/raygun4cfml/",
     "documentation":"https://github.com/MindscapeHQ/raygun4cfml/blob/master/README.md",
     "repository":{
-        "type":"Git",
+        "type":"git",
         "URL":"https://github.com/MindscapeHQ/raygun4cfml/"
     },
     "bugs":"https://github.com/MindscapeHQ/raygun4cfml/issues",
     "slug":"raygun4cfml",
-    "shortDescription":"I provide integration with the Raygun.io API",
-    "description":"API provider to send error information to Raygun.io for tracking and analysis",
+    "shortDescription":"Provides integration with the Raygun CrashReporting API",
+    "description":"API provider to send error information to Raygun crash reporting for tracking and analysis",
     "instructions":"Install this module and follow the guidelines in README.me as well as in /samples and /tests/test_manual",
     "changelog":"https://github.com/MindscapeHQ/raygun4cfml/blob/master/changelog.md",
     "keywords":["error","errortracking","bugs","bugtracking","raygun","raygun.io"],
@@ -25,7 +25,7 @@
     "license":[
         {"type":"Apache 2.0","URL":"http://www.apache.org/licenses/LICENSE-2.0"}
     ],
-    "dependencies":{
+    "devDependencies":{
         "testbox":"x"
     }
 }
