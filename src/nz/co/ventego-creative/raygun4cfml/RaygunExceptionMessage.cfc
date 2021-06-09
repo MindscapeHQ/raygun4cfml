@@ -38,6 +38,7 @@ limitations under the License.
 			var stackTraceLineElements = [];
 			var j = 0;
 			var isLucee = new RaygunInternalTools().isLucee();
+			var isACF2021 = new RaygunInternalTools().isACF2021();
 
 			stackTraceLines = arguments.issueDataStruct.stacktrace.split("\sat");
 			lenStackTraceLines = ArrayLen(stackTraceLines);
@@ -76,7 +77,7 @@ limitations under the License.
 
 			returnContent["stackTrace"] = tagContextData;
 
-			if (isLucee) {
+			if (isLucee || isACF2021) {
 				returnContent["stackTrace"] = stackTraceData;
 			} else {
 				returnContent["data"] = {"JavaStrackTrace" = stackTraceData};
@@ -99,7 +100,7 @@ limitations under the License.
 			// otherwise there's no root cause and the specific data has to be grabbed from somewhere else
 			else
 			{
-				if (!isLucee) {
+				if (!isLucee || isACF2021) {
 					returnContent["data"]["type"] = arguments.issueDataStruct.type;
 				}
 				returnContent["message"] = arguments.issueDataStruct.message;

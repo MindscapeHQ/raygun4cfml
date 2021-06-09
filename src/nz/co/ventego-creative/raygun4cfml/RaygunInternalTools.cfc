@@ -32,11 +32,23 @@ limitations under the License.
 
 	</cffunction>
 
-	<cffunction name="isLucee" access="public" output="false" returnformat="boolean">
+	<cffunction name="isLucee" access="public" output="false" returntype="boolean">
 		<cfscript>
 			var productCheck = new tools.ProductCheck().getServerProductInfo();
 
 			if (structCount(productCheck) && productCheck.cf_server == "Lucee") {
+				return true;
+			}
+
+			return false;
+		</cfscript>
+	</cffunction>
+
+	<cffunction name="isACF2021" access="public" output="false" returntype="boolean">
+		<cfscript>
+			var productCheck = new tools.ProductCheck().getServerProductInfo();
+
+			if (structCount(productCheck) && productCheck.cf_server == "ACF" && productCheck.server_main_version == "2021") {
 				return true;
 			}
 
