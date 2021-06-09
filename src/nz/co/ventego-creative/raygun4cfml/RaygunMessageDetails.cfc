@@ -35,8 +35,12 @@ limitations under the License.
 			var messageClientDetails = new RaygunClientMessage();
 			var messageEnvironmentDetails = new RaygunEnvironmentMessage();
 
-			returnContent["version"] = JavaCast("null","");
-
+			if (structKeyExists(arguments.issueDataStruct,"appVersion")) {
+				returnContent["version"] = arguments.issueDataStruct.appVersion;
+			} else {
+				returnContent["version"] = JavaCast("null","");
+			}
+			
             try
             {
                 returnContent["machineName"] = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostAddress();
