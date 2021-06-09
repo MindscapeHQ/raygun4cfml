@@ -35,9 +35,10 @@ limitations under the License.
 
 			returnContent["architecture"] = props["os.arch"];
 			returnContent["availablePhysicalMemory"] = osbean.getFreePhysicalMemorySize();
-			returnContent["osVersion"] = props["os.name"] & "|" & props["os.version"];
+			returnContent["osVersion"] = props["os.version"];
 			returnContent["packageVersion"] = props["java.vm.vendor"] & "|" & props["java.runtime.version"] & "|" & props["java.vm.name"];
 			returnContent["totalPhysicalMemory"] = osbean.getTotalPhysicalMemorySize();
+			returnContent["platform"] = props["os.name"];
 
 			return returnContent;
 		</cfscript>
