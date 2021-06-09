@@ -54,4 +54,20 @@ limitations under the License.
 
 	</cffunction>
 
+	<cffunction name="getQueryStringFromUrlScope" access="private" output="false" returntype="string">
+		<cfscript>
+			var result = "";
+
+			for(var key in url) {
+				result = result & key & "=" & url[key] & "&";
+			}
+
+            if (len(result)) {
+                return left(result,len(result)-1);
+			} else {
+                return "";
+            }
+		</cfscript>
+	</cffunction>
+
 </cfcomponent>
