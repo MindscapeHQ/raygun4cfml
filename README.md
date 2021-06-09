@@ -3,25 +3,25 @@ raygun4cfml
 
 Raygun.io API client for CFML.
 
-Current Version: 1.1.0 (Jan 2 2016)
+Current Version: 1.2.0 (Jun 8 2021)
 
 Dependencies: 
 
-- Testbox 2 (for running unit and BDD tests only)
+- Testbox (for running unit and BDD tests only)
 
 ## Library organisation
 
 /src contains the source code. The package structure is nz.co.ventego-creative.co.nz.raygun4cfml but the library's components themselves are independent of the package path. Therefore you can use the library in multiple ways:
 
-Put the content of /src into your webroot and instantiate RaygunClient through something like the following:
+- Put the content of /src into your webroot and instantiate RaygunClient through something like the following:
 
     raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(
         apiKey = "YOURAPIKEYHERE"
     );
 
-Put the contents of /src into any other place of your choice and create a mapping to /nz in your server administrator or through code and then use the instantiation code as above.
+- Put the contents of /src into any other place of your choice and create a mapping to /nz in your server administrator or through code and then use the instantiation code as above.
 
-Put the contents of the raygun4cfml into a place of your choice where your CFML has some sort of a mapping pointing towards and and just instantiate RaygunClient like this:
+- Put the contents of the raygun4cfml into a place of your choice where your CFML has some sort of a mapping pointing towards and and just instantiate RaygunClient like this:
 
     raygun = createObject("component","RaygunClient").init(
         apiKey = "YOURAPIKEYHERE"
@@ -29,7 +29,7 @@ Put the contents of the raygun4cfml into a place of your choice where your CFML 
     
 /samples contains a set of files that show how the library can be used in your code through a global error handler as well as a contributed example for ColdBox 3.6
 
-/tests contains manual tests as well as a structure (but no tests at this stage) for Testbox unit and BDD tests.
+/tests contains manual tests and more samples as well as a structure (but no tests at this stage) for Testbox unit and BDD tests.
 
 ## Getting and Using raygun4cfml
 
@@ -88,7 +88,7 @@ Most of the active development happens in my own fork: https://github.com/TheRea
 
 ## License
 
-Copyright 2013-2016 Kai Koenig, Ventego Creative Ltd
+Copyright 2013-2021 Kai Koenig, Ventego Creative Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
