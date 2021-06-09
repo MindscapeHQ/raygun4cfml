@@ -2,18 +2,18 @@
     "name":"raygun4cfml",
     "version":"1.2.0",
     "author":"Kai Koenig",
-    "homepage":"https://github.com/TheRealAgentK/raygun4cfml/",
-    "documentation":"https://github.com/TheRealAgentK/raygun4cfml/blob/master/README.md",
+    "homepage":"https://github.com/MindscapeHQ/raygun4cfml/",
+    "documentation":"https://github.com/MindscapeHQ/raygun4cfml/blob/master/README.md",
     "repository":{
         "type":"Git",
-        "URL":"https://github.com/TheRealAgentK/raygun4cfml/"
+        "URL":"https://github.com/MindscapeHQ/raygun4cfml/"
     },
     "bugs":"https://github.com/MindscapeHQ/raygun4cfml/issues",
     "slug":"raygun4cfml",
     "shortDescription":"I provide integration with the Raygun.io API",
     "description":"API provider to send error information to Raygun.io for tracking and analysis",
     "instructions":"Install this module and follow the guidelines in README.me as well as in /samples and /tests/test_manual",
-    "changelog":"https://github.com/TheRealAgentK/raygun4cfml/blob/master/changelog.md",
+    "changelog":"https://github.com/MindscapeHQ/raygun4cfml/blob/master/changelog.md",
     "keywords":["error","errortracking","bugs","bugtracking","raygun","raygun.io"],
     "engines":[
         {"type":"railo","version":">=4.0.0"},
@@ -21,7 +21,7 @@
         {"type":"adobe","version":">=9.0.0"}
     ],
     "type":"logging",
-    "projectURL":"https://github.com/TheRealAgentK/raygun4cfml/",
+    "projectURL":"https://github.com/MindscapeHQ/raygun4cfml/",
     "license":[
         {"type":"Apache 2.0","URL":"http://www.apache.org/licenses/LICENSE-2.0"}
     ],
