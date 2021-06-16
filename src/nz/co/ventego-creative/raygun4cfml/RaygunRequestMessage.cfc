@@ -33,7 +33,7 @@ limitations under the License.
             var rawDataMaxLength = 4096;
 
 			returnContent["hostName"] = CGI.HTTP_HOST;
-			returnContent["url"] = CGI.SCRIPT_NAME;
+			returnContent["url"] = CGI.SCRIPT_NAME & CGI.PATH_INFO
 			returnContent["httpMethod"] = CGI.REQUEST_METHOD;
 			returnContent["iPAddress"] = CGI.REMOTE_ADDR;
 			returnContent["queryString"] = CGI.QUERY_STRING;

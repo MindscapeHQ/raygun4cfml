@@ -75,18 +75,11 @@ limitations under the License.
 				tagContextData[j]["lineNumber"] = trim( arguments.issueDataStruct.tagcontext[j]["line"] );
 			}
 
+			returnContent["data"] = {"JavaStrackTrace" = stackTraceData};
 			returnContent["stackTrace"] = tagContextData;
-
-			if (isLucee || isACF2021) {
-				returnContent["stackTrace"] = stackTraceData;
-			} else {
-				returnContent["data"] = {"JavaStrackTrace" = stackTraceData};
-				returnContent["stackTrace"] = tagContextData;
-			}
 			
 			// if we deal with an error struct, there'll be a root cause
-			if (StructKeyExists(arguments.issueDataStruct,"RootCause"))
-			{
+			if (StructKeyExists(arguments.issueDataStruct,"RootCause")) {
 				if (StructKeyExists(arguments.issueDataStruct["RootCause"],"Type") and arguments.issueDataStruct["RootCause"]["Type"] eq "expression")
 				{
 					returnContent["data"]["type"] = arguments.issueDataStruct["RootCause"]["Type"];
@@ -95,21 +88,14 @@ limitations under the License.
 				{
 					returnContent["message"] = arguments.issueDataStruct["RootCause"]["Message"];
 				}
-				returnContent["catchingMethod"] = "error struct";
-			}
-			// otherwise there's no root cause and the specific data has to be grabbed from somewhere else
-			else
-			{
-				if (!isLucee || isACF2021) {
+				returnContent["catchingMethod"] = "Error struct";
+			} else {
+                // otherwise there's no root cause and the specific data has to be grabbed from somewhere else
+                if (!isLucee || isACF2021) {
 					returnContent["data"]["type"] = arguments.issueDataStruct.type;
 				}
 				returnContent["message"] = arguments.issueDataStruct.message;
-				returnContent["catchingMethod"] = "cfcatch struct";
-			}
-
-			// Look for CFML code snippet in TagContext
-			if (StructKeyExists(arguments.issueDataStruct,"TagContext") && isArray(arguments.issueDataStruct["TagContext"]) && structKeyExists(arguments.issueDataStruct["TagContext"][1],"codePrintPlain")) {
-				returnContent["data"]["code"] = arguments.issueDataStruct["TagContext"][1]["codePrintPlain"];
+				returnContent["catchingMethod"] = "CFCatch struct";
 			}
 
 			returnContent["className"] = trim( arguments.issueDataStruct.type );
