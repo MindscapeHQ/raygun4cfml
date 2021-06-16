@@ -3,7 +3,7 @@ raygun4cfml
 
 Raygun.io API client for CFML.
 
-Current Version: 1.2.0 (Jun 8 2021)
+Current Version: 1.2.1 (Jun 16 2021)
 
 Dependencies: 
 

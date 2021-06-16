@@ -1,7 +1,7 @@
 {
     "name":"raygun4cfml",
-    "version":"1.2.0",
-    "location":"MindscapeHQ/raygun4cfml#1.2.0",
+    "version":"1.2.1",
+    "location":"MindscapeHQ/raygun4cfml#1.2.1",
     "author":"Kai Koenig <kai@ventego-creative.co.nz>",
     "homepage":"https://github.com/MindscapeHQ/raygun4cfml/",
     "documentation":"https://github.com/MindscapeHQ/raygun4cfml/blob/master/README.md",

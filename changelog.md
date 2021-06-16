@@ -1,6 +1,11 @@
 History
 =======
 
+1.2.1 (Jun 16 2021)
+
+- Minor changes to stacktrace handling
+- Additional of Path Info to Request URL data
+
 1.2.0 (Jun 8 2021)
 
 - Support for version (#34)
