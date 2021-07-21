@@ -1,6 +1,10 @@
 History
 =======
 
+1.3.0 (Jul 21 2021)
+
+- Raygun4CFML is now tracking heap memory in the `availableVirtualMemory` and `availableFreeMemory` fields and not physical memory anymore. Fixed accessibility issues of internal classes post-Java 8 and the library should now be working fine across all JDKs.
+
 1.2.1 (Jun 16 2021)
 
 - Minor changes to stacktrace handling
@@ -8,7 +12,7 @@ History
 
 1.2.0 (Jun 8 2021)
 
-- Support for version (#34)
+- Support for version (#33)
 - Fixed stack traces to work better with Lucee and ACF 2021
 
 1.1.0 (Jan 2 2016)
