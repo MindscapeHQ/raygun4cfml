@@ -41,9 +41,9 @@ limitations under the License.
 			returnContent["data"] = CGI;
         	returnContent["form"] = FORM;
 
-            // TODO: proper testing of this block
             if (CGI.CONTENT_TYPE != "text/html" && CGI.CONTENT_TYPE != "application/x-www-form-urlencoded" && CGI.REQUEST_METHOD != "GET") {
-                var temp = getHttpRequestData().content;
+				// TODO check if this is JSON and if yes, deserialise and apply content filter in some way here and then deserialise again
+				var temp = getHttpRequestData().content;
                 returnContent["rawData"] = Left(temp, rawDataMaxLength);
             } else {
                 returnContent["rawData"] = JavaCast("null","");
