@@ -32,6 +32,7 @@ limitations under the License.
 			var props = runtime.getProperties();
 			var mf = createObject("java", "java.lang.management.ManagementFactory");
 			var heapMem = mf.getMemoryMXBean().getHeapMemoryUsage();
+			var osbean = "";
 
 			returnContent["availableVirtualMemory"] = heapMem.getCommitted()-heapMem.getUsed();
 			returnContent["totalVirtualMemory"] = heapMem.getCommitted();
@@ -39,6 +40,16 @@ limitations under the License.
 			returnContent["osVersion"] = props["os.version"];
 			returnContent["packageVersion"] = props["java.vm.vendor"] & "|" & props["java.runtime.version"] & "|" & props["java.vm.name"];
 			returnContent["platform"] = props["os.name"];
+			
+			try {
+				osbean = mf.getOperatingSystemMXBean();
+				returnContent["availablePhysicalMemory"] = osbean.getFreePhysicalMemorySize();
+				returnContent["totalPhysicalMemory"] = osbean.getTotalPhysicalMemorySize();
+			}
+			catch (any e) {
+				returnContent["availablePhysicalMemory"] = JavaCast("null","");
+				returnContent["totalPhysicalMemory"] = JavaCast("null","");
+			}
 
 			return returnContent;
 		</cfscript>
