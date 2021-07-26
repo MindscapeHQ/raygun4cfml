@@ -1,6 +1,10 @@
 History
 =======
 
+1.3.1 (Jul 26 2021)
+
+- Physical memory tracking again under certain conditions, provided the underlying Java code is available on the JVM (modules opened up).
+
 1.3.0 (Jul 21 2021)
 
 - Raygun4CFML is now tracking heap memory in the `availableVirtualMemory` and `availableFreeMemory` fields and not physical memory anymore. Fixed accessibility issues of internal classes post-Java 8 and the library should now be working fine across all JDKs.
