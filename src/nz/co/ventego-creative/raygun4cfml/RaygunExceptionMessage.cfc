@@ -39,6 +39,7 @@ limitations under the License.
 			var j = 0;
 			var isLucee = new RaygunInternalTools().isLucee();
 			var isACF2021 = new RaygunInternalTools().isACF2021();
+			var stackTraceLineElement = {};
 
 			stackTraceLines = arguments.issueDataStruct.stacktrace.split("\sat");
 			lenStackTraceLines = ArrayLen(stackTraceLines);
@@ -46,22 +47,28 @@ limitations under the License.
 			for (j=2;j<=lenStackTraceLines;j++)
 			{
 				stackTraceLineElements = stackTraceLines[j].split("\(");
-				stackTraceData[j-1] = {};
-				stackTraceData[j-1]["methodName"] = Trim(ListLast(stackTraceLineElements[1],"."));
-				stackTraceData[j-1]["className"] = Trim(ListDeleteAt(stackTraceLineElements[1],ListLen(stackTraceLineElements[1],"."),"."));
-				// PR 26 - It seems there are Java Strack Traces without line numbers
-				// Check if a line number is present in the Java Stack Trace
-				// We look for a colon followed by number(s)
-				// If no line number, return 0 so it's apparent none was given.
-				if (ReFind("\:(?!\D+)",stackTraceLineElements[2])){
-					stackTraceData[j-1]["fileName"] = Trim(ReReplace(stackTraceLineElements[2].split("\:(?!\D+)")[1],"[\)\n\r]",""));
-					stackTraceData[j-1]["lineNumber"] = Trim(ReReplace(stackTraceLineElements[2].split("\:(?!\D+)")[2],"[\)\n\r]",""));
-				}
-				else
-				{
-					stackTraceData[j-1]["fileName"] = Trim(ReReplace(stackTraceLineElements[2],"[\)\n\r]",""));
-					stackTraceData[j-1]["lineNumber"] = 0;
-				}
+				
+				if (ArrayLen(stackTraceLineElements) == 2) {
+					
+					stackTraceLineElement = {};
+					stackTraceLineElement["methodName"] = Trim(ListLast(stackTraceLineElements[1],"."));
+					stackTraceLineElement["className"] = Trim(ListDeleteAt(stackTraceLineElements[1],ListLen(stackTraceLineElements[1],"."),"."));
+					// PR 26 - It seems there are Java Strack Traces without line numbers
+					// Check if a line number is present in the Java Stack Trace
+					// We look for a colon followed by number(s)
+					// If no line number, return 0 so it's apparent none was given.
+					if (ReFind("\:(?!\D+)",stackTraceLineElements[2])){
+						stackTraceLineElement["fileName"] = Trim(ReReplace(stackTraceLineElements[2].split("\:(?!\D+)")[1],"[\)\n\r]",""));
+						stackTraceLineElement["lineNumber"] = Trim(ReReplace(stackTraceLineElements[2].split("\:(?!\D+)")[2],"[\)\n\r]",""));
+					}
+					else
+					{
+						stackTraceLineElement["fileName"] = Trim(ReReplace(stackTraceLineElements[2],"[\)\n\r]",""));
+						stackTraceLineElement["lineNumber"] = 0;
+					}
+
+					ArrayAppend(stackTraceData, stackTraceLineElement);
+				}	
 			}
 
 			lenTagContext = arraylen(arguments.issueDataStruct.tagcontext);
@@ -90,8 +97,8 @@ limitations under the License.
 				}
 				returnContent["catchingMethod"] = "Error struct";
 			} else {
-                // otherwise there's no root cause and the specific data has to be grabbed from somewhere else
-                if (!isLucee || isACF2021) {
+            // otherwise there's no root cause and the specific data has to be grabbed from somewhere else
+            if (!isLucee || isACF2021) {
 					returnContent["data"]["type"] = arguments.issueDataStruct.type;
 				}
 				returnContent["message"] = arguments.issueDataStruct.message;
