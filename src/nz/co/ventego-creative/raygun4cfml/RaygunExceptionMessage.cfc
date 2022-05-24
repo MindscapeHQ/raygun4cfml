@@ -30,75 +30,96 @@ limitations under the License.
 
 		<cfscript>
 			var returnContent = {};
+			
 			var stackTraceData = [];
 			var stackTraceLines = [];
 			var tagContextData = [];
+			var stackTraceLineElements = [];
+			var stackTraceLineElement = {};
 			var lenStackTraceLines = 0;
 			var lenTagContext = 0;
-			var stackTraceLineElements = [];
 			var j = 0;
+			
 			var isLucee = new RaygunInternalTools().isLucee();
 			var isACF2021 = new RaygunInternalTools().isACF2021();
+			
+			var entryPoint = arguments.issueDataStruct;
 
-			stackTraceLines = arguments.issueDataStruct.stacktrace.split("\sat");
-			lenStackTraceLines = ArrayLen(stackTraceLines);
+ 			if (StructKeyExists(arguments.issueDataStruct,"Cause") && StructKeyExists(arguments.issueDataStruct.cause,"CatchBlock")) {
+ 				entryPoint = arguments.issueDataStruct.cause.CatchBlock;
+ 			}
 
-			for (j=2;j<=lenStackTraceLines;j++)
-			{
-				stackTraceLineElements = stackTraceLines[j].split("\(");
-				stackTraceData[j-1] = {};
-				stackTraceData[j-1]["methodName"] = Trim(ListLast(stackTraceLineElements[1],"."));
-				stackTraceData[j-1]["className"] = Trim(ListDeleteAt(stackTraceLineElements[1],ListLen(stackTraceLineElements[1],"."),"."));
-				// PR 26 - It seems there are Java Strack Traces without line numbers
-				// Check if a line number is present in the Java Stack Trace
-				// We look for a colon followed by number(s)
-				// If no line number, return 0 so it's apparent none was given.
-				if (ReFind("\:(?!\D+)",stackTraceLineElements[2])){
-					stackTraceData[j-1]["fileName"] = Trim(ReReplace(stackTraceLineElements[2].split("\:(?!\D+)")[1],"[\)\n\r]",""));
-					stackTraceData[j-1]["lineNumber"] = Trim(ReReplace(stackTraceLineElements[2].split("\:(?!\D+)")[2],"[\)\n\r]",""));
-				}
-				else
+ 			if (isArray(entryPoint.stacktrace)) {
+ 				stackTraceData = entryPoint.stacktrace;
+ 			} elseif (isSimpleValue(entryPoint.stacktrace)) {
+ 				stackTraceLines = entryPoint.stacktrace.split("\sat");
+				lenStackTraceLines = ArrayLen(stackTraceLines);
+
+				for (j=2;j<=lenStackTraceLines;j++)
 				{
-					stackTraceData[j-1]["fileName"] = Trim(ReReplace(stackTraceLineElements[2],"[\)\n\r]",""));
-					stackTraceData[j-1]["lineNumber"] = 0;
+					stackTraceLineElements = stackTraceLines[j].split("\(");
+					
+					if (ArrayLen(stackTraceLineElements) == 2) {
+						
+						stackTraceLineElement = {};
+						stackTraceLineElement["methodName"] = Trim(ListLast(stackTraceLineElements[1],"."));
+						stackTraceLineElement["className"] = Trim(ListDeleteAt(stackTraceLineElements[1],ListLen(stackTraceLineElements[1],"."),"."));
+						// PR 26 - It seems there are Java Strack Traces without line numbers
+						// Check if a line number is present in the Java Stack Trace
+						// We look for a colon followed by number(s)
+						// If no line number, return 0 so it's apparent none was given.
+						if (ReFind("\:(?!\D+)",stackTraceLineElements[2])){
+							stackTraceLineElement["fileName"] = Trim(ReReplace(stackTraceLineElements[2].split("\:(?!\D+)")[1],"[\)\n\r]",""));
+							stackTraceLineElement["lineNumber"] = Trim(ReReplace(stackTraceLineElements[2].split("\:(?!\D+)")[2],"[\)\n\r]",""));
+						}
+						else
+						{
+							stackTraceLineElement["fileName"] = Trim(ReReplace(stackTraceLineElements[2],"[\)\n\r]",""));
+							stackTraceLineElement["lineNumber"] = 0;
+						}
+
+						ArrayAppend(stackTraceData, stackTraceLineElement);
+					}	
 				}
-			}
+ 			}
 
-			lenTagContext = arraylen(arguments.issueDataStruct.tagcontext);
+			if (structKeyExists(entryPoint,"tagcontext")) {
+				lenTagContext = arraylen(entryPoint.tagcontext);
 
-			for (j=1;j<=lenTagContext;j++)
-			{
-				tagContextData[j] = {};
-				tagContextData[j]["methodName"] = "";
-				tagContextData[j]["className"] = trim( arguments.issueDataStruct.tagcontext[j]["id"] );
-				tagContextData[j]["fileName"] = trim( arguments.issueDataStruct.tagcontext[j]["template"] );
-				tagContextData[j]["lineNumber"] = trim( arguments.issueDataStruct.tagcontext[j]["line"] );
-			}
-
+				for (j=1;j<=lenTagContext;j++)
+				{
+					tagContextData[j] = {};
+					tagContextData[j]["methodName"] = "";
+					tagContextData[j]["className"] = trim( entryPoint.tagcontext[j]["id"] );
+					tagContextData[j]["fileName"] = trim( entryPoint.tagcontext[j]["template"] );
+					tagContextData[j]["lineNumber"] = trim( entryPoint.tagcontext[j]["line"] );
+				}
+ 			}
+ 			
 			returnContent["data"] = {"JavaStrackTrace" = stackTraceData};
 			returnContent["stackTrace"] = tagContextData;
 			
 			// if we deal with an error struct, there'll be a root cause
-			if (StructKeyExists(arguments.issueDataStruct,"RootCause")) {
-				if (StructKeyExists(arguments.issueDataStruct["RootCause"],"Type") and arguments.issueDataStruct["RootCause"]["Type"] eq "expression")
+			if (StructKeyExists(entryPoint,"RootCause")) {
+				if (StructKeyExists(entryPoint["RootCause"],"Type") and entryPoint["RootCause"]["Type"] eq "expression")
 				{
-					returnContent["data"]["type"] = arguments.issueDataStruct["RootCause"]["Type"];
+					returnContent["data"]["type"] = entryPoint["RootCause"]["Type"];
 				}
-				if (StructKeyExists(arguments.issueDataStruct["RootCause"],"Message"))
+				if (StructKeyExists(entryPoint["RootCause"],"Message"))
 				{
-					returnContent["message"] = arguments.issueDataStruct["RootCause"]["Message"];
+					returnContent["message"] = entryPoint["RootCause"]["Message"];
 				}
 				returnContent["catchingMethod"] = "Error struct";
 			} else {
-                // otherwise there's no root cause and the specific data has to be grabbed from somewhere else
-                if (!isLucee || isACF2021) {
-					returnContent["data"]["type"] = arguments.issueDataStruct.type;
+            // otherwise there's no root cause and the specific data has to be grabbed from somewhere else
+            if (!isLucee || isACF2021) {
+					returnContent["data"]["type"] = entryPoint.type;
 				}
-				returnContent["message"] = arguments.issueDataStruct.message;
+				returnContent["message"] = entryPoint.message;
 				returnContent["catchingMethod"] = "CFCatch struct";
 			}
 
-			returnContent["className"] = trim( arguments.issueDataStruct.type );
+			returnContent["className"] = trim( entryPoint.type );
 
 			return returnContent;
 		</cfscript>
