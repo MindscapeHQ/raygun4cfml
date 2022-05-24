@@ -1,6 +1,11 @@
 History
 =======
 
+1.4.0 (May 24 2022)
+
+- Supporting stack traces where certain elements (like TagContext) don't exist
+- Support for specifc Java strack traces stemming from asynchronous handling
+
 1.3.1 (Jul 26 2021)
 
 - Physical memory tracking again under certain conditions, provided the underlying Java code is available on the JVM (modules opened up).
