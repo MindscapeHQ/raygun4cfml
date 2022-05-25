@@ -78,7 +78,7 @@ Download a zip file containing the current content of the repo or a release/tag 
 
 (1) Options 2 and 3 will not fulfill any necessary dependencies, you're on your own.
 
-## Versions
+## Version History
 
 See changelog.md for further information.
 
