@@ -92,25 +92,12 @@ See changelog.md for further information.
 
 ## How to contribute
 
+Note: Please be aware that raygun4cfml is not an official Raygun library and not maintained by Raygun stuff. See [LICENSE](LICENSE) for more details.
+
 The main repository of this project is https://github.com/MindscapeHQ/raygun4cfml. Please fork from there, create a local develop or feature branch and merge changes back to your local master branch to submit a pull request. Even better, get in touch with me on Twitter (@AgentK) or here on Github before you undertake any work so that it can be coordinated with what I'm doing.
 
 Most of the active development happens in my own fork: https://github.com/TheRealAgentK/raygun4cfml - feel free to peek around in there.
 
-## License
-
-Copyright 2013-2022 Kai Koenig, Ventego Creative Ltd
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
 
 
 
