@@ -92,7 +92,7 @@ See changelog.md for further information.
 
 ## How to contribute
 
-Please note that this repository is not an official Raygun repository, see [LICENSE](LICENSE) for more details.
+Note: Please be aware that raygun4cfml is not an official Raygun library and not maintained by Raygun stuff. See [LICENSE](LICENSE) for more details.
 
 The main repository of this project is https://github.com/MindscapeHQ/raygun4cfml. Please fork from there, create a local develop or feature branch and merge changes back to your local master branch to submit a pull request. Even better, get in touch with me on Twitter (@AgentK) or here on Github before you undertake any work so that it can be coordinated with what I'm doing.
 
