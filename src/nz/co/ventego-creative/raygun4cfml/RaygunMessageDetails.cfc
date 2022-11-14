@@ -35,12 +35,16 @@ limitations under the License.
 			var messageClientDetails = new RaygunClientMessage();
 			var messageEnvironmentDetails = new RaygunEnvironmentMessage();
 
+            if (structKeyExists(arguments.issueDataStruct,"groupingKey") && len(arguments.issueDataStruct.groupingKey)) {
+                returnContent["groupingKey"] = arguments.issueDataStruct.groupingKey;
+            }
+
 			if (structKeyExists(arguments.issueDataStruct,"appVersion")) {
 				returnContent["version"] = arguments.issueDataStruct.appVersion;
 			} else {
 				returnContent["version"] = JavaCast("null","");
 			}
-			
+
             try
             {
                 returnContent["machineName"] = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostAddress();
@@ -70,7 +74,7 @@ limitations under the License.
 			else {
 				returnContent["tags"] = ArrayNew(1);
 			}
-			
+
 			if (structKeyExists(arguments.issueDataStruct,"user") && isObject(arguments.issueDataStruct.user))
 			{
 				returnContent["user"] = arguments.issueDataStruct.user.build();
@@ -78,7 +82,7 @@ limitations under the License.
 			else {
 				returnContent["user"] = JavaCast("null", "");
 			}
-		
+
 			return returnContent;
 		</cfscript>
 

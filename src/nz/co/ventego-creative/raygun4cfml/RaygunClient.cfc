@@ -54,6 +54,7 @@ limitations under the License.
 		<cfargument name="userCustomData" type="RaygunUserCustomData" required="no">
 		<cfargument name="tags" type="array" required="no">
 		<cfargument name="user" type="RaygunIdentifierMessage" required="no">
+        <cfargument name="groupingKey" type="string" required="no">
         <cfargument name="sendAsync" type="boolean" required="no" default="false">
 
         <cfscript>
@@ -76,6 +77,12 @@ limitations under the License.
                 payloadArgs["user"] = arguments.user;
             }
 
+            // deal with a grouping key passed as an argument
+            if (structKeyExists(arguments,"groupingKey") && len(arguments.groupingKey))
+            {
+                payloadArgs["groupingKey"] = arguments.groupingKey;
+            }
+
             var payload = buildPayload(argumentCollection=payloadArgs);
 
             if (arguments.sendAsync) {
@@ -95,6 +102,7 @@ limitations under the License.
 		<cfargument name="userCustomData" type="RaygunUserCustomData" required="no">
 		<cfargument name="tags" type="array" required="no">
 		<cfargument name="user" type="RaygunIdentifierMessage" required="no">
+        <cfargument name="groupingKey" type="string" required="no">
 
         <cfscript>
             arguments["sendAsync"] = true;
@@ -110,6 +118,7 @@ limitations under the License.
 		<cfargument name="userCustomData" type="RaygunUserCustomData" required="no">
 		<cfargument name="tags" type="array" required="no">
 		<cfargument name="user" type="RaygunIdentifierMessage" required="no">
+        <cfargument name="groupingKey" type="string" required="no">
 
         <cfscript>
 			var message = new RaygunMessage();
@@ -153,6 +162,12 @@ limitations under the License.
             if (structKeyExists(arguments,"user") && isObject(arguments.user))
             {
                 issueData["user"] = arguments.user;
+            }
+
+            // deal with a grouping key passed as an argument
+            if (structKeyExists(arguments,"groupingKey") && len(arguments.groupingKey))
+            {
+                issueData["groupingKey"] = arguments.groupingKey;
             }
 
             messageContent = message.build(duplicate(issueData));
