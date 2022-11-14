@@ -1,5 +1,5 @@
 <!---
-Copyright 2013-2014 Kai Koenig, Ventego Creative Ltd
+Copyright 2022 Kai Koenig, Ventego Creative Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -35,9 +35,9 @@ limitations under the License.
         <cfscript>
             customUserDataStruct = {"session" = {"memberID" = "5747854", "memberFirstName" = "Kai"}, "params" = {"currentAction" = "IwasDoingThis", "justAnotherParam" = "test"}};
             customUserData = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunUserCustomData").init(customUserDataStruct);
-            
+
             tags = ["coding","db","sqlfail"];
-            
+
             userIdentifier = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunIdentifierMessage").init(Identifier="test@test.com",isAnonymous=false,UUID="47e432fff11",FirstName="Test",Fullname="Tester");
 
             raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(

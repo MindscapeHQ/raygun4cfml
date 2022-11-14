@@ -1,5 +1,5 @@
 <!---
-Copyright 2013 Kai Koenig, Ventego Creative Ltd
+Copyright 2022 Kai Koenig, Ventego Creative Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@ limitations under the License.
 --->
 
 
-<!--- 
-Example: Catching an exception - in this case an Expression exception 
+<!---
+Example: Catching an exception - in this case an Expression exception
 
 This code will never hit an error handler but only be dealt with locally in the try/catch construct
 --->

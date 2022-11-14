@@ -1,5 +1,5 @@
 <!---
-Copyright 2013 Kai Koenig, Ventego Creative Ltd
+Copyright 2022 Kai Koenig, Ventego Creative Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ limitations under the License.
 		</cfscript>
 
 	</cffunction>
-	
+
 	<cffunction name="getUserCustomData" access="public" output="false" returntype="struct">
 
 		<cfreturn variables.userCustomData>
@@ -39,11 +39,11 @@ limitations under the License.
 	</cffunction>
 
 	<cffunction name="build" access="public" output="false" returntype="struct">
-		
+
 		<cfscript>
 			return getUserCustomData();
 		</cfscript>
-	
+
 	</cffunction>
 
 </cfcomponent>

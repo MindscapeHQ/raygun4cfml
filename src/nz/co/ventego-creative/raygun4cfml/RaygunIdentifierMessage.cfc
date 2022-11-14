@@ -1,5 +1,5 @@
 <!---
-Copyright 2015 Kai Koenig, Ventego Creative Ltd
+Copyright 2022 Kai Koenig, Ventego Creative Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -36,27 +36,27 @@ limitations under the License.
 
 		<cfscript>
 			variables.Identifier = arguments.Identifier;
-			
+
 			if (structKeyExists(arguments,"IsAnonymous")) {
 				variables.IsAnonymous = arguments.IsAnonymous;
 			}
-			
+
 			if (structKeyExists(arguments,"Email")) {
 				variables.Email = arguments.Email;
 			}
-			
+
 			if (structKeyExists(arguments,"FullName")) {
 				variables.FullName = arguments.FullName;
 			}
-			
+
 			if (structKeyExists(arguments,"FirstName")) {
 				variables.FirstName = arguments.FirstName;
 			}
-			
+
 			if (structKeyExists(arguments,"UUID")) {
 				variables.UUID = arguments.UUID;
 			}
-			
+
 			return this;
 		</cfscript>
 
@@ -73,7 +73,7 @@ limitations under the License.
 			returnContent["fullName"] = variables.FullName;
 			returnContent["firstName"] = variables.FirstName;
 			returnContent["uuid"] = variables.UUID;
-			
+
 			return returnContent;
 		</cfscript>
 

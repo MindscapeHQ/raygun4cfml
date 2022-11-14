@@ -1,5 +1,5 @@
 <!---
-Copyright 2013 Kai Koenig, Ventego Creative Ltd
+Copyright 2022 Kai Koenig, Ventego Creative Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ limitations under the License.
 			returnContent["osVersion"] = props["os.version"];
 			returnContent["packageVersion"] = props["java.vm.vendor"] & "|" & props["java.runtime.version"] & "|" & props["java.vm.name"];
 			returnContent["platform"] = props["os.name"];
-			
+
 			try {
 				osbean = mf.getOperatingSystemMXBean();
 				returnContent["availablePhysicalMemory"] = osbean.getFreePhysicalMemorySize();

@@ -1,5 +1,5 @@
 <!---
-Copyright 2013 Kai Koenig, Ventego Creative Ltd
+Copyright 2022 Kai Koenig, Ventego Creative Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -47,8 +47,8 @@ limitations under the License.
     // );
     //
 	// result = raygun.send(error)
-    
-    
+
+
 
 	// 3. Sending custom data (NEW way of doing it)
     //
@@ -56,15 +56,15 @@ limitations under the License.
     //
     // customUserDataStruct = {"session" = {"memberID" = "5747854", "memberFirstName" = "Kai"}, "params" = {"currentAction" = "IwasDoingThis", "justAnotherParam" = "test"}};
     // customUserData = createObject("nz.co.ventego-creative.raygun4cfml.RaygunUserCustomData").init(customUserDataStruct);
-    // 
+    //
     // raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(
     //      apiKey =  variables.RAYGUNAPIKEY
     // );
 	//
 	// result = raygun.send(issueDataStruct=error,userCustomData=customUserData);
-	
-	
-	
+
+
+
 	// 4. Sending tags
     //
     // Sample with passing in tags (error is the CF error structure provided to the error template(s), variables.RAYGUNAPIKEY is the Raygun.io API key)
@@ -76,9 +76,9 @@ limitations under the License.
     // );
 	//
 	// result = raygun.send(issueDataStruct=error,tags=tags);
-	
-	
-	
+
+
+
 	// 5. Sending user information
     //
     // Sample with passing in user information (error is the CF error structure provided to the error template(s), variables.RAYGUNAPIKEY is the Raygun.io API key)

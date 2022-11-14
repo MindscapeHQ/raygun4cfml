@@ -1,5 +1,5 @@
 <!---
-Copyright 2013 Kai Koenig, Ventego Creative Ltd
+Copyright 2022 Kai Koenig, Ventego Creative Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ limitations under the License.
 
 		<cfscript>
 			var returnContent = {};
-			
+
 			var stackTraceData = [];
 			var stackTraceLines = [];
 			var tagContextData = [];
@@ -39,10 +39,10 @@ limitations under the License.
 			var lenStackTraceLines = 0;
 			var lenTagContext = 0;
 			var j = 0;
-			
+
 			var isLucee = new RaygunInternalTools().isLucee();
 			var isACF2021 = new RaygunInternalTools().isACF2021();
-			
+
 			var entryPoint = arguments.issueDataStruct;
 
  			if (StructKeyExists(arguments.issueDataStruct,"Cause") && StructKeyExists(arguments.issueDataStruct.cause,"CatchBlock")) {
@@ -58,9 +58,9 @@ limitations under the License.
 				for (j=2;j<=lenStackTraceLines;j++)
 				{
 					stackTraceLineElements = stackTraceLines[j].split("\(");
-					
+
 					if (ArrayLen(stackTraceLineElements) == 2) {
-						
+
 						stackTraceLineElement = {};
 						stackTraceLineElement["methodName"] = Trim(ListLast(stackTraceLineElements[1],"."));
 						stackTraceLineElement["className"] = Trim(ListDeleteAt(stackTraceLineElements[1],ListLen(stackTraceLineElements[1],"."),"."));
@@ -79,7 +79,7 @@ limitations under the License.
 						}
 
 						ArrayAppend(stackTraceData, stackTraceLineElement);
-					}	
+					}
 				}
  			}
 
@@ -95,10 +95,10 @@ limitations under the License.
 					tagContextData[j]["lineNumber"] = trim( entryPoint.tagcontext[j]["line"] );
 				}
  			}
- 			
+
 			returnContent["data"] = {"JavaStrackTrace" = stackTraceData};
 			returnContent["stackTrace"] = tagContextData;
-			
+
 			// if we deal with an error struct, there'll be a root cause
 			if (StructKeyExists(entryPoint,"RootCause")) {
 				if (StructKeyExists(entryPoint["RootCause"],"Type") and entryPoint["RootCause"]["Type"] eq "expression")
