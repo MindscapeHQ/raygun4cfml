@@ -1,6 +1,13 @@
 History
 =======
 
+1.5.0 (November 14 2022)
+
+- Added .sendAsync() entry point wrapping the HTTP call into its own thread. 
+- Regorganisation of code in RaygunClient
+- Improving handling of getHTTPRequestData in RaygunRequestMessage
+- Changed HTTP endpoint to .com
+
 1.4.0 (May 24 2022)
 
 - Supporting stack traces where certain elements (like TagContext) don't exist
