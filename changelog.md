@@ -7,6 +7,7 @@ History
 - Regorganisation of code in RaygunClient
 - Improving handling of getHTTPRequestData in RaygunRequestMessage
 - Changed HTTP endpoint to .com
+- Supports groupingKey now
 
 1.4.0 (May 24 2022)
 
