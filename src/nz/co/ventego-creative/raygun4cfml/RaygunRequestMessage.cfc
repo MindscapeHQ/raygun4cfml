@@ -31,19 +31,20 @@ limitations under the License.
 		<cfscript>
 			var returnContent = {};
             var rawDataMaxLength = 4096;
+            var httpRequest = getHttpRequestData();
 
 			returnContent["hostName"] = CGI.HTTP_HOST;
 			returnContent["url"] = CGI.SCRIPT_NAME & CGI.PATH_INFO
 			returnContent["httpMethod"] = CGI.REQUEST_METHOD;
 			returnContent["iPAddress"] = CGI.REMOTE_ADDR;
 			returnContent["queryString"] = CGI.QUERY_STRING;
-			returnContent["headers"] = getHttpRequestData().headers;
+			returnContent["headers"] = httpRequest.headers;
 			returnContent["data"] = CGI;
         	returnContent["form"] = FORM;
 
             if (CGI.CONTENT_TYPE != "text/html" && CGI.CONTENT_TYPE != "application/x-www-form-urlencoded" && CGI.REQUEST_METHOD != "GET") {
 				// TODO check if this is JSON and if yes, deserialise and apply content filter in some way here and then deserialise again
-				var temp = getHttpRequestData().content;
+				var temp = httpRequest.content;
                 returnContent["rawData"] = Left(temp, rawDataMaxLength);
             } else {
                 returnContent["rawData"] = JavaCast("null","");
