@@ -1,5 +1,5 @@
 <!---
-Copyright 2014 Kai Koenig, Ventego Creative Ltd
+Copyright 2022 Kai Koenig, Ventego Creative Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,45 +16,45 @@ limitations under the License.
 
 <cfcomponent output="false">
 
-	<cffunction name="needsHTTPSecurityProviderHack" access="public" output="false" returntype="boolean">
+    <cffunction name="needsHTTPSecurityProviderHack" access="public" output="false" returntype="boolean">
 
-		<cfscript>
+        <cfscript>
 
-			var productCheck = new tools.ProductCheck().getServerProductInfo();
+            var productCheck = new tools.ProductCheck().getServerProductInfo();
 
-			if (structCount(productCheck) && productCheck.cf_server == "ACF" && productCheck.server_main_version == 9 && ListFindNoCase("Developer,Enterprise",productCheck.product_level)) {
-				return true;
-			}
+            if (structCount(productCheck) && productCheck.cf_server == "ACF" && productCheck.server_main_version == 9 && ListFindNoCase("Developer,Enterprise",productCheck.product_level)) {
+                return true;
+            }
 
-			return false;
-		</cfscript>
+            return false;
+        </cfscript>
 
 
-	</cffunction>
+    </cffunction>
 
-	<cffunction name="isLucee" access="public" output="false" returntype="boolean">
-		<cfscript>
-			var productCheck = new tools.ProductCheck().getServerProductInfo();
+    <cffunction name="isLucee" access="public" output="false" returntype="boolean">
+        <cfscript>
+            var productCheck = new tools.ProductCheck().getServerProductInfo();
 
-			if (structCount(productCheck) && productCheck.cf_server == "Lucee") {
-				return true;
-			}
+            if (structCount(productCheck) && productCheck.cf_server == "Lucee") {
+                return true;
+            }
 
-			return false;
-		</cfscript>
-	</cffunction>
+            return false;
+        </cfscript>
+    </cffunction>
 
-	<cffunction name="isACF2021" access="public" output="false" returntype="boolean">
-		<cfscript>
-			var productCheck = new tools.ProductCheck().getServerProductInfo();
+    <cffunction name="isACF2021" access="public" output="false" returntype="boolean">
+        <cfscript>
+            var productCheck = new tools.ProductCheck().getServerProductInfo();
 
-			if (structCount(productCheck) && productCheck.cf_server == "ACF" && productCheck.server_main_version == "2021") {
-				return true;
-			}
+            if (structCount(productCheck) && productCheck.cf_server == "ACF" && productCheck.server_main_version == "2021") {
+                return true;
+            }
 
-			return false;
-		</cfscript>
-	</cffunction>
+            return false;
+        </cfscript>
+    </cffunction>
 
 
 

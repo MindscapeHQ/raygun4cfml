@@ -1,5 +1,5 @@
 <!---
-Copyright 2013 Kai Koenig, Ventego Creative Ltd
+Copyright 2022 Kai Koenig, Ventego Creative Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,34 +16,34 @@ limitations under the License.
 
 <cfcomponent output="false">
 
-	<cfscript>
-		variables.userCustomData = {};
-	</cfscript>
+    <cfscript>
+        variables.userCustomData = {};
+    </cfscript>
 
-	<cffunction name="init" access="public" output="false" returntype="any">
+    <cffunction name="init" access="public" output="false" returntype="any">
 
-		<cfargument name="userCustomData" type="struct" required="yes">
+        <cfargument name="userCustomData" type="struct" required="yes">
 
-		<cfscript>
-			variables.userCustomData = arguments.userCustomData;
+        <cfscript>
+            variables.userCustomData = arguments.userCustomData;
 
-			return this;
-		</cfscript>
+            return this;
+        </cfscript>
 
-	</cffunction>
-	
-	<cffunction name="getUserCustomData" access="public" output="false" returntype="struct">
+    </cffunction>
 
-		<cfreturn variables.userCustomData>
+    <cffunction name="getUserCustomData" access="public" output="false" returntype="struct">
 
-	</cffunction>
+        <cfreturn variables.userCustomData>
 
-	<cffunction name="build" access="public" output="false" returntype="struct">
-		
-		<cfscript>
-			return getUserCustomData();
-		</cfscript>
-	
-	</cffunction>
+    </cffunction>
+
+    <cffunction name="build" access="public" output="false" returntype="struct">
+
+        <cfscript>
+            return getUserCustomData();
+        </cfscript>
+
+    </cffunction>
 
 </cfcomponent>

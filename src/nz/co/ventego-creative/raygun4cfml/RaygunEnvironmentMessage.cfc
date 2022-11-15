@@ -1,5 +1,5 @@
 <!---
-Copyright 2013 Kai Koenig, Ventego Creative Ltd
+Copyright 2022 Kai Koenig, Ventego Creative Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,44 +16,44 @@ limitations under the License.
 
 <cfcomponent output="false">
 
-	<cffunction name="init" access="public" output="false" returntype="any">
+    <cffunction name="init" access="public" output="false" returntype="any">
 
-		<cfscript>
-			return this;
-		</cfscript>
+        <cfscript>
+            return this;
+        </cfscript>
 
-	</cffunction>
+    </cffunction>
 
-	<cffunction name="build" access="public" output="false" returntype="struct">
+    <cffunction name="build" access="public" output="false" returntype="struct">
 
-		<cfscript>
-			var returnContent = {};
-			var runtime = createObject("java", "java.lang.System");
-			var props = runtime.getProperties();
-			var mf = createObject("java", "java.lang.management.ManagementFactory");
-			var heapMem = mf.getMemoryMXBean().getHeapMemoryUsage();
-			var osbean = "";
+        <cfscript>
+            var returnContent = {};
+            var runtime = createObject("java", "java.lang.System");
+            var props = runtime.getProperties();
+            var mf = createObject("java", "java.lang.management.ManagementFactory");
+            var heapMem = mf.getMemoryMXBean().getHeapMemoryUsage();
+            var osbean = "";
 
-			returnContent["availableVirtualMemory"] = heapMem.getCommitted()-heapMem.getUsed();
-			returnContent["totalVirtualMemory"] = heapMem.getCommitted();
-			returnContent["architecture"] = props["os.arch"];
-			returnContent["osVersion"] = props["os.version"];
-			returnContent["packageVersion"] = props["java.vm.vendor"] & "|" & props["java.runtime.version"] & "|" & props["java.vm.name"];
-			returnContent["platform"] = props["os.name"];
-			
-			try {
-				osbean = mf.getOperatingSystemMXBean();
-				returnContent["availablePhysicalMemory"] = osbean.getFreePhysicalMemorySize();
-				returnContent["totalPhysicalMemory"] = osbean.getTotalPhysicalMemorySize();
-			}
-			catch (any e) {
-				returnContent["availablePhysicalMemory"] = JavaCast("null","");
-				returnContent["totalPhysicalMemory"] = JavaCast("null","");
-			}
+            returnContent["availableVirtualMemory"] = heapMem.getCommitted()-heapMem.getUsed();
+            returnContent["totalVirtualMemory"] = heapMem.getCommitted();
+            returnContent["architecture"] = props["os.arch"];
+            returnContent["osVersion"] = props["os.version"];
+            returnContent["packageVersion"] = props["java.vm.vendor"] & "|" & props["java.runtime.version"] & "|" & props["java.vm.name"];
+            returnContent["platform"] = props["os.name"];
 
-			return returnContent;
-		</cfscript>
+            try {
+                osbean = mf.getOperatingSystemMXBean();
+                returnContent["availablePhysicalMemory"] = osbean.getFreePhysicalMemorySize();
+                returnContent["totalPhysicalMemory"] = osbean.getTotalPhysicalMemorySize();
+            }
+            catch (any e) {
+                returnContent["availablePhysicalMemory"] = JavaCast("null","");
+                returnContent["totalPhysicalMemory"] = JavaCast("null","");
+            }
 
-	</cffunction>
+            return returnContent;
+        </cfscript>
+
+    </cffunction>
 
 </cfcomponent>

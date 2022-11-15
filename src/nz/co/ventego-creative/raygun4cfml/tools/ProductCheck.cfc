@@ -1,5 +1,5 @@
 <!---
-Copyright 2014 Kai Koenig, Ventego Creative Ltd
+Copyright 2022 Kai Koenig, Ventego Creative Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,33 +16,33 @@ limitations under the License.
 
 <cfcomponent output="false">
 
-  	<cffunction name="getServerProductInfo" access="public" output="false" returntype="struct">
+      <cffunction name="getServerProductInfo" access="public" output="false" returntype="struct">
 
-  		<cfscript>
-			var stProductInfo = {};
+          <cfscript>
+            var stProductInfo = {};
 
-			if (server.ColdFusion.ProductName CONTAINS "Railo") {
+            if (server.ColdFusion.ProductName CONTAINS "Railo") {
 
-				  stProductInfo.cf_server = "Railo";
-				  stProductInfo.server_version = listFirst(server.railo.version);
+                  stProductInfo.cf_server = "Railo";
+                  stProductInfo.server_version = listFirst(server.railo.version);
 
-			} else if (server.ColdFusion.ProductName CONTAINS "Lucee") {
+            } else if (server.ColdFusion.ProductName CONTAINS "Lucee") {
 
-				  stProductInfo.cf_server = "Lucee";
-				  stProductInfo.server_version = listFirst(server.lucee.version);
+                  stProductInfo.cf_server = "Lucee";
+                  stProductInfo.server_version = listFirst(server.lucee.version);
 
-			} else if (server.ColdFusion.ProductName CONTAINS "ColdFusion") {
+            } else if (server.ColdFusion.ProductName CONTAINS "ColdFusion") {
 
-				  stProductInfo.cf_server = "ACF";
-				  stProductInfo.server_version = server.coldfusion.productversion;
-				  stProductInfo.server_main_version = ListFirst(stProductInfo.server_version);
-				  stProductInfo.product_level = server.coldfusion.productlevel;
+                  stProductInfo.cf_server = "ACF";
+                  stProductInfo.server_version = server.coldfusion.productversion;
+                  stProductInfo.server_main_version = ListFirst(stProductInfo.server_version);
+                  stProductInfo.product_level = server.coldfusion.productlevel;
 
-			}
+            }
 
-			return stProductInfo;
-		</cfscript>
+            return stProductInfo;
+        </cfscript>
 
-  	</cffunction>
+      </cffunction>
 
 </cfcomponent>

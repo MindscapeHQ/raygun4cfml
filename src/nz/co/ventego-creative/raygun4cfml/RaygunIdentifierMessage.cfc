@@ -1,5 +1,5 @@
 <!---
-Copyright 2015 Kai Koenig, Ventego Creative Ltd
+Copyright 2022 Kai Koenig, Ventego Creative Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,67 +16,67 @@ limitations under the License.
 
 <cfcomponent output="false">
 
-	<cfscript>
-		variables.Identifier = "";
-		variables.IsAnonymous = "";
-		variables.Email = "";
-		variables.FullName = "";
-		variables.FirstName = "";
-		variables.UUID = "";
-	</cfscript>
+    <cfscript>
+        variables.Identifier = "";
+        variables.IsAnonymous = "";
+        variables.Email = "";
+        variables.FullName = "";
+        variables.FirstName = "";
+        variables.UUID = "";
+    </cfscript>
 
-	<cffunction name="init" access="public" output="false" returntype="any">
+    <cffunction name="init" access="public" output="false" returntype="any">
 
-		<cfargument name="Identifier" type="string" required="yes">
-		<cfargument name="IsAnonymous" type="boolean" required="no">
-		<cfargument name="Email" type="string" required="no">
-		<cfargument name="FullName" type="string" required="no">
-		<cfargument name="FirstName" type="string" required="no">
-		<cfargument name="UUID" type="string" required="no">
+        <cfargument name="Identifier" type="string" required="yes">
+        <cfargument name="IsAnonymous" type="boolean" required="no">
+        <cfargument name="Email" type="string" required="no">
+        <cfargument name="FullName" type="string" required="no">
+        <cfargument name="FirstName" type="string" required="no">
+        <cfargument name="UUID" type="string" required="no">
 
-		<cfscript>
-			variables.Identifier = arguments.Identifier;
-			
-			if (structKeyExists(arguments,"IsAnonymous")) {
-				variables.IsAnonymous = arguments.IsAnonymous;
-			}
-			
-			if (structKeyExists(arguments,"Email")) {
-				variables.Email = arguments.Email;
-			}
-			
-			if (structKeyExists(arguments,"FullName")) {
-				variables.FullName = arguments.FullName;
-			}
-			
-			if (structKeyExists(arguments,"FirstName")) {
-				variables.FirstName = arguments.FirstName;
-			}
-			
-			if (structKeyExists(arguments,"UUID")) {
-				variables.UUID = arguments.UUID;
-			}
-			
-			return this;
-		</cfscript>
+        <cfscript>
+            variables.Identifier = arguments.Identifier;
 
-	</cffunction>
+            if (structKeyExists(arguments,"IsAnonymous")) {
+                variables.IsAnonymous = arguments.IsAnonymous;
+            }
 
-	<cffunction name="build" access="public" output="false" returntype="struct">
+            if (structKeyExists(arguments,"Email")) {
+                variables.Email = arguments.Email;
+            }
 
-		<cfscript>
-			var returnContent = {};
+            if (structKeyExists(arguments,"FullName")) {
+                variables.FullName = arguments.FullName;
+            }
 
-			returnContent["identifier"] = variables.Identifier;
-			returnContent["isAnonymous"] = variables.IsAnonymous;
-			returnContent["email"] = variables.Email;
-			returnContent["fullName"] = variables.FullName;
-			returnContent["firstName"] = variables.FirstName;
-			returnContent["uuid"] = variables.UUID;
-			
-			return returnContent;
-		</cfscript>
+            if (structKeyExists(arguments,"FirstName")) {
+                variables.FirstName = arguments.FirstName;
+            }
 
-	</cffunction>
+            if (structKeyExists(arguments,"UUID")) {
+                variables.UUID = arguments.UUID;
+            }
+
+            return this;
+        </cfscript>
+
+    </cffunction>
+
+    <cffunction name="build" access="public" output="false" returntype="struct">
+
+        <cfscript>
+            var returnContent = {};
+
+            returnContent["identifier"] = variables.Identifier;
+            returnContent["isAnonymous"] = variables.IsAnonymous;
+            returnContent["email"] = variables.Email;
+            returnContent["fullName"] = variables.FullName;
+            returnContent["firstName"] = variables.FirstName;
+            returnContent["uuid"] = variables.UUID;
+
+            return returnContent;
+        </cfscript>
+
+    </cffunction>
 
 </cfcomponent>

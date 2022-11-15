@@ -27,13 +27,13 @@ This code will never hit an error handler but only be dealt with locally in the 
 <cftry>
     <cfscript>
         a = 14;
-        b = 0;
+        e = 0;
         c = a/b;
     </cfscript>
 <cfcatch>
     <cfdump var="#cfcatch#"/>
     <cfset raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(apiKey=variables.RAYGUNAPIKEY,appVersion="3.4.5")/>
-    <cfset result = raygun.send(cfcatch)/>
+    <cfset result = raygun.send(issueDataStruct=cfcatch, groupingKey="ThisIsMyGroupingHash")/>
     <cfdump var="#result#"/>
 </cfcatch>
 </cftry>

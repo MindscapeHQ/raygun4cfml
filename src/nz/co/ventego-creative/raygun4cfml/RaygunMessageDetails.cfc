@@ -1,5 +1,5 @@
 <!---
-Copyright 2013 Kai Koenig, Ventego Creative Ltd
+Copyright 2022 Kai Koenig, Ventego Creative Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,31 +16,35 @@ limitations under the License.
 
 <cfcomponent output="false">
 
-	<cffunction name="init" access="public" output="false" returntype="any">
+    <cffunction name="init" access="public" output="false" returntype="any">
 
-		<cfscript>
-			return this;
-		</cfscript>
+        <cfscript>
+            return this;
+        </cfscript>
 
-	</cffunction>
+    </cffunction>
 
-	<cffunction name="build" access="public" output="false" returntype="struct">
+    <cffunction name="build" access="public" output="false" returntype="struct">
 
-		<cfargument name="issueDataStruct" type="struct" required="yes">
+        <cfargument name="issueDataStruct" type="struct" required="yes">
 
-		<cfscript>
-			var returnContent = {};
-			var messageErrorDetails = new RaygunExceptionMessage();
-			var messageRequestDetails = new RaygunRequestMessage();
-			var messageClientDetails = new RaygunClientMessage();
-			var messageEnvironmentDetails = new RaygunEnvironmentMessage();
+        <cfscript>
+            var returnContent = {};
+            var messageErrorDetails = new RaygunExceptionMessage();
+            var messageRequestDetails = new RaygunRequestMessage();
+            var messageClientDetails = new RaygunClientMessage();
+            var messageEnvironmentDetails = new RaygunEnvironmentMessage();
 
-			if (structKeyExists(arguments.issueDataStruct,"appVersion")) {
-				returnContent["version"] = arguments.issueDataStruct.appVersion;
-			} else {
-				returnContent["version"] = JavaCast("null","");
-			}
-			
+            if (structKeyExists(arguments.issueDataStruct,"groupingKey") && len(arguments.issueDataStruct.groupingKey)) {
+                returnContent["groupingKey"] = arguments.issueDataStruct.groupingKey;
+            }
+
+            if (structKeyExists(arguments.issueDataStruct,"appVersion")) {
+                returnContent["version"] = arguments.issueDataStruct.appVersion;
+            } else {
+                returnContent["version"] = JavaCast("null","");
+            }
+
             try
             {
                 returnContent["machineName"] = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostAddress();
@@ -50,38 +54,38 @@ limitations under the License.
                 returnContent["machineName"] = CGI.SERVER_NAME;
             }
 
-			returnContent["error"] = messageErrorDetails.build(arguments.issueDataStruct);
-			returnContent["request"] = messageRequestDetails.build(arguments.issueDataStruct);
-			returnContent["client"] = messageClientDetails.build();
-			returnContent["environment"] = messageEnvironmentDetails.build();
+            returnContent["error"] = messageErrorDetails.build(arguments.issueDataStruct);
+            returnContent["request"] = messageRequestDetails.build(arguments.issueDataStruct);
+            returnContent["client"] = messageClientDetails.build();
+            returnContent["environment"] = messageEnvironmentDetails.build();
 
-			if (structKeyExists(arguments.issueDataStruct,"userCustomData") && isObject(arguments.issueDataStruct.userCustomData))
-			{
-				returnContent["userCustomData"] = arguments.issueDataStruct.userCustomData.build();
-			}
-			else {
-				returnContent["userCustomData"] = JavaCast("null","");
-			}
+            if (structKeyExists(arguments.issueDataStruct,"userCustomData") && isObject(arguments.issueDataStruct.userCustomData))
+            {
+                returnContent["userCustomData"] = arguments.issueDataStruct.userCustomData.build();
+            }
+            else {
+                returnContent["userCustomData"] = JavaCast("null","");
+            }
 
-			if (structKeyExists(arguments.issueDataStruct,"tags") && isArray(arguments.issueDataStruct.tags))
-			{
-				returnContent["tags"] = arguments.issueDataStruct.tags;
-			}
-			else {
-				returnContent["tags"] = ArrayNew(1);
-			}
-			
-			if (structKeyExists(arguments.issueDataStruct,"user") && isObject(arguments.issueDataStruct.user))
-			{
-				returnContent["user"] = arguments.issueDataStruct.user.build();
-			}
-			else {
-				returnContent["user"] = JavaCast("null", "");
-			}
-		
-			return returnContent;
-		</cfscript>
+            if (structKeyExists(arguments.issueDataStruct,"tags") && isArray(arguments.issueDataStruct.tags))
+            {
+                returnContent["tags"] = arguments.issueDataStruct.tags;
+            }
+            else {
+                returnContent["tags"] = ArrayNew(1);
+            }
 
-	</cffunction>
+            if (structKeyExists(arguments.issueDataStruct,"user") && isObject(arguments.issueDataStruct.user))
+            {
+                returnContent["user"] = arguments.issueDataStruct.user.build();
+            }
+            else {
+                returnContent["user"] = JavaCast("null", "");
+            }
+
+            return returnContent;
+        </cfscript>
+
+    </cffunction>
 
 </cfcomponent>

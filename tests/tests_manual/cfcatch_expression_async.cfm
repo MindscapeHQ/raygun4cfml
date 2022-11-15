@@ -14,9 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 --->
 
-<!--- This is supposed to run into the onError function in this folder's Application.cfc --->
+
+<!---
+Example: Catching an exception - in this case an Expression exception
+
+This code will never hit an error handler but only be dealt with locally in the try/catch construct
+--->
 <cfscript>
-    a = 34;
-    b = 0;
-    c = a/b;
+    variables.RAYGUNAPIKEY = "<your API key>";
 </cfscript>
+
+<cftry>
+    <cfscript>
+        a = 14;
+        b = 0;
+        c = a/b;
+    </cfscript>
+<cfcatch>
+    <cfdump var="#cfcatch#"/>
+    <cfset raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(apiKey=variables.RAYGUNAPIKEY,appVersion="3.4.5")/>
+    <cfset raygun.sendAsync(cfcatch)/>
+</cfcatch>
+</cftry>
