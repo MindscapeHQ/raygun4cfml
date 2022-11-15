@@ -16,34 +16,34 @@ limitations under the License.
 
 <cfcomponent output="false">
 
-	<cfscript>
-		variables.userCustomData = {};
-	</cfscript>
+    <cfscript>
+        variables.userCustomData = {};
+    </cfscript>
 
-	<cffunction name="init" access="public" output="false" returntype="any">
+    <cffunction name="init" access="public" output="false" returntype="any">
 
-		<cfargument name="userCustomData" type="struct" required="yes">
+        <cfargument name="userCustomData" type="struct" required="yes">
 
-		<cfscript>
-			variables.userCustomData = arguments.userCustomData;
+        <cfscript>
+            variables.userCustomData = arguments.userCustomData;
 
-			return this;
-		</cfscript>
+            return this;
+        </cfscript>
 
-	</cffunction>
+    </cffunction>
 
-	<cffunction name="getUserCustomData" access="public" output="false" returntype="struct">
+    <cffunction name="getUserCustomData" access="public" output="false" returntype="struct">
 
-		<cfreturn variables.userCustomData>
+        <cfreturn variables.userCustomData>
 
-	</cffunction>
+    </cffunction>
 
-	<cffunction name="build" access="public" output="false" returntype="struct">
+    <cffunction name="build" access="public" output="false" returntype="struct">
 
-		<cfscript>
-			return getUserCustomData();
-		</cfscript>
+        <cfscript>
+            return getUserCustomData();
+        </cfscript>
 
-	</cffunction>
+    </cffunction>
 
 </cfcomponent>

@@ -45,7 +45,7 @@ limitations under the License.
                 appVersion = "4.3.6"
             );
 
-	        result = raygun.send(issueDataStruct=arguments.Exception,userCustomData=customUserData,tags=tags,user=userIdentifier);
+            result = raygun.send(issueDataStruct=arguments.Exception,userCustomData=customUserData,tags=tags,user=userIdentifier);
         </cfscript>
     </cffunction>
 </cfcomponent>

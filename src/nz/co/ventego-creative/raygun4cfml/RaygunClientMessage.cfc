@@ -16,26 +16,26 @@ limitations under the License.
 
 <cfcomponent output="false">
 
-	<cffunction name="init" access="public" output="false" returntype="any">
+    <cffunction name="init" access="public" output="false" returntype="any">
 
-		<cfscript>
-			return this;
-		</cfscript>
+        <cfscript>
+            return this;
+        </cfscript>
 
-	</cffunction>
+    </cffunction>
 
-	<cffunction name="build" access="public" output="false" returntype="struct">
+    <cffunction name="build" access="public" output="false" returntype="struct">
 
-		<cfscript>
-			var returnContent = {};
+        <cfscript>
+            var returnContent = {};
 
-			returnContent["name"] = "raygun4cfml";
-			returnContent["version"] = "1.5.0";
-			returnContent["clientUrl"] = "https://github.com/MindscapeHQ/raygun4cfml";
+            returnContent["name"] = "raygun4cfml";
+            returnContent["version"] = "1.5.0";
+            returnContent["clientUrl"] = "https://github.com/MindscapeHQ/raygun4cfml";
 
-			return returnContent;
-		</cfscript>
+            return returnContent;
+        </cfscript>
 
-	</cffunction>
+    </cffunction>
 
 </cfcomponent>

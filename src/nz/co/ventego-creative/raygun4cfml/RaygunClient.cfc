@@ -16,21 +16,21 @@ limitations under the License.
 
 <cfcomponent output="false">
 
-	<cfscript>
-		variables.apiKey = "";
+    <cfscript>
+        variables.apiKey = "";
         variables.contentFilter = "";
         variables.appVersion = "";
-	</cfscript>
+    </cfscript>
 
 
-	<cffunction name="init" access="public" output="false" returntype="any">
+    <cffunction name="init" access="public" output="false" returntype="any">
 
-		<cfargument name="apiKey" type="string" required="yes">
+        <cfargument name="apiKey" type="string" required="yes">
         <cfargument name="contentFilter" type="RaygunContentFilter" required="no">
         <cfargument name="appVersion" type="string" required="no">
 
-		<cfscript>
-			variables.apiKey = arguments.apiKey;
+        <cfscript>
+            variables.apiKey = arguments.apiKey;
 
             if (structKeyExists(arguments,"contentFilter"))
             {
@@ -42,18 +42,18 @@ limitations under the License.
                 variables.appVersion = arguments.appVersion;
             }
 
-			return this;
-		</cfscript>
+            return this;
+        </cfscript>
 
-	</cffunction>
+    </cffunction>
 
 
     <cffunction name="send" access="public" output="false" returntype="struct">
 
-		<cfargument name="issueDataStruct" type="any" required="yes">
-		<cfargument name="userCustomData" type="RaygunUserCustomData" required="no">
-		<cfargument name="tags" type="array" required="no">
-		<cfargument name="user" type="RaygunIdentifierMessage" required="no">
+        <cfargument name="issueDataStruct" type="any" required="yes">
+        <cfargument name="userCustomData" type="RaygunUserCustomData" required="no">
+        <cfargument name="tags" type="array" required="no">
+        <cfargument name="user" type="RaygunIdentifierMessage" required="no">
         <cfargument name="groupingKey" type="string" required="no">
         <cfargument name="sendAsync" type="boolean" required="no" default="false">
 
@@ -98,10 +98,10 @@ limitations under the License.
 
     <cffunction name="sendAsync" access="public" output="true" returntype="void">
 
-		<cfargument name="issueDataStruct" type="any" required="yes">
-		<cfargument name="userCustomData" type="RaygunUserCustomData" required="no">
-		<cfargument name="tags" type="array" required="no">
-		<cfargument name="user" type="RaygunIdentifierMessage" required="no">
+        <cfargument name="issueDataStruct" type="any" required="yes">
+        <cfargument name="userCustomData" type="RaygunUserCustomData" required="no">
+        <cfargument name="tags" type="array" required="no">
+        <cfargument name="user" type="RaygunIdentifierMessage" required="no">
         <cfargument name="groupingKey" type="string" required="no">
 
         <cfscript>
@@ -115,26 +115,26 @@ limitations under the License.
     <cffunction name="buildPayload" access="private" output="false" returntype="string">
 
         <cfargument name="issueDataStruct" type="any" required="yes">
-		<cfargument name="userCustomData" type="RaygunUserCustomData" required="no">
-		<cfargument name="tags" type="array" required="no">
-		<cfargument name="user" type="RaygunIdentifierMessage" required="no">
+        <cfargument name="userCustomData" type="RaygunUserCustomData" required="no">
+        <cfargument name="tags" type="array" required="no">
+        <cfargument name="user" type="RaygunIdentifierMessage" required="no">
         <cfargument name="groupingKey" type="string" required="no">
 
         <cfscript>
-			var message = new RaygunMessage();
-			var messageContent = "";
-			var jSONData = "";
+            var message = new RaygunMessage();
+            var messageContent = "";
+            var jSONData = "";
 
-			// PR10: In CF10+, the passed in issueDataStruct is not editable in all cases anymore. It looks like a
-			// struct, but is of a different internal data type behind the scenes. This works around that issue.
-			var issueData = {};
+            // PR10: In CF10+, the passed in issueDataStruct is not editable in all cases anymore. It looks like a
+            // struct, but is of a different internal data type behind the scenes. This works around that issue.
+            var issueData = {};
 
-			structAppend(issueData, arguments.issueDataStruct);
+            structAppend(issueData, arguments.issueDataStruct);
 
-			if (not Len(variables.apiKey))
-			{
-				throw("API integration not valid, cannot send message to Raygun");
-			}
+            if (not Len(variables.apiKey))
+            {
+                throw("API integration not valid, cannot send message to Raygun");
+            }
 
             if (isObject(variables.contentFilter))
             {
@@ -171,7 +171,7 @@ limitations under the License.
             }
 
             messageContent = message.build(duplicate(issueData));
-			jSONData = serializeJSON(messageContent);
+            jSONData = serializeJSON(messageContent);
 
             // Remove '//' in case CF is adding it when serializing JSON (which is recommended in the CF Lockdown Guide)
             // KK: This will only work if the users has setup none or the default prefix for JSON data
@@ -193,7 +193,7 @@ limitations under the License.
             var postResult = "";
 
             // Fixing a CF 9 issue with JVM security providers
-			var needsHTTPSecurityHack = new RaygunInternalTools().needsHTTPSecurityProviderHack();
+            var needsHTTPSecurityHack = new RaygunInternalTools().needsHTTPSecurityProviderHack();
 
             // Fixing a CF 9 issue with JVM security providers
             if (needsHTTPSecurityHack) {
@@ -231,16 +231,16 @@ limitations under the License.
             }
         </cfscript>
 
-		<cfreturn postResult>
-	</cffunction>
+        <cfreturn postResult>
+    </cffunction>
 
 
     <cffunction name="applyFilter" access="private" output="false" returntype="void">
 
-		<cfargument name="contentFilter" type="RaygunContentFilter" required="yes">
+        <cfargument name="contentFilter" type="RaygunContentFilter" required="yes">
 
-		<cfscript>
-		    var defaultScopes = [url,form];
+        <cfscript>
+            var defaultScopes = [url,form];
             var filter = arguments.contentFilter.getFilter();
             var match = {};
             var matchResult = "";
@@ -265,8 +265,8 @@ limitations under the License.
                     }
                 }
             }
-		</cfscript>
+        </cfscript>
 
-	</cffunction>
+    </cffunction>
 
 </cfcomponent>

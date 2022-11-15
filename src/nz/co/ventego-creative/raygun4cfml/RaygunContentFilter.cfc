@@ -16,21 +16,21 @@ limitations under the License.
 
 <cfcomponent output="false">
 
-	<cfscript>
-		variables.filter = [];
-	</cfscript>
+    <cfscript>
+        variables.filter = [];
+    </cfscript>
 
-	<cffunction name="init" access="public" output="false" returntype="any">
+    <cffunction name="init" access="public" output="false" returntype="any">
 
-		<cfargument name="filter" type="array" required="yes">
+        <cfargument name="filter" type="array" required="yes">
 
-		<cfscript>
-			variables.filter = arguments.filter;
+        <cfscript>
+            variables.filter = arguments.filter;
 
-			return this;
-		</cfscript>
+            return this;
+        </cfscript>
 
-	</cffunction>
+    </cffunction>
 
     <cffunction name="getFilter" access="public" output="false" returntype="array">
 

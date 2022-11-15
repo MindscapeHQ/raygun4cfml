@@ -16,67 +16,67 @@ limitations under the License.
 
 <cfcomponent output="false">
 
-	<cfscript>
-		variables.Identifier = "";
-		variables.IsAnonymous = "";
-		variables.Email = "";
-		variables.FullName = "";
-		variables.FirstName = "";
-		variables.UUID = "";
-	</cfscript>
+    <cfscript>
+        variables.Identifier = "";
+        variables.IsAnonymous = "";
+        variables.Email = "";
+        variables.FullName = "";
+        variables.FirstName = "";
+        variables.UUID = "";
+    </cfscript>
 
-	<cffunction name="init" access="public" output="false" returntype="any">
+    <cffunction name="init" access="public" output="false" returntype="any">
 
-		<cfargument name="Identifier" type="string" required="yes">
-		<cfargument name="IsAnonymous" type="boolean" required="no">
-		<cfargument name="Email" type="string" required="no">
-		<cfargument name="FullName" type="string" required="no">
-		<cfargument name="FirstName" type="string" required="no">
-		<cfargument name="UUID" type="string" required="no">
+        <cfargument name="Identifier" type="string" required="yes">
+        <cfargument name="IsAnonymous" type="boolean" required="no">
+        <cfargument name="Email" type="string" required="no">
+        <cfargument name="FullName" type="string" required="no">
+        <cfargument name="FirstName" type="string" required="no">
+        <cfargument name="UUID" type="string" required="no">
 
-		<cfscript>
-			variables.Identifier = arguments.Identifier;
+        <cfscript>
+            variables.Identifier = arguments.Identifier;
 
-			if (structKeyExists(arguments,"IsAnonymous")) {
-				variables.IsAnonymous = arguments.IsAnonymous;
-			}
+            if (structKeyExists(arguments,"IsAnonymous")) {
+                variables.IsAnonymous = arguments.IsAnonymous;
+            }
 
-			if (structKeyExists(arguments,"Email")) {
-				variables.Email = arguments.Email;
-			}
+            if (structKeyExists(arguments,"Email")) {
+                variables.Email = arguments.Email;
+            }
 
-			if (structKeyExists(arguments,"FullName")) {
-				variables.FullName = arguments.FullName;
-			}
+            if (structKeyExists(arguments,"FullName")) {
+                variables.FullName = arguments.FullName;
+            }
 
-			if (structKeyExists(arguments,"FirstName")) {
-				variables.FirstName = arguments.FirstName;
-			}
+            if (structKeyExists(arguments,"FirstName")) {
+                variables.FirstName = arguments.FirstName;
+            }
 
-			if (structKeyExists(arguments,"UUID")) {
-				variables.UUID = arguments.UUID;
-			}
+            if (structKeyExists(arguments,"UUID")) {
+                variables.UUID = arguments.UUID;
+            }
 
-			return this;
-		</cfscript>
+            return this;
+        </cfscript>
 
-	</cffunction>
+    </cffunction>
 
-	<cffunction name="build" access="public" output="false" returntype="struct">
+    <cffunction name="build" access="public" output="false" returntype="struct">
 
-		<cfscript>
-			var returnContent = {};
+        <cfscript>
+            var returnContent = {};
 
-			returnContent["identifier"] = variables.Identifier;
-			returnContent["isAnonymous"] = variables.IsAnonymous;
-			returnContent["email"] = variables.Email;
-			returnContent["fullName"] = variables.FullName;
-			returnContent["firstName"] = variables.FirstName;
-			returnContent["uuid"] = variables.UUID;
+            returnContent["identifier"] = variables.Identifier;
+            returnContent["isAnonymous"] = variables.IsAnonymous;
+            returnContent["email"] = variables.Email;
+            returnContent["fullName"] = variables.FullName;
+            returnContent["firstName"] = variables.FirstName;
+            returnContent["uuid"] = variables.UUID;
 
-			return returnContent;
-		</cfscript>
+            return returnContent;
+        </cfscript>
 
-	</cffunction>
+    </cffunction>
 
 </cfcomponent>
