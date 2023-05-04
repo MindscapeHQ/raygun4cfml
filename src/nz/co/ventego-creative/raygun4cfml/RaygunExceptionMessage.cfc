@@ -51,7 +51,7 @@ limitations under the License.
 
              if (isArray(entryPoint.stacktrace)) {
                  stackTraceData = entryPoint.stacktrace;
-             } elseif (isSimpleValue(entryPoint.stacktrace)) {
+             } else if (isSimpleValue(entryPoint.stacktrace)) {
                  stackTraceLines = entryPoint.stacktrace.split("\sat");
                 lenStackTraceLines = ArrayLen(stackTraceLines);
 
