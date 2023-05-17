@@ -42,12 +42,13 @@ limitations under the License.
             returnContent["data"] = CGI;
             returnContent["form"] = FORM;
 
+            returnContent["rawData"] = JavaCast("null", "");
             if (CGI.CONTENT_TYPE != "text/html" && CGI.CONTENT_TYPE != "application/x-www-form-urlencoded" && CGI.REQUEST_METHOD != "GET") {
-                // TODO check if this is JSON and if yes, deserialise and apply content filter in some way here and then deserialise again
-                var temp = httpRequest.content;
-                returnContent["rawData"] = Left(temp, rawDataMaxLength);
-            } else {
-                returnContent["rawData"] = JavaCast("null","");
+                if(!isBinary(httpRequest.content)) {
+                    // TODO check if this is JSON and if yes, deserialise and apply content filter in some way here and then deserialise again
+                    var temp = httpRequest.content;
+                    returnContent["rawData"] = Left(temp, rawDataMaxLength);
+                }
             }
 
             return returnContent;
