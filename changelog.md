@@ -1,6 +1,11 @@
 History
 =======
 
+1.6.0 (November 23 2023)
+
+- Fixed issue in RaygunExceptionMessage on recent version of ACF
+- Changed content/sensitivity filter behaviour. It now runs just before data is being send to RG and filters against the full pre-send payload and not just URL/FORM scopes.
+
 1.5.0 (November 14 2022)
 
 - Added .sendAsync() entry point wrapping the HTTP call into its own thread. 
