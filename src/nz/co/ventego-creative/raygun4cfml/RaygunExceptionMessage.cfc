@@ -45,14 +45,14 @@ limitations under the License.
 
             var entryPoint = arguments.issueDataStruct;
 
-             if (StructKeyExists(arguments.issueDataStruct,"Cause") && StructKeyExists(arguments.issueDataStruct.cause,"CatchBlock")) {
-                 entryPoint = arguments.issueDataStruct.cause.CatchBlock;
-             }
+            if (StructKeyExists(arguments.issueDataStruct,"Cause") && StructKeyExists(arguments.issueDataStruct.cause,"CatchBlock")) {
+                entryPoint = arguments.issueDataStruct.cause.CatchBlock;
+            }
 
-             if (isArray(entryPoint.stacktrace)) {
-                 stackTraceData = entryPoint.stacktrace;
-             } elseif (isSimpleValue(entryPoint.stacktrace)) {
-                 stackTraceLines = entryPoint.stacktrace.split("\sat");
+            if (isArray(entryPoint.stacktrace)) {
+                stackTraceData = entryPoint.stacktrace;
+            } else if (isSimpleValue(entryPoint.stacktrace)) {
+                stackTraceLines = entryPoint.stacktrace.split("\sat");
                 lenStackTraceLines = ArrayLen(stackTraceLines);
 
                 for (j=2;j<=lenStackTraceLines;j++)
@@ -81,7 +81,7 @@ limitations under the License.
                         ArrayAppend(stackTraceData, stackTraceLineElement);
                     }
                 }
-             }
+            }
 
             if (structKeyExists(entryPoint,"tagcontext")) {
                 lenTagContext = arraylen(entryPoint.tagcontext);
@@ -94,7 +94,7 @@ limitations under the License.
                     tagContextData[j]["fileName"] = trim( entryPoint.tagcontext[j]["template"] );
                     tagContextData[j]["lineNumber"] = trim( entryPoint.tagcontext[j]["line"] );
                 }
-             }
+            }
 
             returnContent["data"] = {"JavaStrackTrace" = stackTraceData};
             returnContent["stackTrace"] = tagContextData;
@@ -111,8 +111,8 @@ limitations under the License.
                 }
                 returnContent["catchingMethod"] = "Error struct";
             } else {
-            // otherwise there's no root cause and the specific data has to be grabbed from somewhere else
-            if (!isLucee || isACF2021) {
+                // otherwise there's no root cause and the specific data has to be grabbed from somewhere else
+                if (!isLucee || isACF2021) {
                     returnContent["data"]["type"] = entryPoint.type;
                 }
                 returnContent["message"] = entryPoint.message;
