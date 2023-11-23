@@ -3,7 +3,7 @@ raygun4cfml
 
 Raygun Crash Reporting client for CFML.
 
-Current Version: 1.5.0 (November 14 2022)
+Current Version: 1.6.0 (November 23 2023)
 
 Dependencies: 
 

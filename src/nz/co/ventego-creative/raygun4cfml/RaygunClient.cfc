@@ -96,7 +96,7 @@ limitations under the License.
     </cffunction>
 
 
-    <cffunction name="sendAsync" access="public" output="true" returntype="void">
+    <cffunction name="sendAsync" access="public" output="false" returntype="void">
 
         <cfargument name="issueDataStruct" type="any" required="yes">
         <cfargument name="userCustomData" type="RaygunUserCustomData" required="no">
@@ -136,11 +136,6 @@ limitations under the License.
                 throw("API integration not valid, cannot send message to Raygun");
             }
 
-            if (isObject(variables.contentFilter))
-            {
-                applyFilter(variables.contentFilter);
-            }
-
             if (len(variables.appVersion))
             {
                 issueData["appVersion"] = variables.appVersion
@@ -171,6 +166,12 @@ limitations under the License.
             }
 
             messageContent = message.build(duplicate(issueData));
+
+            if (isObject(variables.contentFilter))
+            {
+                messageContent = applyFilter(variables.contentFilter, messageContent);
+            }
+
             jSONData = serializeJSON(messageContent);
 
             // Remove '//' in case CF is adding it when serializing JSON (which is recommended in the CF Lockdown Guide)
@@ -235,12 +236,12 @@ limitations under the License.
     </cffunction>
 
 
-    <cffunction name="applyFilter" access="private" output="false" returntype="void">
+    <cffunction name="applyFilter" access="private" output="false" returntype="struct">
 
         <cfargument name="contentFilter" type="RaygunContentFilter" required="yes">
+        <cfargument name="messageData" type="struct" required="yes">
 
         <cfscript>
-            var defaultScopes = [url,form];
             var filter = arguments.contentFilter.getFilter();
             var match = {};
             var matchResult = "";
@@ -248,23 +249,35 @@ limitations under the License.
             for (var i=1; i<=ArrayLen(filter); i++)
             {
                 // current filter object (filter,replacement)
-                match = filter[i];
+                matcher = filter[i];
 
-                // loop over scopes
-                for (var j=1; j<=ArrayLen(defaultScopes); j++)
+                var findKeysByFilter = structFindKey(arguments.messageData,matcher.filter);
+
+                // loop over general finds and replace
+                for (var j=1; j<=ArrayLen(findKeysByFilter); j++)
                 {
-                    // for each scope loop over keys
-                    for (var key in defaultScopes[j])
-                    {
-                        matchResult = reMatchNoCase(match.filter,key);
+                    var element = findKeysByFilter[j];
+                    element.owner[matcher.filter] = matcher.replacement;
+                }
 
-                        if (isArray(matchResult) && ArrayLen(matchResult))
-                        {
-                            defaultScopes[j][key] = match.replacement;
-                        }
+                // additional case - rawData might be JSON
+                if (!isNull(arguments.messageData.details.request.rawData) && isJSON(arguments.messageData.details.request.rawData)) {
+                    var rawDataJSON = deserializeJSON(arguments.messageData.details.request.rawData);
+
+                    var findRawDataKeysByFilter = structFindKey(rawDataJSON,matcher.filter);
+
+                    // loop over finds in rawData and replace
+                    for (var k=1; k<=ArrayLen(findRawDataKeysByFilter); k++)
+                    {
+                        var element = findRawDataKeysByFilter[k];
+                        element.owner[matcher.filter] = matcher.replacement;
+
                     }
+                    arguments.messageData.details.request.rawData = serializeJSON(rawDataJSON);
                 }
             }
+
+            return arguments.messageData;
         </cfscript>
 
     </cffunction>
