@@ -33,14 +33,14 @@ limitations under the License.
             var rawDataMaxLength = 4096;
             var httpRequest = getHttpRequestData();
 
-            returnContent["hostName"] = CGI.HTTP_HOST;
-            returnContent["url"] = CGI.SCRIPT_NAME & CGI.PATH_INFO
-            returnContent["httpMethod"] = CGI.REQUEST_METHOD;
-            returnContent["iPAddress"] = CGI.REMOTE_ADDR;
-            returnContent["queryString"] = CGI.QUERY_STRING;
+            returnContent["hostName"] = duplicate(CGI.HTTP_HOST);
+            returnContent["url"] = duplicate(CGI.SCRIPT_NAME) & duplicate(CGI.PATH_INFO)
+            returnContent["httpMethod"] = duplicate(CGI.REQUEST_METHOD);
+            returnContent["iPAddress"] = duplicate(CGI.REMOTE_ADDR);
+            returnContent["queryString"] = duplicate(CGI.QUERY_STRING);
             returnContent["headers"] = httpRequest.headers;
-            returnContent["data"] = CGI;
-            returnContent["form"] = FORM;
+            returnContent["data"] = duplicate(CGI);
+            returnContent["form"] = duplicate(FORM);
 
             if (CGI.CONTENT_TYPE != "text/html" && CGI.CONTENT_TYPE != "application/x-www-form-urlencoded" && CGI.REQUEST_METHOD != "GET") {
                 var temp = httpRequest.content;
