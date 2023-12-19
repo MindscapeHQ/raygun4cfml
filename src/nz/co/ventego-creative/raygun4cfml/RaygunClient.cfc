@@ -249,7 +249,7 @@ limitations under the License.
             for (var i=1; i<=ArrayLen(filter); i++)
             {
                 // current filter object (filter,replacement)
-                matcher = filter[i];
+                var matcher = filter[i];
 
                 var findKeysByFilter = structFindKey(arguments.messageData,matcher.filter);
 
