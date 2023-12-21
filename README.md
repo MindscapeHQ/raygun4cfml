@@ -3,6 +3,11 @@ raygun4cfml
 
 Raygun Crash Reporting client for CFML.
 
+Supported:
+
+Adobe CF 2018+
+Lucee 5+
+
 Current Version: 1.7.0 (December 20 2023)
 
 Dependencies: 
