@@ -31,20 +31,36 @@ limitations under the License.
         <cfscript>
             var returnContent = {};
             var rawDataMaxLength = 4096;
-            var httpRequest = getHttpRequestData();
+            
+            try {
+                var httpRequest = getHttpRequestData();
+            }  catch (any e) {
+                var httpRequest = {};
+            }
 
-            returnContent["hostName"] = duplicate(CGI.HTTP_HOST);
-            returnContent["url"] = duplicate(CGI.SCRIPT_NAME) & duplicate(CGI.PATH_INFO)
-            returnContent["httpMethod"] = duplicate(CGI.REQUEST_METHOD);
-            returnContent["iPAddress"] = duplicate(CGI.REMOTE_ADDR);
-            returnContent["queryString"] = duplicate(CGI.QUERY_STRING);
-            returnContent["headers"] = httpRequest.headers;
-            returnContent["data"] = duplicate(CGI);
-            returnContent["form"] = duplicate(FORM);
+            try {
+                var localCGI = duplicate(CGI);
+            }  catch (any e) {
+                var localCGI = {};
+            }
 
-            if (CGI.CONTENT_TYPE != "text/html" && CGI.CONTENT_TYPE != "application/x-www-form-urlencoded" && CGI.REQUEST_METHOD != "GET") {
-                var temp = httpRequest.content;
-                returnContent["rawData"] = Left(temp, rawDataMaxLength);
+            try {
+                var localForm = duplicate(FORM);
+            }  catch (any e) {
+                var localForm = {};
+            }
+
+            returnContent["hostName"] =  (localCGI.keyExists("HTTP_HOST") ? localCGI.HTTP_HOST : JavaCast("null", ""));
+            returnContent["url"] = (localCGI.keyExists("SCRIPT_NAME") ? localCGI.SCRIPT_NAME : JavaCast("null", "")) & (localCGI.keyExists("PATH_INFO") ? localCGI.PATH_INFO : JavaCast("null", ""));
+            returnContent["httpMethod"] = (localCGI.keyExists("REQUEST_METHOD") ? localCGI.REQUEST_METHOD : JavaCast("null", ""));    
+            returnContent["iPAddress"] = (localCGI.keyExists("REMOTE_ADDR") ? localCGI.REMOTE_ADDR : JavaCast("null", ""));
+            returnContent["queryString"] = (localCGI.keyExists("QUERY_STRING") ? localCGI.QUERY_STRING : JavaCast("null", ""));
+            returnContent["headers"] = (httpRequest.keyExists("headers") ? httpRequest.headers : JavaCast("null", ""));
+            returnContent["data"] = localCGI;
+            returnContent["form"] = localForm;
+
+            if (localCGI.keyExists("CONTENT_TYPE") && localCGI.keyExists("REQUEST_METHOD") && localCGI.CONTENT_TYPE != "text/html" && localCGI.CONTENT_TYPE != "application/x-www-form-urlencoded" && localCGI.REQUEST_METHOD != "GET") {
+                returnContent["rawData"] = Left((httpRequest.keyExists("content") ? httpRequest.content : JavaCast("null", "")), rawDataMaxLength);
             } else {
                 returnContent["rawData"] = JavaCast("null","");
             }
