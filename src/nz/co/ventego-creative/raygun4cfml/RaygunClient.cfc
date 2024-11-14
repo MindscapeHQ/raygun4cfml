@@ -250,8 +250,7 @@ limitations under the License.
             {
                 // current filter object (filter,replacement)
                 var matcher = filter[i];
-
-                var findKeysByFilter = structFindKey(arguments.messageData,matcher.filter);
+                var findKeysByFilter = structFindKey(arguments.messageData,matcher.filter,"all");
 
                 // loop over general finds and replace
                 for (var j=1; j<=ArrayLen(findKeysByFilter); j++)
@@ -264,7 +263,7 @@ limitations under the License.
                 if (!isNull(arguments.messageData.details.request.rawData) && isJSON(arguments.messageData.details.request.rawData)) {
                     var rawDataJSON = deserializeJSON(arguments.messageData.details.request.rawData);
 
-                    var findRawDataKeysByFilter = structFindKey(rawDataJSON,matcher.filter);
+                    var findRawDataKeysByFilter = structFindKey(rawDataJSON,matcher.filter,"all");
 
                     // loop over finds in rawData and replace
                     for (var k=1; k<=ArrayLen(findRawDataKeysByFilter); k++)
