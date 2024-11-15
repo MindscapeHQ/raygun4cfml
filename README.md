@@ -3,7 +3,12 @@ raygun4cfml
 
 Raygun Crash Reporting client for CFML.
 
-Current Version: 1.6.0 (November 23 2023)
+Supported:
+
+Adobe CF 2018+
+Lucee 5+
+
+Current Version: 1.7.0 (November 14 2024)
 
 Dependencies: 
 
@@ -80,7 +85,7 @@ Download a zip file containing the current content of the repo or a release/tag 
 
 ## Version History
 
-See changelog.md for further information.
+See CHANGELOG.md for further information.
 
 ## General Notes
 
@@ -89,6 +94,10 @@ See changelog.md for further information.
 (2) If you are using the ACF Administrator setting: "Prefix serialized JSON with..." with anything else but the default prefix of `//`, the library will not work.
 
 (3) Version 1.1.0 and newer will not work on Adobe ColdFusion 8 and most likely not on Railo 3 (the latter not tested).
+
+(4) Version 1.7.0 and newer will most likely not work with Adobe ColdFUsion 2016 and Railo/Lucee 4.x. 
+
+(5) On newer Java versions (>11), there is no default access to Java Memory Management unless you add the following argument to your JVM configuration: `--add-opens java.management/sun.management=ALL-UNNAMED`
 
 ## How to contribute
 

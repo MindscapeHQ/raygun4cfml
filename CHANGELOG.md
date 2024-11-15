@@ -1,6 +1,13 @@
 History
 =======
 
+1.7.0 (November 14 2024)
+
+- Fixes issues around non-existent HTTP request objects when run on ACF and in a thread context
+- Fixes access to JVM memory beans depending on JVM settings and JVM type available
+- Minimum requirements are now Lucee 5+ anmd ACF 2018+
+- Fixes issue with content filter not trailing deep into payload
+
 1.6.0 (November 23 2023)
 
 - Fixed issue in RaygunExceptionMessage on recent version of ACF
