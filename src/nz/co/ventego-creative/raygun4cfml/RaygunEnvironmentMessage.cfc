@@ -31,15 +31,23 @@ limitations under the License.
             var runtime = createObject("java", "java.lang.System");
             var props = runtime.getProperties();
             var mf = createObject("java", "java.lang.management.ManagementFactory");
-            var heapMem = mf.getMemoryMXBean().getHeapMemoryUsage();
+            var heapMem = "";
             var osbean = "";
 
-            returnContent["availableVirtualMemory"] = heapMem.getCommitted()-heapMem.getUsed();
-            returnContent["totalVirtualMemory"] = heapMem.getCommitted();
             returnContent["architecture"] = props["os.arch"];
             returnContent["osVersion"] = props["os.version"];
             returnContent["packageVersion"] = props["java.vm.vendor"] & "|" & props["java.runtime.version"] & "|" & props["java.vm.name"];
             returnContent["platform"] = props["os.name"];
+
+            try {
+                heapMem = mf.getMemoryMXBean().getHeapMemoryUsage();
+                returnContent["availableVirtualMemory"] = heapMem.getCommitted()-heapMem.getUsed();
+                returnContent["totalVirtualMemory"] = heapMem.getCommitted();
+            }
+            catch (any e) {
+                returnContent["availableVirtualMemory"] = JavaCast("null","");
+                returnContent["totalVirtualMemory"] = JavaCast("null","");
+            }
 
             try {
                 osbean = mf.getOperatingSystemMXBean();
