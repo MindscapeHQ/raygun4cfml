@@ -8,7 +8,7 @@ Supported:
 Adobe CF 2018+
 Lucee 5+
 
-Current Version: 1.7.0 (December 20 2023)
+Current Version: 1.7.0 (November 14 2024)
 
 Dependencies: 
 
@@ -95,7 +95,9 @@ See CHANGELOG.md for further information.
 
 (3) Version 1.1.0 and newer will not work on Adobe ColdFusion 8 and most likely not on Railo 3 (the latter not tested).
 
-(4) On newer Java versions (>11), there is no default access to Java Memory Management unless you add the following argument to your JVM configuration: `--add-opens java.management/sun.management=ALL-UNNAMED`
+(4) Version 1.7.0 and newer will most likely not work with Adobe ColdFUsion 2016 and Railo/Lucee 4.x. 
+
+(5) On newer Java versions (>11), there is no default access to Java Memory Management unless you add the following argument to your JVM configuration: `--add-opens java.management/sun.management=ALL-UNNAMED`
 
 ## How to contribute
 
