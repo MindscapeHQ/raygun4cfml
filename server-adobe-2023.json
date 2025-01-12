@@ -1,0 +1,13 @@
+{
+    "trayEnable":false,
+    "profile":"development",
+    "name":"adobe-2023",
+    "app":{
+        "cfengine":"adobe@2023"
+    },
+    "web":{
+        "http":{
+            "port":"9193"
+        }
+    }
+}

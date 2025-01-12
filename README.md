@@ -1,116 +1,105 @@
-raygun4cfml
+Raygun4CFML
 ===========
 
-Raygun Crash Reporting client for CFML.
+Raygun4CFML is a client library for integrating Raygun's Crash Reporting service with your CFML applications. It enables you to send error reports and crash data to Raygun for tracking and analysis.
 
-Supported:
+Supported Platforms:
 
-Adobe CF 2018+
-Lucee 5+
+- Adobe ColdFusion 2021+
+- Lucee 5.3+
+- Boxlang 1+
 
-Current Version: 1.7.0 (November 14 2024)
+Current Version: 2.0.0
 
-Dependencies: 
+## Active development
 
-- Testbox (for running unit and BDD tests only)
+2.0.0 is a complete rewrite of the project and is ready-to-use for the 3 major CFML engines and their crash reports. 
 
-## Library organisation
+Please be aware that no testing and work has *yet* gone into framework-specific crash reports, e.g. a deeper integration with Coldbox HVMC, Fusebox, CF on Wheels etc. This will be added over time in future releases.
 
-`/src` contains the source code. The package structure is `nz.co.ventego-creative.co.nz.raygun4cfml` but the library's components themselves are independent of the package path. Therefore you can use the library in multiple ways:
+## Dependencies
 
-- Put the content of `/src` into your webroot and instantiate `RaygunClient` through something like the following:
+- Testbox (used as a development dependency for local and CI testing)
 
-    ```
-    raygun = createObject("component","nz.co.ventego-creative.raygun4cfml.RaygunClient").init(
-        apiKey = "YOURAPIKEYHERE"
-    );
-    ```
-- Put the contents of `/src` into any other place of your choice and create a mapping to `/nz` in your server administrator or through code and then use the instantiation code as above.
+## Installation and Setup
 
-- Put the contents of the `raygun4cfml` directory into a place of your choice where your CFML has some sort of a mapping pointing towards and and just instantiate `RaygunClient` like this:
-    
-    ```
-    raygun = createObject("component","RaygunClient").init(
-        apiKey = "YOURAPIKEYHERE"
-    );
-    ```
-    
-`/samples` contains a set of files that show how the library can be used in your code through a global error handler as well as a contributed example for ColdBox 3.6
+### Using CommandBox (Preferred Method)
 
-`/tests` contains manual tests and more samples as well as a structure (but no tests at this stage) for Testbox unit and BDD tests.
+1. **Install via CommandBox:**
 
-## Getting and Using raygun4cfml
+   To install the latest version from the master repository, use:
+   ```
+   box install raygun4cfml
+   ```
 
-### Option 1 (preferred):
+   To install a specific release or tag, use:
+   ```
+   box install git://github.com/MindscapeHQ/raygun4cfml.git#{tagname}
+   ```
 
-Use Commandbox and Forgebox to get the library and then follow the ideas outlined in 'Library organisation' for further setup.
+   Alternatively, you can use:
+   ```
+   box install MindscapeHQ/raygun4cfml#{tagname}
+   ```
 
-To get the latest from the master repository
+2. **Setup:**
 
-```
-box install raygun4cfml 
-```
+   After installation, follow the setup instructions in the 'Library Usage' section below.
 
-To install a specific release or tag:     
+### Manual Installation
 
-```
-box install git://github.com/MindscapeHQ/raygun4cfml.git#{tagname}
-```
+1. **Clone or Download:**
 
-Example tag names are `1.1.0`, `1.0.2.0`, `1.0.1.0` etc. Please check the list of tags on Github. Be aware that if you install any tag from before I introduced support for Commandbox and Forgebox there won't be a `box.json` file and therefore Commandbox will give you a warning as well as there won't be any dependency management for such an installation of the library.
-    
-Shortcut for the above:
- 
-```
-box install MindscapeHQ/raygun4cfml#{tagname}
-```
+   - Fork and clone the repository to your local system, or download a zip file of the current content or a specific release/tag.
 
-To get the latest from my development repository (be warned, this might contain all sorts of untested code):
-  
-```
-box install TheRealAgentK/raygun4cfml
-```
+2. **Move Files:**
 
-### Option 2:
+   - Move the `src` and/or `tests` directories to locations suitable for your system.
 
-Fork and clone the repo to your local system. Move the src/test directories into places of your choice and suitable for your system and follow the ideas outlined in 'Library organisation'.
+3. **Dependencies:**
 
-### Option 3:
+   - Note that manual installation will not automatically resolve dependencies.
 
-Download a zip file containing the current content of the repo or a release/tag of your choice. Unzip the resulting file. Move the src/test directories into places of your choice and suitable for your system and follow the ideas outlined in 'Library organisation'.
+## Library Usage
 
-#### Notes: 
+### Initializing RaygunClient
 
-(1) Options 2 and 3 will not fulfill any necessary dependencies, you're on your own.
+The `RaygunClient` is the primary component for sending error reports. You can initialize it in several ways depending on your setup:
+
+- **Webroot Setup:**
+
+  Place the contents of `/src` in your webroot and initialize the `RaygunClient` as follows:
+  ```cfml
+  raygun = createObject("component", "com.raygun.RaygunClient").init(
+      apiKey = "YOURAPIKEYHERE"
+  );
+  ```
+
+- **Custom Mapping:**
+
+  Place the contents of `/src` in a directory of your choice and create a mapping to `/com` in your server administrator or through code. Them, initialise as suitable for the mapping.
+
+
+### Using the Library
+
+- **Error Reporting:**
+
+  Once initialized, use the `RaygunClient` to send error reports with the `.send()` function. Refer to the `/samples` directory for examples.
+
+- **Testing:**
+
+  The `/tests` directory contains structures for Testbox unit and integration tests. Use these to validate your integration.
 
 ## Version History
 
-See CHANGELOG.md for further information.
+For detailed version history, refer to the `CHANGELOG.md` file.
 
-## General Notes
+## Contribution Guidelines
 
-(1) All releases onwards from 0.5.0.0 will break your code if you've used 0.4 and older before and have used `customRequestData`. 
+Raygun4CFML is not an official Raygun library and is not maintained by Raygun staff. 
 
-(2) If you are using the ACF Administrator setting: "Prefix serialized JSON with..." with anything else but the default prefix of `//`, the library will not work.
+Contributions are welcome. 
 
-(3) Version 1.1.0 and newer will not work on Adobe ColdFusion 8 and most likely not on Railo 3 (the latter not tested).
+Please fork the main repository at https://github.com/MindscapeHQ/raygun4cfml, create a feature branch, and submit a pull request. Coordination via X (@AgentK) or GitHub (https://github.com/TheRealAgentK/) is encouraged before starting any work.
 
-(4) Version 1.7.0 and newer will most likely not work with Adobe ColdFUsion 2016 and Railo/Lucee 4.x. 
-
-(5) On newer Java versions (>11), there is no default access to Java Memory Management unless you add the following argument to your JVM configuration: `--add-opens java.management/sun.management=ALL-UNNAMED`
-
-## How to contribute
-
-Note: Please be aware that raygun4cfml is not an official Raygun library and not maintained by Raygun stuff. See [LICENSE](LICENSE) for more details.
-
-The main repository of this project is https://github.com/MindscapeHQ/raygun4cfml. Please fork from there, create a local develop or feature branch and merge changes back to your local master branch to submit a pull request. Even better, get in touch with me on Twitter (@AgentK) or here on Github before you undertake any work so that it can be coordinated with what I'm doing.
-
-Most of the active development happens in my own fork: https://github.com/TheRealAgentK/raygun4cfml - feel free to peek around in there.
-
-
-
-
-
-
-
-
+For more active development, visit my development fork at https://github.com/TheRealAgentK/raygun4cfml.

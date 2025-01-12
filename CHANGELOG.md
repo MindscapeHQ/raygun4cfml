@@ -1,5 +1,43 @@
-History
-=======
+History and Plan
+================
+
+2.1+ Plan
+
+- Making Raygun4CFML a Coldbox module OR building a Coldbox module wrapper using Raygun4CFML as a dependency.
+- Add breadcrumbs (#46)
+
+2.0.1 Plan
+
+- Add support for response.statusCode (#48)
+- Integration and adaptation to Coldbox error reporting, adding CB HMVC app/API samples
+- Cleanup `legacy` directory
+
+2.0.0 (Jan 12 2025)
+
+- Fixed issue with Boxlang CGI-Scope
+- Added Lucee 5.3 support back-in and provided test server setup
+
+2.0.0-alpha (January 4 2025)
+
+- Complete re-write, breaking API changes and changes in essential functionality:
+    - Raygun4CFML is now entirely written in CFML script.
+    - The original stack trace is now tracked in the stack trace field, not the CFML `TagContext`. The latter is now in the exception's data section, where available.
+    - There is now proper support for nested exceptions (based on existence of `cause` field).
+    - Content filtering (`RaygunContentFilter`), user identifier (`RaygunIdentifierMessage`) and user custom data (`RaygunUserCustomData`) are now using the builder-pattern approach to be setup for `RaygunClient`.
+    - Size of raw data can be configured (#42).
+    - SQL exception tracking has been improved (#44).
+    - Constants are now tracked in their own static component and some can be overwritten by `RaygunSettings`.
+    - `ProductCheck` and `RaygunInternalTools` are now static components.
+    - CFML engine is being track in Raygun's Environment tab now.
+- Samples in `/samples` have been reworked.
+- Unit/Integration tests are in `/tests/specs`.
+- Code formatting via `run-script format` was added for Commandbox.
+- Project contains custom CFML server declarations for testing on ports (port 9191 upwards).
+- All files have improved code documentation.
+- Engine-specific changes:
+    - Support for Adobe ColdFusion *before* ACF 2021 has been stopped. ACF 2018 and earlier are - as CFML engines go - not supported any more, please upgrade your platforms.
+    - Support for any versions of Railo has been stopped. Lucee support is set to Lucee 5.4 and newer, but this might be extended to 5.3 in a future 2.0.0 pre-release.
+    - Support for Boxlang 1.0.0 has been added. 
 
 1.7.0 (November 14 2024)
 

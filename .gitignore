@@ -1,4 +1,2 @@
-.*
-!.gitignore
-*.iml
-/server.json
+# Testbox dependency
+/testbox
