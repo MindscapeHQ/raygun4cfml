@@ -1,0 +1,19 @@
+{
+    "trayEnable":false,
+    "profile":"development",
+    "name":"boxlang-1",
+    "app":{
+        "cfengine":"boxlang@1.0.0-snapshot"
+    },
+    "web":{
+        "http":{
+            "port":"9197"
+        }
+    },
+    "scripts":{
+        "onServerInitialInstall":"install bx-compat-cfml"
+    },
+    "jvm":{
+        "javaVersion":"openjdk21_jdk"
+    }
+}

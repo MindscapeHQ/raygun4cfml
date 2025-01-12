@@ -1,7 +1,7 @@
 {
     "name":"raygun4cfml",
-    "version":"1.7.0",
-    "location":"MindscapeHQ/raygun4cfml#1.7.0",
+    "version":"2.0.0",
+    "location":"MindscapeHQ/raygun4cfml#2.0.0",
     "author":"Kai Koenig <kai@ventego-creative.co.nz>",
     "homepage":"https://github.com/MindscapeHQ/raygun4cfml/",
     "documentation":"https://github.com/MindscapeHQ/raygun4cfml/blob/master/README.md",
@@ -12,20 +12,48 @@
     "bugs":"https://github.com/MindscapeHQ/raygun4cfml/issues",
     "slug":"raygun4cfml",
     "shortDescription":"Provides integration with the Raygun CrashReporting API",
-    "description":"API provider to send error information to Raygun crash reporting for tracking and analysis",
-    "instructions":"Install this module and follow the guidelines in README.me as well as in /samples and /tests/test_manual",
-    "changelog":"https://github.com/MindscapeHQ/raygun4cfml/blob/master/changelog.md",
-    "keywords":["error","errortracking","bugs","bugtracking","raygun","raygun.io"],
+    "description":"API provider to send error information to Raygun crash reporting for tracking and analysis.",
+    "instructions":"Install this module and follow the guidelines in README.me as well as in /samples.",
+    "changelog":"https://github.com/MindscapeHQ/raygun4cfml/blob/master/CHANGELOG.md",
+    "keywords":[
+        "error",
+        "error tracking",
+        "bugs",
+        "bug tracking",
+        "raygun",
+        "crash reporting",
+        "error reporting"
+    ],
     "engines":[
-        {"type":"lucee","version":">=5.0.0"},
-        {"type":"adobe","version":">=2018.0.0"}
+        {
+            "type":"lucee",
+            "version":">=5.3.0"
+        },
+        {
+            "type":"adobe",
+            "version":">=2021.0.0"
+        },
+        {
+            "type":"boxlang"
+        }
     ],
     "type":"logging",
     "projectURL":"https://github.com/MindscapeHQ/raygun4cfml/",
     "license":[
-        {"type":"Apache 2.0","URL":"http://www.apache.org/licenses/LICENSE-2.0"}
+        {
+            "type":"Apache 2.0",
+            "URL":"http://www.apache.org/licenses/LICENSE-2.0"
+        }
     ],
     "devDependencies":{
-        "testbox":"x"
+        "testbox":"6"
+    },
+    "scripts":{
+        "format":"cfformat run src/**/*.cfc,tests/**/*.cfc,tests/**/*.cfm,samples/**/*.cfc,samples/**/*.cfm --overwrite",
+        "format:watch":"cfformat watch src/**/*.cfc,tests/**/*.cfc,tests/**/*.cfm,samples/**/*.cfc,samples/**/*.cfm --overwrite",
+        "format:check":"cfformat check src/**/*.cfc,tests/**/*.cfc,tests/**/*.cfm,samples/**/*.cfc,samples/**/*.cfm"
+    },
+    "installPaths":{
+        "testbox":"testbox/"
     }
 }

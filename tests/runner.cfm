@@ -1,6 +1,6 @@
 <cfscript>
-    r = CreateObject("component","testbox.system.testing.TestBox");
-    r.init(directory="raygun4cfml.tests.raygun4cfml.unit");
+    r = CreateObject("component","testbox.system.TestBox");
+    r.init(directory="tests");
 </cfscript>
 
 <cfoutput>#r.run()#</cfoutput>
