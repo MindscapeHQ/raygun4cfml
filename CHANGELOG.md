@@ -6,11 +6,15 @@ History and Plan
 - Making Raygun4CFML a Coldbox module OR building a Coldbox module wrapper using Raygun4CFML as a dependency.
 - Add breadcrumbs (#46)
 
-2.0.1 Plan
+2.0.2 Plan
 
 - Add support for response.statusCode (#48)
 - Integration and adaptation to Coldbox error reporting, adding CB HMVC app/API samples
 - Cleanup `legacy` directory
+
+2.0.1 (Jan 13 2025)
+
+- Fixed issue with ACF Content filtering and CGI-Scope
 
 2.0.0 (Jan 12 2025)
 
