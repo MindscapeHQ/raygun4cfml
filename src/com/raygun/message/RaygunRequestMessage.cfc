@@ -27,6 +27,13 @@ component {
             var httpRequest = {};
         }
 
+        // Original CGI scope is often not writable, this can become a problem when using the RaygunContentFilter
+        try {
+            var localCGI = duplicate( CGI );
+        } catch ( any e ) {
+            var localCGI = {};
+        }
+
         // Form scope might not exist for non-POST requests
         try {
             var localForm = duplicate( FORM );
@@ -51,7 +58,7 @@ component {
             "iPAddress"   : ( len( CGI.REMOTE_ADDR ) ? CGI.REMOTE_ADDR : javacast( "null", "" ) ),
             "queryString" : ( len( CGI.QUERY_STRING ) ? CGI.QUERY_STRING : javacast( "null", "" ) ),
             "headers"     : ( httpRequest.keyExists( "headers" ) ? httpRequest.headers : javacast( "null", "" ) ),
-            "data"        : CGI,
+            "data"        : localCGI,
             "form"        : localForm,
             "params"      : localUrl
         };

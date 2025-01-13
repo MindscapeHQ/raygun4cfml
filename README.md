@@ -9,11 +9,11 @@ Supported Platforms:
 - Lucee 5.3+
 - Boxlang 1+
 
-Current Version: 2.0.0
+Current Version: 2.0.1
 
 ## Active development
 
-2.0.0 is a complete rewrite of the project and is ready-to-use for the 3 major CFML engines and their crash reports. 
+2.0.0 was a complete rewrite of the project and is ready-to-use for the 3 major CFML engines and their crash reports. 
 
 Please be aware that no testing and work has *yet* gone into framework-specific crash reports, e.g. a deeper integration with Coldbox HVMC, Fusebox, CF on Wheels etc. This will be added over time in future releases.
 
