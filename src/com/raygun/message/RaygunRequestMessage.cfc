@@ -3,9 +3,13 @@
  * Captures essential request context including headers, form data, and raw request content
  * while gracefully handling cases where certain scopes might be unavailable.
  */
-component {
+component accessors="true" {
 
-    public RaygunRequestMessage function init() {
+    property name="settings" type="struct";
+
+    public RaygunRequestMessage function init( struct settings = {} ) {
+        setSettings( arguments.settings );
+
         return this;
     }
 
@@ -14,10 +18,8 @@ component {
      * Uses multiple data sources (CGI, FORM, URL scopes) with fallbacks to ensure
      * we capture as much context as possible even if some scopes are restricted.
      * Raw request data is truncated to prevent oversized payloads.
-     *
-     * @settings Optional configuration settings, primarily for controlling raw data length
      */
-    public struct function build( struct settings = {} ) {
+    public struct function build() {
         var returnContent = {};
 
         // Safely access request data - some environments restrict getHTTPRequestData()
@@ -69,7 +71,7 @@ component {
             len( CGI.CONTENT_TYPE ) && len( CGI.REQUEST_METHOD ) && CGI.CONTENT_TYPE != "text/html" && CGI.CONTENT_TYPE != "application/x-www-form-urlencoded" && CGI.REQUEST_METHOD != "GET"
         ) {
             var maxLength = (
-                arguments.settings.keyExists( "rawDataMaxLength" ) ? arguments.settings.rawDataMaxLength : com.raygun.environment.RaygunConfig::getRawDataMaxLengthDefault()
+                getSettings().keyExists( "rawDataMaxLength" ) ? getSettings().rawDataMaxLength : com.raygun.environment.RaygunConfig::getRawDataMaxLengthDefault()
             );
             returnContent[ "rawData" ] = left(
                 ( httpRequest.keyExists( "content" ) ) ? httpRequest.content : javacast( "null", "" ),
