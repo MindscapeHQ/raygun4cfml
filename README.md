@@ -9,7 +9,7 @@ Supported Platforms:
 - Lucee 5.3+
 - Boxlang 1+
 
-Current Version: 2.0.1
+Current Version: 2.1.0
 
 ## Active development
 
