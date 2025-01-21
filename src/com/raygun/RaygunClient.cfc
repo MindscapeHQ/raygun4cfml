@@ -136,13 +136,13 @@ component accessors="true" {
             augmentedIssueData[ "groupingKey" ] = arguments.groupingKey;
         }
 
-        var message        = new message.RaygunMessage();
         var raygunSettings = {};
         // Only apply settings if they've been properly initialized
         if ( isInstanceOf( getSettings(), "RaygunSettings" ) ) {
             var raygunSettings = getSettings().getSettings();
         }
-        var messageContent = message.build( augmentedIssueData, raygunSettings );
+
+        var messageContent = new message.RaygunMessage(settings = raygunSettings).build( augmentedIssueData );
 
         // Apply content filtering if configured to protect sensitive data
         if (

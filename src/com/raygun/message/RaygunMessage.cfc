@@ -6,11 +6,15 @@
  */
 component accessors="true" {
 
+    property name="settings" type="struct";
+
     // Handles the detailed error information including stack traces, request data, etc
     property name="raygunMessageDetails" type="RaygunMessageDetails";
 
-    public RaygunMessage function init( RaygunMessageDetails raygunMessageDetails = new RaygunMessageDetails() ) {
-        setRaygunMessageDetails( arguments.raygunMessageDetails );
+    public RaygunMessage function init( RaygunMessageDetails raygunMessageDetails, struct settings = {} ) {
+        setSettings( arguments.settings );
+        setRaygunMessageDetails( !isNull(arguments.raygunMessageDetails) && isInstanceOf(arguments.raygunMessageDetails, "RaygunMessageDetails") ? arguments.raygunMessageDetails : new raygunMessageDetails( settings = getSettings() ) );
+        
         return this;
     }
 
@@ -21,11 +25,9 @@ component accessors="true" {
      * consistent error chronology across different server timezones.
      *
      * @issueData The struct containing issue data augmented with Raygun-specific data
-     * @settings Optional configuration settings that modify message construction
      */
     public struct function build(
-        required struct issueData,
-        struct settings = {}
+        required struct issueData
     ) {
         var returnContent = {};
         // Convert to UTC for consistent timestamps across different server timezones
@@ -33,8 +35,7 @@ component accessors="true" {
 
         returnContent[ "occurredOn" ] = ts.dateFormat( "yyyy-mm-dd" ) & "T" & ts.timeFormat( "HH:mm:ss" ) & "Z";
         returnContent[ "details" ]    = raygunMessageDetails.build(
-            arguments.issueData,
-            arguments.settings
+            arguments.issueData
         );
 
         return returnContent;
