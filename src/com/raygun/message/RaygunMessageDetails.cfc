@@ -68,8 +68,6 @@ component accessors="true" {
         returnContent[ "request" ]     = raygunRequestMessage.build( getSettings() );
         returnContent[ "client" ]      = raygunClientMessage.build();
         returnContent[ "environment" ] = raygunEnvironmentMessage.build();
-        // writeDump(raygunResponseMessage);
-        // writeDump(getSettings());
         returnContent[ "response" ]    = raygunResponseMessage.build( arguments.issueData);
 
         // Include any custom data if provided through a builder object
