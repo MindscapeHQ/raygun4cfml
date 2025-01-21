@@ -13,7 +13,7 @@ component {
      * Sets up the Raygun error tracking API key for exception monitoring
      */
     public void function onRequestStart() {
-        variables.RAYGUNAPIKEY = "erHT5l1N2VPfHW3E82kQQ";
+        variables.RAYGUNAPIKEY = "<YOUR API KEY>";
     }
 
 }
