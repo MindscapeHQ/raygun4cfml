@@ -9,7 +9,7 @@ component accessors="true" {
 
     public RaygunRequestMessage function init( struct settings = {} ) {
         setSettings( arguments.settings );
-        
+
         return this;
     }
 

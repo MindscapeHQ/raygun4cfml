@@ -142,7 +142,7 @@ component accessors="true" {
             var raygunSettings = getSettings().getSettings();
         }
 
-        var messageContent = new message.RaygunMessage(settings = raygunSettings).build( augmentedIssueData );
+        var messageContent = new message.RaygunMessage( settings = raygunSettings ).build( augmentedIssueData );
 
         // Apply content filtering if configured to protect sensitive data
         if (

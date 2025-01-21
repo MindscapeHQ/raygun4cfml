@@ -22,12 +22,37 @@ component accessors="true" {
         struct settings = {}
     ) {
         setSettings( arguments.settings );
-        setRaygunExceptionMessage( !isNull(arguments.raygunExceptionMessage) && isInstanceOf(arguments.raygunExceptionMessage, "RaygunExceptionMessage") ? arguments.raygunExceptionMessage : new RaygunExceptionMessage() );
-        setRaygunRequestMessage( !isNull(arguments.raygunRequestMessage) && isInstanceOf(arguments.raygunRequestMessage, "RaygunRequestMessage") ? arguments.raygunRequestMessage : new RaygunRequestMessage() );
-        setRaygunClientMessage( !isNull(arguments.raygunClientMessage) && isInstanceOf(arguments.raygunClientMessage, "RaygunClientMessage") ? arguments.raygunClientMessage : new RaygunClientMessage() );
-        setRaygunEnvironmentMessage( !isNull(arguments.raygunEnvironmentMessage) && isInstanceOf(arguments.raygunEnvironmentMessage, "RaygunEnvironmentMessage") ? arguments.raygunEnvironmentMessage : new RaygunEnvironmentMessage() );
-        setRaygunResponseMessage( !isNull(arguments.raygunResponseMessage) && isInstanceOf(arguments.raygunResponseMessage, "RaygunResponseMessage") ? arguments.raygunResponseMessage : new RaygunResponseMessage( settings = getSettings() ) );
-    
+        setRaygunExceptionMessage(
+            !isNull( arguments.raygunExceptionMessage ) && isInstanceOf(
+                arguments.raygunExceptionMessage,
+                "RaygunExceptionMessage"
+            ) ? arguments.raygunExceptionMessage : new RaygunExceptionMessage()
+        );
+        setRaygunRequestMessage(
+            !isNull( arguments.raygunRequestMessage ) && isInstanceOf(
+                arguments.raygunRequestMessage,
+                "RaygunRequestMessage"
+            ) ? arguments.raygunRequestMessage : new RaygunRequestMessage()
+        );
+        setRaygunClientMessage(
+            !isNull( arguments.raygunClientMessage ) && isInstanceOf(
+                arguments.raygunClientMessage,
+                "RaygunClientMessage"
+            ) ? arguments.raygunClientMessage : new RaygunClientMessage()
+        );
+        setRaygunEnvironmentMessage(
+            !isNull( arguments.raygunEnvironmentMessage ) && isInstanceOf(
+                arguments.raygunEnvironmentMessage,
+                "RaygunEnvironmentMessage"
+            ) ? arguments.raygunEnvironmentMessage : new RaygunEnvironmentMessage()
+        );
+        setRaygunResponseMessage(
+            !isNull( arguments.raygunResponseMessage ) && isInstanceOf(
+                arguments.raygunResponseMessage,
+                "RaygunResponseMessage"
+            ) ? arguments.raygunResponseMessage : new RaygunResponseMessage( settings = getSettings() )
+        );
+
         return this;
     }
 
@@ -38,9 +63,7 @@ component accessors="true" {
      *
      * @issueData The core error data to be processed
      */
-    public struct function build(
-        required struct issueData
-    ) {
+    public struct function build( required struct issueData ) {
         var returnContent = {};
 
         // Grouping key allows for custom error grouping in Raygun's dashboard
@@ -67,7 +90,7 @@ component accessors="true" {
         returnContent[ "request" ]     = raygunRequestMessage.build( getSettings() );
         returnContent[ "client" ]      = raygunClientMessage.build();
         returnContent[ "environment" ] = raygunEnvironmentMessage.build();
-        returnContent[ "response" ]    = raygunResponseMessage.build( arguments.issueData);
+        returnContent[ "response" ]    = raygunResponseMessage.build( arguments.issueData );
 
         // Include any custom data if provided through a builder object
         if ( arguments.issueData.keyExists( "userCustomData" ) && isObject( arguments.issueData.userCustomData ) ) {

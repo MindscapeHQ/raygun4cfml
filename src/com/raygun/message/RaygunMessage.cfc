@@ -11,10 +11,18 @@ component accessors="true" {
     // Handles the detailed error information including stack traces, request data, etc
     property name="raygunMessageDetails" type="RaygunMessageDetails";
 
-    public RaygunMessage function init( RaygunMessageDetails raygunMessageDetails, struct settings = {} ) {
+    public RaygunMessage function init(
+        RaygunMessageDetails raygunMessageDetails,
+        struct settings = {}
+    ) {
         setSettings( arguments.settings );
-        setRaygunMessageDetails( !isNull(arguments.raygunMessageDetails) && isInstanceOf(arguments.raygunMessageDetails, "RaygunMessageDetails") ? arguments.raygunMessageDetails : new raygunMessageDetails( settings = getSettings() ) );
-        
+        setRaygunMessageDetails(
+            !isNull( arguments.raygunMessageDetails ) && isInstanceOf(
+                arguments.raygunMessageDetails,
+                "RaygunMessageDetails"
+            ) ? arguments.raygunMessageDetails : new RaygunMessageDetails( settings = getSettings() )
+        );
+
         return this;
     }
 
@@ -26,17 +34,13 @@ component accessors="true" {
      *
      * @issueData The struct containing issue data augmented with Raygun-specific data
      */
-    public struct function build(
-        required struct issueData
-    ) {
+    public struct function build( required struct issueData ) {
         var returnContent = {};
         // Convert to UTC for consistent timestamps across different server timezones
         var ts            = dateConvert( "local2Utc", now() );
 
         returnContent[ "occurredOn" ] = ts.dateFormat( "yyyy-mm-dd" ) & "T" & ts.timeFormat( "HH:mm:ss" ) & "Z";
-        returnContent[ "details" ]    = raygunMessageDetails.build(
-            arguments.issueData
-        );
+        returnContent[ "details" ]    = raygunMessageDetails.build( arguments.issueData );
 
         return returnContent;
     }
