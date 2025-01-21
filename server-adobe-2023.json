@@ -9,5 +9,8 @@
         "http":{
             "port":"9193"
         }
+    },
+    "scripts":{
+        "onServerInitialInstall":"cfpm install debugger"
     }
 }

@@ -1,25 +1,58 @@
 /**
  * Represents the core message details for a Raygun error report.
  * This component aggregates all the different aspects of an error report including
- * exception details, request information, client data, and environment specifics.
+ * exception details, request information, client data, environment specifics, and response data.
  */
 component accessors="true" {
+
+    property name="settings" type="struct";
 
     property name="raygunExceptionMessage"   type="RaygunExceptionMessage";
     property name="raygunRequestMessage"     type="RaygunRequestMessage";
     property name="raygunClientMessage"      type="RaygunClientMessage";
     property name="raygunEnvironmentMessage" type="RaygunEnvironmentMessage";
+    property name="raygunResponseMessage"    type="RaygunResponseMessage";
 
     public RaygunMessageDetails function init(
-        RaygunExceptionMessage raygunExceptionMessage     = new RaygunExceptionMessage(),
-        RaygunRequestMessage raygunRequestMessage         = new RaygunRequestMessage(),
-        RaygunClientMessage raygunClientMessage           = new RaygunClientMessage(),
-        RaygunEnvironmentMessage raygunEnvironmentMessage = new RaygunEnvironmentMessage()
+        RaygunExceptionMessage raygunExceptionMessage,
+        RaygunRequestMessage raygunRequestMessage,
+        RaygunClientMessage raygunClientMessage,
+        RaygunEnvironmentMessage raygunEnvironmentMessage,
+        RaygunResponseMessage raygunResponseMessage,
+        struct settings = {}
     ) {
-        setRaygunExceptionMessage( arguments.raygunExceptionMessage );
-        setRaygunRequestMessage( arguments.raygunRequestMessage );
-        setRaygunClientMessage( arguments.raygunClientMessage );
-        setRaygunEnvironmentMessage( arguments.raygunEnvironmentMessage );
+        setSettings( arguments.settings );
+        setRaygunExceptionMessage(
+            !isNull( arguments.raygunExceptionMessage ) && isInstanceOf(
+                arguments.raygunExceptionMessage,
+                "RaygunExceptionMessage"
+            ) ? arguments.raygunExceptionMessage : new RaygunExceptionMessage()
+        );
+        setRaygunRequestMessage(
+            !isNull( arguments.raygunRequestMessage ) && isInstanceOf(
+                arguments.raygunRequestMessage,
+                "RaygunRequestMessage"
+            ) ? arguments.raygunRequestMessage : new RaygunRequestMessage()
+        );
+        setRaygunClientMessage(
+            !isNull( arguments.raygunClientMessage ) && isInstanceOf(
+                arguments.raygunClientMessage,
+                "RaygunClientMessage"
+            ) ? arguments.raygunClientMessage : new RaygunClientMessage()
+        );
+        setRaygunEnvironmentMessage(
+            !isNull( arguments.raygunEnvironmentMessage ) && isInstanceOf(
+                arguments.raygunEnvironmentMessage,
+                "RaygunEnvironmentMessage"
+            ) ? arguments.raygunEnvironmentMessage : new RaygunEnvironmentMessage()
+        );
+        setRaygunResponseMessage(
+            !isNull( arguments.raygunResponseMessage ) && isInstanceOf(
+                arguments.raygunResponseMessage,
+                "RaygunResponseMessage"
+            ) ? arguments.raygunResponseMessage : new RaygunResponseMessage( settings = getSettings() )
+        );
+
         return this;
     }
 
@@ -29,12 +62,8 @@ component accessors="true" {
      * that matches Raygun's API expectations.
      *
      * @issueData The core error data to be processed
-     * @settings Optional configuration settings that may affect how the request data is processed
      */
-    public struct function build(
-        required struct issueData,
-        struct settings = {}
-    ) {
+    public struct function build( required struct issueData ) {
         var returnContent = {};
 
         // Grouping key allows for custom error grouping in Raygun's dashboard
@@ -58,9 +87,10 @@ component accessors="true" {
 
         // Build the core components of the error report
         returnContent[ "error" ]       = raygunExceptionMessage.build( arguments.issueData );
-        returnContent[ "request" ]     = raygunRequestMessage.build( arguments.settings );
+        returnContent[ "request" ]     = raygunRequestMessage.build( getSettings() );
         returnContent[ "client" ]      = raygunClientMessage.build();
         returnContent[ "environment" ] = raygunEnvironmentMessage.build();
+        returnContent[ "response" ]    = raygunResponseMessage.build( arguments.issueData );
 
         // Include any custom data if provided through a builder object
         if ( arguments.issueData.keyExists( "userCustomData" ) && isObject( arguments.issueData.userCustomData ) ) {

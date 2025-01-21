@@ -43,7 +43,8 @@ component extends="samples.Application" {
             .setFullName( "Tester" );
 
         // Increase max payload size to ensure detailed error data is captured
-        var settings = new com.raygun.environment.RaygunSettings().setRawDataMaxLength( 10000 );
+        // Set default status code to 418 to indicate that the error responses are from a teapot
+        var settings = new com.raygun.environment.RaygunSettings().setRawDataMaxLength( 10000 ).setStatusCode( 418 );
 
         var raygun = new com.raygun.RaygunClient(
             apiKey     = variables.RAYGUNAPIKEY,

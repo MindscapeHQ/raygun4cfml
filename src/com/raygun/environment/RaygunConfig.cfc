@@ -13,6 +13,9 @@ component {
         RAYGUN_CLIENT_NAME    = "raygun4cfml";
         RAYGUN_CLIENT_VERSION = "2.0.1";
         RAYGUN_CLIENT_URL     = "https://github.com/MindscapeHQ/raygun4cfml";
+
+        // New default status code
+        DEFAULT_STATUS_CODE = 500;
     }
 
     /**
@@ -49,6 +52,13 @@ component {
      */
     public static function getRaygunClientUrl() {
         return static.RAYGUN_CLIENT_URL;
+    }
+
+    /**
+     * Returns the default HTTP status code for error responses.
+     */
+    public static function getDefaultStatusCode() {
+        return static.DEFAULT_STATUS_CODE;
     }
 
 }
