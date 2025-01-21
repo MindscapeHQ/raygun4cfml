@@ -37,7 +37,6 @@ component accessors="true" {
      * that matches Raygun's API expectations.
      *
      * @issueData The core error data to be processed
-     * @settings Optional configuration settings that may affect how the request data is processed
      */
     public struct function build(
         required struct issueData
