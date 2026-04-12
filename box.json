@@ -49,6 +49,8 @@
         "testbox":"6"
     },
     "scripts":{
+        "test":"bash run-tests.sh server-lucee-6-1.json",
+        "test:all":"bash run-tests.sh",
         "format":"cfformat run src/**/*.cfc,tests/**/*.cfc,tests/**/*.cfm,samples/**/*.cfc,samples/**/*.cfm --overwrite",
         "format:watch":"cfformat watch src/**/*.cfc,tests/**/*.cfc,tests/**/*.cfm,samples/**/*.cfc,samples/**/*.cfm --overwrite",
         "format:check":"cfformat check src/**/*.cfc,tests/**/*.cfc,tests/**/*.cfm,samples/**/*.cfc,samples/**/*.cfm"
