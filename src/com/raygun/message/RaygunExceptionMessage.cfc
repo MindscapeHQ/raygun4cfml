@@ -55,7 +55,7 @@ component {
         returnContent[ "data" ][ "extendedInfo" ] = ( entryPoint.keyExists( "extendedinfo" ) && entryPoint.extendedinfo.len() ) ? entryPoint.extendedinfo : "";
 
         // Additional handling for database errors to capture SQL-specific details
-        if ( entryPoint.type == "database" ) {
+        if ( compareNoCase( entryPoint.type, "database" ) == 0 ) {
             if ( !returnContent[ "message" ].len() ) returnContent[ "message" ] = "SQL/DB issue";
 
             var databaseData                      = {};
