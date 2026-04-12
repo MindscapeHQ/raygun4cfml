@@ -90,11 +90,30 @@ All code must work on Adobe CF 2021+, Lucee 5.3+, and BoxLang 1+.
 
 - Tests live in `tests/specs/com/raygun/`, mirroring `src/com/raygun/` structure
 - Test files are named `*Test.cfc` and extend `testbox.system.BaseSpec`
-- **Run tests**:
-  1. Start a server: `box server start server-lucee-6-1.json`
-  2. Navigate to `http://localhost:9195/tests/runner.cfm`
-- Test any behavior change; verify against multiple engines when touching engine-dependent code
 - TestBox is a dev dependency (`"testbox": "6"` in `box.json`)
+- Test any behavior change; verify against multiple engines when touching engine-dependent code
+
+### Running tests locally
+
+**Automated (preferred)** — uses `run-tests.sh` which starts a server, runs tests, and stops the server (cleanup on interrupt via trap):
+
+```bash
+./run-tests.sh server-lucee-6-1.json    # single engine
+./run-tests.sh                           # all engines sequentially
+box run-script test                      # shortcut: Lucee 6.1
+box run-script test:all                  # shortcut: all engines
+```
+
+**Manual** — if you need to keep a server running for debugging:
+
+```bash
+box server start serverConfigFile=server-lucee-6-1.json
+# Browse to http://localhost:9195/tests/runner.cfm
+# When done:
+box server stop serverConfigFile=server-lucee-6-1.json
+```
+
+> **Important:** Always stop servers when done. If a server is left running, its port will conflict with future test runs. Use `box server list` to check for running servers.
 
 ## Commit Messages
 

@@ -70,6 +70,20 @@ wait_for_server() {
     return 0
 }
 
+# Track the currently running server config so we can clean up on interrupt
+CURRENT_SERVER=""
+
+cleanup() {
+    if [ -n "$CURRENT_SERVER" ]; then
+        echo ""
+        echo "  Stopping server (cleanup)..."
+        box server stop serverConfigFile="$CURRENT_SERVER" 2>/dev/null || true
+        CURRENT_SERVER=""
+    fi
+}
+
+trap cleanup EXIT INT TERM
+
 # Run tests against a single server config
 run_single() {
     local config=$1
@@ -84,12 +98,14 @@ run_single() {
 
     # Start server
     echo "  Starting server..."
+    CURRENT_SERVER="$config"
     box server start serverConfigFile="$config" --!verbose 2>&1 | sed 's/^/  /'
 
     # Wait for it to be ready
     if ! wait_for_server "$port"; then
         echo "  ❌ Server failed to start within ${MAX_WAIT}s"
         box server stop serverConfigFile="$config" 2>/dev/null || true
+        CURRENT_SERVER=""
         return 1
     fi
 
@@ -136,6 +152,7 @@ for bundle in d.get('bundleStats', []):
     # Stop server
     echo "  Stopping server..."
     box server stop serverConfigFile="$config" 2>&1 | sed 's/^/  /'
+    CURRENT_SERVER=""
     echo ""
 
     return $exit_code
