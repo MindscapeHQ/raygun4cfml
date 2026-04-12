@@ -78,16 +78,20 @@ component accessors="true" {
             returnContent[ "version" ] = javacast( "null", "" );
         }
 
-        // Attempt to get the real IP address, fallback to SERVER_NAME if Java networking is unavailable
+        // Attempt to get the real IP address, with safe fallbacks for non-web contexts
         try {
             returnContent[ "machineName" ] = createObject( "java", "java.net.InetAddress" ).getLocalHost().getHostAddress();
         } catch ( any e ) {
-            returnContent[ "machineName" ] = CGI.SERVER_NAME;
+            try {
+                returnContent[ "machineName" ] = CGI.SERVER_NAME;
+            } catch ( any e2 ) {
+                returnContent[ "machineName" ] = "";
+            }
         }
 
         // Build the core components of the error report
         returnContent[ "error" ]       = raygunExceptionMessage.build( arguments.issueData );
-        returnContent[ "request" ]     = raygunRequestMessage.build( getSettings() );
+        returnContent[ "request" ]     = raygunRequestMessage.build();
         returnContent[ "client" ]      = raygunClientMessage.build();
         returnContent[ "environment" ] = raygunEnvironmentMessage.build();
         returnContent[ "response" ]    = raygunResponseMessage.build( arguments.issueData );
