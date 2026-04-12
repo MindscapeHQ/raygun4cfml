@@ -219,10 +219,27 @@ run_single() {
         exit_code=1
         details="Empty response"
     else
-        total_pass=$(python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('totalPass',0))" < /tmp/raygun4cfml-test-result.json 2>/dev/null) || total_pass="?"
-        total_fail=$(python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('totalFail',0))" < /tmp/raygun4cfml-test-result.json 2>/dev/null) || total_fail="?"
-        total_error=$(python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('totalError',0))" < /tmp/raygun4cfml-test-result.json 2>/dev/null) || total_error="?"
-        total_specs=$(python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('totalSpecs',0))" < /tmp/raygun4cfml-test-result.json 2>/dev/null) || total_specs="?"
+        # Extract JSON object from response — ACF may append debug HTML after the JSON
+        python3 -c "
+import json, sys
+raw = sys.stdin.read()
+# Find the end of the top-level JSON object
+depth = 0
+end = 0
+for i, ch in enumerate(raw):
+    if ch == '{': depth += 1
+    elif ch == '}':
+        depth -= 1
+        if depth == 0:
+            end = i + 1
+            break
+sys.stdout.write(raw[:end])
+" < /tmp/raygun4cfml-test-result.json > /tmp/raygun4cfml-test-clean.json 2>/dev/null
+
+        total_pass=$(python3 -c "import json,sys; d=json.load(sys.stdin); print(int(d.get('totalPass',0)))" < /tmp/raygun4cfml-test-clean.json 2>/dev/null) || total_pass="?"
+        total_fail=$(python3 -c "import json,sys; d=json.load(sys.stdin); print(int(d.get('totalFail',0)))" < /tmp/raygun4cfml-test-clean.json 2>/dev/null) || total_fail="?"
+        total_error=$(python3 -c "import json,sys; d=json.load(sys.stdin); print(int(d.get('totalError',0)))" < /tmp/raygun4cfml-test-clean.json 2>/dev/null) || total_error="?"
+        total_specs=$(python3 -c "import json,sys; d=json.load(sys.stdin); print(int(d.get('totalSpecs',0)))" < /tmp/raygun4cfml-test-clean.json 2>/dev/null) || total_specs="?"
 
         if [ "$total_fail" = "0" ] && [ "$total_error" = "0" ]; then
             log "${SYM_PASS} ${C_GREEN}${total_specs} specs passed${C_RESET}"
@@ -240,7 +257,7 @@ for bundle in d.get('bundleStats', []):
                 msg = spec.get('failMessage') or spec.get('error', '')
                 lines.append(f\"{spec.get('name')}: {msg}\")
 print('\n'.join(lines))
-" < /tmp/raygun4cfml-test-result.json 2>/dev/null) || details=""
+" < /tmp/raygun4cfml-test-clean.json 2>/dev/null) || details=""
 
             # Print failure details indented
             if [ -n "$details" ]; then
