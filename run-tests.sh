@@ -181,7 +181,7 @@ run_single() {
     # Start server
     log "${SYM_DOT} Starting server..."
     CURRENT_SERVER="$config"
-    box server start serverConfigFile="$config" --!verbose > /dev/null 2>&1
+    box server start serverConfigFile="$config" --!verbose --!openBrowser > /dev/null 2>&1
 
     # Wait for it
     if ! wait_for_server "$port"; then
