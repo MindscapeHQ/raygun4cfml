@@ -16,6 +16,14 @@ component {
 
         // New default status code
         DEFAULT_STATUS_CODE = 500;
+
+        API_ENDPOINT         = "https://api.raygun.com/entries";
+        LOG_FILE_NAME        = "Raygun4CFML";
+        CONTENT_TYPE_HTML    = "text/html";
+        CONTENT_TYPE_FORM    = "application/x-www-form-urlencoded";
+        HTTP_METHOD_GET      = "GET";
+        FORM_FIELD_MAX_LENGTH = 256;
+        MAX_PAYLOAD_SIZE     = 131072;
     }
 
     /**
@@ -59,6 +67,55 @@ component {
      */
     public static function getDefaultStatusCode() {
         return static.DEFAULT_STATUS_CODE;
+    }
+
+    /**
+     * Returns the Raygun API endpoint URL for submitting error reports.
+     */
+    public static function getApiEndpoint() {
+        return static.API_ENDPOINT;
+    }
+
+    /**
+     * Returns the log file name used for async error logging.
+     */
+    public static function getLogFileName() {
+        return static.LOG_FILE_NAME;
+    }
+
+    /**
+     * Returns the HTML content type string used for request filtering.
+     */
+    public static function getContentTypeHtml() {
+        return static.CONTENT_TYPE_HTML;
+    }
+
+    /**
+     * Returns the form-urlencoded content type string used for request filtering.
+     */
+    public static function getContentTypeForm() {
+        return static.CONTENT_TYPE_FORM;
+    }
+
+    /**
+     * Returns the HTTP GET method string used for request filtering.
+     */
+    public static function getHttpMethodGet() {
+        return static.HTTP_METHOD_GET;
+    }
+
+    /**
+     * Returns the maximum character length for individual form field values.
+     */
+    public static function getFormFieldMaxLength() {
+        return static.FORM_FIELD_MAX_LENGTH;
+    }
+
+    /**
+     * Returns the maximum payload size in bytes accepted by the Raygun API.
+     */
+    public static function getMaxPayloadSize() {
+        return static.MAX_PAYLOAD_SIZE;
     }
 
 }

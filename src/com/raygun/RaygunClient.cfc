@@ -7,9 +7,9 @@ component accessors="true" {
 
     // Core configuration properties required for Raygun integration
     property name="apiKey"        type="string"              default="";
-    property name="contentFilter" type="RaygunContentFilter" default="";
+    property name="contentFilter" type="RaygunContentFilter";
     property name="appVersion"    type="string"              default="";
-    property name="settings"      type="RaygunSettings"      default="";
+    property name="settings"      type="RaygunSettings";
 
     public RaygunClient function init(
         required string apiKey,
@@ -182,7 +182,7 @@ component accessors="true" {
             thread action="run" name="sendAsyncToRaygunThread_#createUUID()#" apiKey=getApiKey() payload=arguments.jsonData {
                 try {
                     cfhttp(
-                        url     = "https://api.raygun.com/entries",
+                        url     = com.raygun.environment.RaygunConfig::getApiEndpoint(),
                         method  = "post",
                         charset = "utf-8"
                     ) {
@@ -206,14 +206,14 @@ component accessors="true" {
                     writeLog(
                         text = "Error when trying to send to Raygun async: #serializeJSON( e )#",
                         type = "error",
-                        file = "Raygun4CFML"
+                        file = com.raygun.environment.RaygunConfig::getLogFileName()
                     );
                 }
             }
         } else {
             // Synchronous transmission allows error handling by the caller
             cfhttp(
-                url     = "https://api.raygun.com/entries",
+                url     = com.raygun.environment.RaygunConfig::getApiEndpoint(),
                 method  = "post",
                 charset = "utf-8",
                 result  = "postResult"

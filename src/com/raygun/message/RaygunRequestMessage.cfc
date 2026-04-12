@@ -77,7 +77,7 @@ component accessors="true" {
         var contentType    = localCGI.keyExists( "CONTENT_TYPE" ) ? localCGI[ "CONTENT_TYPE" ] : "";
         var requestMethod  = localCGI.keyExists( "REQUEST_METHOD" ) ? localCGI[ "REQUEST_METHOD" ] : "";
         if (
-            len( contentType ) && len( requestMethod ) && contentType != "text/html" && contentType != "application/x-www-form-urlencoded" && requestMethod != "GET"
+            len( contentType ) && len( requestMethod ) && contentType != com.raygun.environment.RaygunConfig::getContentTypeHtml() && contentType != com.raygun.environment.RaygunConfig::getContentTypeForm() && requestMethod != com.raygun.environment.RaygunConfig::getHttpMethodGet()
         ) {
             var maxLength = (
                 getSettings().keyExists( "rawDataMaxLength" ) ? getSettings().rawDataMaxLength : com.raygun.environment.RaygunConfig::getRawDataMaxLengthDefault()

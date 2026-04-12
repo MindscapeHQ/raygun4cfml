@@ -23,6 +23,38 @@ component extends="testbox.system.BaseSpec" {
             it( "should provide default status code", function() {
                 expect( com.raygun.environment.RaygunConfig::getDefaultStatusCode() ).toBe( 500 );
             } );
+
+            it( "should provide API endpoint", function() {
+                expect( com.raygun.environment.RaygunConfig::getApiEndpoint() ).toBe(
+                    "https://api.raygun.com/entries"
+                );
+            } );
+
+            it( "should provide log file name", function() {
+                expect( com.raygun.environment.RaygunConfig::getLogFileName() ).toBe( "Raygun4CFML" );
+            } );
+
+            it( "should provide HTML content type", function() {
+                expect( com.raygun.environment.RaygunConfig::getContentTypeHtml() ).toBe( "text/html" );
+            } );
+
+            it( "should provide form content type", function() {
+                expect( com.raygun.environment.RaygunConfig::getContentTypeForm() ).toBe(
+                    "application/x-www-form-urlencoded"
+                );
+            } );
+
+            it( "should provide HTTP GET method", function() {
+                expect( com.raygun.environment.RaygunConfig::getHttpMethodGet() ).toBe( "GET" );
+            } );
+
+            it( "should provide form field max length", function() {
+                expect( com.raygun.environment.RaygunConfig::getFormFieldMaxLength() ).toBe( 256 );
+            } );
+
+            it( "should provide max payload size", function() {
+                expect( com.raygun.environment.RaygunConfig::getMaxPayloadSize() ).toBe( 131072 );
+            } );
         } );
     }
 
