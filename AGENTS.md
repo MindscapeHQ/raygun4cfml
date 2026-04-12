@@ -153,12 +153,15 @@ Formatting covers `src/**/*.cfc`, `tests/**/*.cfc`, `tests/**/*.cfm`, `samples/*
 
 | File | Engine | Port |
 |---|---|---|
+| `server-lucee-5-3.json` | Lucee 5.3 | 9196 |
 | `server-lucee-5-4.json` | Lucee 5.4 | 9191 |
-| `server-adobe-2021.json` | Adobe CF 2021 | 9192 |
-| `server-adobe-2023.json` | Adobe CF 2023 | 9193 |
 | `server-lucee-6-0.json` | Lucee 6.0 | 9194 |
 | `server-lucee-6-1.json` | Lucee 6.1 | 9195 |
-| `server-lucee-5-3.json` | Lucee 5.3 | 9196 |
+| `server-lucee-6-2.json` | Lucee 6.2 | 9199 |
+| `server-lucee-7-0.json` | Lucee 7.0 | 9200 |
+| `server-lucee-7-1.json` | Lucee 7.1 | 9201 |
+| `server-adobe-2021.json` | Adobe CF 2021 | 9192 |
+| `server-adobe-2023.json` | Adobe CF 2023 | 9193 |
 | `server-adobe-2025.json` | Adobe CF 2025 | 9198 |
 | `server-boxlang-1.json` | BoxLang 1 | 9197 |
 

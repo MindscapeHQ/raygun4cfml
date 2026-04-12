@@ -14,6 +14,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - engine: Lucee 7.1
+            config: server-lucee-7-1.json
+            port: 9201
+          - engine: Lucee 7.0
+            config: server-lucee-7-0.json
+            port: 9200
+          - engine: Lucee 6.2
+            config: server-lucee-6-2.json
+            port: 9199
           - engine: Lucee 6.1
             config: server-lucee-6-1.json
             port: 9195

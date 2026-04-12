@@ -40,6 +40,9 @@ SYM_ARROW="${C_DIM}→${C_RESET}"
 # ── Config ───────────────────────────────────────────────────────────────────
 
 ALL_SERVERS=(
+    server-lucee-7-1.json
+    server-lucee-7-0.json
+    server-lucee-6-2.json
     server-lucee-6-1.json
     server-lucee-6-0.json
     server-lucee-5-4.json
