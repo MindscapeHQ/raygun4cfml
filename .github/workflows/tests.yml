@@ -1,0 +1,120 @@
+name: Tests
+
+on:
+  push:
+    branches: [develop, master]
+  pull_request:
+    branches: [develop, master]
+
+jobs:
+  tests:
+    name: ${{ matrix.engine }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - engine: Lucee 6.1
+            config: server-lucee-6-1.json
+            port: 9195
+          - engine: Lucee 6.0
+            config: server-lucee-6-0.json
+            port: 9194
+          - engine: Lucee 5.4
+            config: server-lucee-5-4.json
+            port: 9191
+          - engine: Lucee 5.3
+            config: server-lucee-5-3.json
+            port: 9196
+          - engine: Adobe CF 2025
+            config: server-adobe-2025.json
+            port: 9198
+          - engine: Adobe CF 2023
+            config: server-adobe-2023.json
+            port: 9193
+          - engine: Adobe CF 2021
+            config: server-adobe-2021.json
+            port: 9192
+          - engine: BoxLang 1
+            config: server-boxlang-1.json
+            port: 9197
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Setup CommandBox
+        uses: Ortus-Solutions/setup-commandbox@v2.0.1
+
+      - name: Install dependencies
+        run: box install
+
+      - name: Start server
+        run: |
+          box server start serverConfigFile=${{ matrix.config }} --!openBrowser --!verbose
+          echo "Waiting for server on port ${{ matrix.port }}..."
+          timeout 120 bash -c 'until curl -sf -o /dev/null http://localhost:${{ matrix.port }}/ 2>/dev/null; do sleep 2; done'
+          echo "Server is ready"
+
+      - name: Run tests
+        run: |
+          HTTP_CODE=$(curl -sf -o test-results.json -w "%{http_code}" \
+            "http://localhost:${{ matrix.port }}/tests/runner.cfm?reporter=json") || true
+
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "::error::Test runner returned HTTP $HTTP_CODE"
+            exit 1
+          fi
+
+          # Extract JSON (ACF may append debug HTML)
+          python3 -c "
+          import sys
+          raw = sys.stdin.read()
+          depth = 0
+          for i, ch in enumerate(raw):
+              if ch == '{': depth += 1
+              elif ch == '}':
+                  depth -= 1
+                  if depth == 0:
+                      sys.stdout.write(raw[:i+1])
+                      break
+          " < test-results.json > test-results-clean.json
+
+          TOTAL_SPECS=$(python3 -c "import json,sys; print(int(json.load(sys.stdin).get('totalSpecs',0)))" < test-results-clean.json)
+          TOTAL_PASS=$(python3 -c "import json,sys; print(int(json.load(sys.stdin).get('totalPass',0)))" < test-results-clean.json)
+          TOTAL_FAIL=$(python3 -c "import json,sys; print(int(json.load(sys.stdin).get('totalFail',0)))" < test-results-clean.json)
+          TOTAL_ERROR=$(python3 -c "import json,sys; print(int(json.load(sys.stdin).get('totalError',0)))" < test-results-clean.json)
+
+          echo "### Test Results for ${{ matrix.engine }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Specs | Passed | Failed | Errors |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|--------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| $TOTAL_SPECS | $TOTAL_PASS | $TOTAL_FAIL | $TOTAL_ERROR |" >> $GITHUB_STEP_SUMMARY
+
+          echo "Results: $TOTAL_SPECS specs | $TOTAL_PASS passed | $TOTAL_FAIL failed | $TOTAL_ERROR errors"
+
+          if [ "$TOTAL_FAIL" != "0" ] || [ "$TOTAL_ERROR" != "0" ]; then
+            echo ""
+            echo "Failure details:"
+            python3 -c "
+          import json, sys
+          d = json.load(sys.stdin)
+          for bundle in d.get('bundleStats', []):
+              for suite in bundle.get('suiteStats', []):
+                  for spec in suite.get('specStats', []):
+                      if spec.get('status') in ('Failed', 'Error'):
+                          msg = spec.get('failMessage') or spec.get('error', '')
+                          print(f\"  ✘ {spec.get('name')}: {msg}\")
+          " < test-results-clean.json
+            exit 1
+          fi
+
+      - name: Stop server
+        if: always()
+        run: box server stop serverConfigFile=${{ matrix.config }} 2>/dev/null || true
