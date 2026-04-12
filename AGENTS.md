@@ -96,6 +96,21 @@ All code must work on Adobe CF 2021+, Lucee 5.3+, and BoxLang 1+.
 - Test any behavior change; verify against multiple engines when touching engine-dependent code
 - TestBox is a dev dependency (`"testbox": "6"` in `box.json`)
 
+## Commit Messages
+
+All commits must follow [Conventional Commits](https://www.conventionalcommits.org/). This is enforced by CI on PRs and direct pushes to `develop`.
+
+**Format:** `type(scope): description`
+
+**Valid types:** `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`
+
+**Scope is optional.** Examples:
+
+- `feat: add breadcrumb support`
+- `fix(filter): handle missing rawData gracefully`
+- `docs: update README with new settings options`
+- `test: add RaygunResponseMessage specs`
+
 ## Change Checklist
 
 For any public API change:
