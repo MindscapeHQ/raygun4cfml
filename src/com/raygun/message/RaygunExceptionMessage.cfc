@@ -34,11 +34,20 @@ component {
             stackTraceData = parseStackTrace( entryPoint.stacktrace );
         }
 
+        // Parse CFML tag context into structured data (also stored under data.tagContext)
+        var tagContextData = parseTagContext( entryPoint );
+
+        // If Java stack trace is empty but CFML tag context is available, use tag context
+        // to populate stackTrace. The Raygun API requires at least one stack frame with lineNumber.
+        if ( !stackTraceData.len() && tagContextData.len() ) {
+            stackTraceData = tagContextData;
+        }
+
         returnContent[ "stackTrace" ] = stackTraceData;
         returnContent[ "message" ]    = entryPoint.message;
         returnContent[ "className" ]  = entryPoint.type.trim();
 
-        returnContent[ "data" ][ "tagContext" ] = parseTagContext( entryPoint );
+        returnContent[ "data" ][ "tagContext" ] = tagContextData;
         // Only include error code if it's meaningful (non-zero and non-empty). The zero case is very common in CFML engines and it's not clear what it means, but doesn't seem to be useful.
         returnContent[ "data" ][ "errorCode" ]  = (
             entryPoint.keyExists( "errorcode" ) && len( entryPoint.errorcode ) && entryPoint.errorcode != 0
