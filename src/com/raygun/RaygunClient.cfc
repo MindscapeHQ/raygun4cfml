@@ -179,13 +179,12 @@ component accessors="true" {
 
         if ( arguments.sendAsync ) {
             // Use threading for async transmission to prevent blocking the main request
-            thread action="run" name="sendAsyncToRaygunThead_#createUUID()#" apiKey=getApiKey() payload=arguments.jsonData {
+            thread action="run" name="sendAsyncToRaygunThread_#createUUID()#" apiKey=getApiKey() payload=arguments.jsonData {
                 try {
                     cfhttp(
-                        url          = "https://api.raygun.com/entries",
-                        method       = "post",
-                        charset      = "utf-8",
-                        throwOnError = true
+                        url     = "https://api.raygun.com/entries",
+                        method  = "post",
+                        charset = "utf-8"
                     ) {
                         cfhttpparam(
                             type  = "header",
