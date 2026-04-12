@@ -8,7 +8,7 @@ component accessors="true" {
 
     // Core identifier fields used to track errors by user
     property name="identifier"  type="string"  default="";
-    property name="isAnonymous" type="boolean" default="";
+    property name="isAnonymous" type="boolean" default=true;
     property name="email"       type="string"  default="";
     property name="fullName"    type="string"  default="";
     property name="firstName"   type="string"  default="";
