@@ -1,12 +1,18 @@
 History and Plan
 ================
 
-2.1+ Plan
+2.2.0 (Unreleased)
 
-- Making Raygun4CFML a Coldbox module OR building a Coldbox module wrapper using Raygun4CFML as a dependency.
-- Add breadcrumbs (#46)
-- Integration and adaptation to Coldbox error reporting, adding CB HMVC app/API samples
-- Cleanup `legacy` directory
+- Fixed settings not propagating to RaygunRequestMessage and RaygunResponseMessage
+- Fixed empty stackTrace when Java stack trace is empty but CFML tag context is available
+- Fixed case-sensitive exception type checks (e.g. "database" vs "Database")
+- Fixed unsafe CGI scope access in RaygunRequestMessage and RaygunMessageDetails
+- Fixed sync/async HTTP error handling inconsistency in RaygunClient
+- Fixed thread name typo in async sending
+- Fixed typed property defaults (`default=""` on non-string typed properties)
+- Centralized magic strings and constants in RaygunConfig
+- Added Lucee 6.2, 7.0, and 7.1 to test matrix (11 engines total)
+- Added comprehensive test coverage for RaygunMessageDetails, RaygunRequestMessage, and RaygunResponseMessage
 
 2.1.0 (Jan 21 2025)
 
