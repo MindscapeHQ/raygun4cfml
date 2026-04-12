@@ -56,6 +56,34 @@ component extends="testbox.system.BaseSpec" {
 
             } );
 
+            describe( "build() contract", function() {
+
+                it( "should return a struct with expected request keys", function() {
+                    var msg    = new com.raygun.message.RaygunRequestMessage();
+                    var result = msg.build();
+
+                    expect( result ).toBeStruct();
+                    expect( result ).toHaveKey( "hostName" );
+                    expect( result ).toHaveKey( "url" );
+                    expect( result ).toHaveKey( "httpMethod" );
+                    expect( result ).toHaveKey( "iPAddress" );
+                    expect( result ).toHaveKey( "queryString" );
+                    expect( result ).toHaveKey( "headers" );
+                    expect( result ).toHaveKey( "data" );
+                    expect( result ).toHaveKey( "form" );
+                    expect( result ).toHaveKey( "params" );
+                } );
+
+                it( "should not throw when CGI scope values are empty", function() {
+                    // Verifies safe access via localCGI — no direct CGI dereferences
+                    var msg = new com.raygun.message.RaygunRequestMessage();
+                    expect( function() {
+                        msg.build();
+                    } ).notToThrow();
+                } );
+
+            } );
+
         } );
     }
 
