@@ -32,7 +32,7 @@ component accessors="true" {
             !isNull( arguments.raygunRequestMessage ) && isInstanceOf(
                 arguments.raygunRequestMessage,
                 "RaygunRequestMessage"
-            ) ? arguments.raygunRequestMessage : new RaygunRequestMessage()
+            ) ? arguments.raygunRequestMessage : new RaygunRequestMessage( settings = getSettings() )
         );
         setRaygunClientMessage(
             !isNull( arguments.raygunClientMessage ) && isInstanceOf(
