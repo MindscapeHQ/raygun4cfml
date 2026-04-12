@@ -15,6 +15,12 @@ component extends="testbox.system.BaseSpec" {
                 expect( variables.userIdentifier.getUUID() ).toBeEmpty();
             } );
 
+            it( "should default isAnonymous to true (not empty string)", function() {
+                var fresh = new com.raygun.message.RaygunIdentifierMessage();
+                expect( fresh.getIsAnonymous() ).toBeBoolean();
+                expect( fresh.getIsAnonymous() ).toBeTrue();
+            } );
+
             it( "should set and get identifier", function() {
                 variables.userIdentifier.setIdentifier( "test-id-123" );
                 expect( variables.userIdentifier.getIdentifier() ).toBe( "test-id-123" );
