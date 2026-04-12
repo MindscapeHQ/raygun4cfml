@@ -16,11 +16,22 @@ component extends="testbox.system.BaseSpec" {
                 expect( settings.getRawDataMaxLength() ).toBe( customLength );
             } );
 
+            it( "should initialize with default status code", function() {
+                expect( variables.settings.getStatusCode() ).toBe( 500 );
+            } );
+
+            it( "should initialize with custom status code", function() {
+                var settings = new com.raygun.environment.RaygunSettings( statusCode = 503 );
+                expect( settings.getStatusCode() ).toBe( 503 );
+            } );
+
             it( "should return settings as struct", function() {
                 var result = variables.settings.getSettings();
                 expect( result ).toBeStruct();
                 expect( result ).toHaveKey( "rawDataMaxLength" );
                 expect( result.rawDataMaxLength ).toBe( variables.settings.getRawDataMaxLength() );
+                expect( result ).toHaveKey( "statusCode" );
+                expect( result.statusCode ).toBe( 500 );
             } );
         } );
     }

@@ -13,7 +13,7 @@
     "slug":"raygun4cfml",
     "shortDescription":"Provides integration with the Raygun CrashReporting API",
     "description":"API provider to send error information to Raygun crash reporting for tracking and analysis.",
-    "instructions":"Install this module and follow the guidelines in README.me as well as in /samples.",
+    "instructions":"Install this module and follow the guidelines in README.md as well as in /samples.",
     "changelog":"https://github.com/MindscapeHQ/raygun4cfml/blob/master/CHANGELOG.md",
     "keywords":[
         "error",
