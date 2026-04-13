@@ -117,6 +117,15 @@ component accessors="true" {
             returnContent[ "user" ] = javacast( "null", "" );
         }
 
+        // Breadcrumbs provide a trail of events leading up to the error
+        if ( arguments.issueData.keyExists( "breadcrumbs" ) && isArray( arguments.issueData.breadcrumbs ) ) {
+            var builtCrumbs = [];
+            for ( var crumb in arguments.issueData.breadcrumbs ) {
+                builtCrumbs.append( crumb.build() );
+            }
+            returnContent[ "breadcrumbs" ] = builtCrumbs;
+        }
+
         return returnContent;
     }
 

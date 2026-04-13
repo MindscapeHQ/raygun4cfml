@@ -10,6 +10,7 @@ component accessors="true" {
     property name="contentFilter" type="RaygunContentFilter";
     property name="appVersion"    type="string"              default="";
     property name="settings"      type="RaygunSettings";
+    property name="breadcrumbs"   type="array";
 
     public RaygunClient function init(
         required string apiKey,
@@ -18,6 +19,7 @@ component accessors="true" {
         RaygunSettings settings
     ) {
         setApiKey( arguments.apiKey );
+        setBreadcrumbs( [] );
 
         if ( arguments.keyExists( "contentFilter" ) ) {
             setContentFilter( arguments.contentFilter );
@@ -31,6 +33,61 @@ component accessors="true" {
             setSettings( arguments.settings );
         }
 
+        return this;
+    }
+
+    /**
+     * Records a breadcrumb to provide context about events leading up to an error.
+     * Breadcrumbs are included in subsequent error reports sent via send() or sendAsync().
+     *
+     * @message Descriptive text for this breadcrumb
+     * @level Severity level: debug, info, warning, or error (default: info)
+     * @type Breadcrumb type (default: manual)
+     * @category Optional grouping category
+     * @className Optional source class name
+     * @methodName Optional source method name
+     * @lineNumber Optional source line number
+     * @customData Optional struct of additional key-value data
+     */
+    public RaygunClient function recordBreadcrumb(
+        required string message,
+        string level      = "info",
+        string type       = "manual",
+        string category   = "",
+        string className  = "",
+        string methodName = "",
+        numeric lineNumber,
+        struct customData
+    ) {
+        var crumbArgs = {
+            "message"    : arguments.message,
+            "level"      : arguments.level,
+            "type"       : arguments.type,
+            "category"   : arguments.category,
+            "className"  : arguments.className,
+            "methodName" : arguments.methodName
+        };
+
+        if ( arguments.keyExists( "lineNumber" ) ) {
+            crumbArgs[ "lineNumber" ] = arguments.lineNumber;
+        }
+
+        if ( arguments.keyExists( "customData" ) ) {
+            crumbArgs[ "customData" ] = arguments.customData;
+        }
+
+        getBreadcrumbs().append(
+            new message.RaygunBreadcrumbMessage( argumentCollection = crumbArgs )
+        );
+
+        return this;
+    }
+
+    /**
+     * Clears all recorded breadcrumbs.
+     */
+    public RaygunClient function clearBreadcrumbs() {
+        setBreadcrumbs( [] );
         return this;
     }
 
@@ -134,6 +191,10 @@ component accessors="true" {
 
         if ( arguments.keyExists( "groupingKey" ) && arguments.groupingKey.len() ) {
             augmentedIssueData[ "groupingKey" ] = arguments.groupingKey;
+        }
+
+        if ( getBreadcrumbs().len() ) {
+            augmentedIssueData[ "breadcrumbs" ] = getBreadcrumbs();
         }
 
         var raygunSettings = {};
