@@ -10,18 +10,21 @@ component accessors="true" {
     property name="contentFilter" type="RaygunContentFilter";
     property name="appVersion"    type="string"              default="";
     property name="settings"      type="RaygunSettings";
-    property name="breadcrumbs"   type="array";
-    property name="onBeforeSend" type="any";
+    property name="breadcrumbs"       type="array";
+    property name="onBeforeSend"     type="any";
+    property name="ignoreExceptions" type="array";
 
     public RaygunClient function init(
         required string apiKey,
         RaygunContentFilter contentFilter,
         string appVersion,
         RaygunSettings settings,
-        any onBeforeSend
+        any onBeforeSend,
+        array ignoreExceptions
     ) {
         setApiKey( arguments.apiKey );
         setBreadcrumbs( [] );
+        setIgnoreExceptions( arguments.keyExists( "ignoreExceptions" ) ? arguments.ignoreExceptions : [] );
 
         if ( arguments.keyExists( "onBeforeSend" ) && isCustomFunction( arguments.onBeforeSend ) ) {
             setOnBeforeSend( arguments.onBeforeSend );
@@ -117,6 +120,11 @@ component accessors="true" {
         string groupingKey,
         boolean sendAsync = false
     ) {
+        // Skip ignored exception types (case-insensitive match)
+        if ( isStruct( arguments.issueData ) && arguments.issueData.keyExists( "type" ) && isExceptionIgnored( arguments.issueData.type ) ) {
+            return "";
+        }
+
         var payloadArgs = { "issueData" : arguments.issueData };
 
         if ( arguments.keyExists( "userCustomData" ) ) {
@@ -401,6 +409,18 @@ component accessors="true" {
             return getSettings().getHttpTimeout();
         }
         return com.raygun.environment.RaygunConfig::getDefaultHttpTimeout();
+    }
+
+    /**
+     * Checks whether the given exception type is in the ignore list.
+     */
+    private boolean function isExceptionIgnored( required string exceptionType ) {
+        for ( var ignored in getIgnoreExceptions() ) {
+            if ( compareNoCase( arguments.exceptionType, ignored ) == 0 ) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
