@@ -11,7 +11,7 @@ component extends="testbox.system.BaseSpec" {
             } );
 
             it( "should provide client version", function() {
-                expect( com.raygun.environment.RaygunConfig::getRaygunClientVersion() ).toBe( "3.0.0-snapshot" );
+                expect( com.raygun.environment.RaygunConfig::getRaygunClientVersion() ).toBe( "3.0.0-rc.1" );
             } );
 
             it( "should provide client URL", function() {
