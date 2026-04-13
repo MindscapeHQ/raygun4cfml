@@ -316,14 +316,15 @@ component accessors="true" {
         required string jsonData,
         boolean sendAsync = false
     ) {
-        var postResult = "";
+        var postResult   = "";
+        var apiEndpoint = resolveApiEndpoint();
 
         if ( arguments.sendAsync ) {
             // Use threading for async transmission to prevent blocking the main request
-            thread action="run" name="sendAsyncToRaygunThread_#createUUID()#" apiKey=getApiKey() payload=arguments.jsonData {
+            thread action="run" name="sendAsyncToRaygunThread_#createUUID()#" apiKey=getApiKey() payload=arguments.jsonData endpoint=apiEndpoint {
                 try {
                     cfhttp(
-                        url     = com.raygun.environment.RaygunConfig::getApiEndpoint(),
+                        url     = attributes.endpoint,
                         method  = "post",
                         charset = "utf-8"
                     ) {
@@ -354,7 +355,7 @@ component accessors="true" {
         } else {
             // Synchronous transmission allows error handling by the caller
             cfhttp(
-                url     = com.raygun.environment.RaygunConfig::getApiEndpoint(),
+                url     = apiEndpoint,
                 method  = "post",
                 charset = "utf-8",
                 result  = "postResult"
@@ -377,6 +378,16 @@ component accessors="true" {
         }
 
         return postResult;
+    }
+
+    /**
+     * Resolves the API endpoint from settings, falling back to the default.
+     */
+    private string function resolveApiEndpoint() {
+        if ( !isNull( getSettings() ) && isInstanceOf( getSettings(), "RaygunSettings" ) ) {
+            return getSettings().getApiEndpoint();
+        }
+        return com.raygun.environment.RaygunConfig::getApiEndpoint();
     }
 
 }

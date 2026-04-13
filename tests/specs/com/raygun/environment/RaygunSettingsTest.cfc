@@ -32,6 +32,28 @@ component extends="testbox.system.BaseSpec" {
                 expect( result.rawDataMaxLength ).toBe( variables.settings.getRawDataMaxLength() );
                 expect( result ).toHaveKey( "statusCode" );
                 expect( result.statusCode ).toBe( 500 );
+                expect( result ).toHaveKey( "apiEndpoint" );
+            } );
+
+            it( "should initialize with default API endpoint", function() {
+                expect( variables.settings.getApiEndpoint() ).toBe(
+                    com.raygun.environment.RaygunConfig::getApiEndpoint()
+                );
+            } );
+
+            it( "should initialize with custom API endpoint", function() {
+                var settings = new com.raygun.environment.RaygunSettings(
+                    apiEndpoint = "https://custom.example.com/entries"
+                );
+                expect( settings.getApiEndpoint() ).toBe( "https://custom.example.com/entries" );
+            } );
+
+            it( "should include API endpoint in settings struct", function() {
+                var settings = new com.raygun.environment.RaygunSettings(
+                    apiEndpoint = "https://custom.example.com/entries"
+                );
+                var result = settings.getSettings();
+                expect( result.apiEndpoint ).toBe( "https://custom.example.com/entries" );
             } );
         } );
     }
