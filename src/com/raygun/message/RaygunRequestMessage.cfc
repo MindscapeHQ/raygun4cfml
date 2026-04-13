@@ -55,6 +55,8 @@ component accessors="true" {
             return ( localCGI.keyExists( arguments.key ) && len( localCGI[ arguments.key ] ) ) ? localCGI[ arguments.key ] : javacast( "null", "" );
         };
 
+        var truncatedForm = truncateFormFields( localForm );
+
         returnContent = {
             "hostName"    : cgiVal( "HTTP_HOST" ),
             "url"         : ( !isNull( cgiVal( "SCRIPT_NAME" ) ) ? cgiVal( "SCRIPT_NAME" ) : "" ) & ( !isNull( cgiVal( "PATH_INFO" ) ) ? cgiVal( "PATH_INFO" ) : "" ),
@@ -63,7 +65,7 @@ component accessors="true" {
             "queryString" : cgiVal( "QUERY_STRING" ),
             "headers"     : ( httpRequest.keyExists( "headers" ) ? httpRequest.headers : javacast( "null", "" ) ),
             "data"        : localCGI,
-            "form"        : localForm,
+            "form"        : truncatedForm,
             "params"      : localUrl
         };
 
@@ -91,6 +93,25 @@ component accessors="true" {
         }
 
         return returnContent;
+    }
+
+    /**
+     * Truncates form field values to the configured maximum length
+     * to prevent oversized payloads per the Raygun API spec.
+     */
+    private struct function truncateFormFields( required struct formData ) {
+        var maxLen = com.raygun.environment.RaygunConfig::getFormFieldMaxLength();
+        var result = {};
+
+        for ( var key in arguments.formData ) {
+            if ( isSimpleValue( arguments.formData[ key ] ) && len( arguments.formData[ key ] ) > maxLen ) {
+                result[ key ] = left( arguments.formData[ key ], maxLen );
+            } else {
+                result[ key ] = arguments.formData[ key ];
+            }
+        }
+
+        return result;
     }
 
 }

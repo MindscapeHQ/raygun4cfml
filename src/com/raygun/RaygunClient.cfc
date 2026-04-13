@@ -163,7 +163,60 @@ component accessors="true" {
             .replaceNoCase( "//{", "{" )
             .replaceNoCase( "//[", "[" );
 
-        return jsonData;
+        return enforceMaxPayloadSize( jsonData );
+    }
+
+    /**
+     * Ensures the JSON payload does not exceed the Raygun API's maximum size limit.
+     * If oversized, strips expendable fields and re-serializes. As a last resort,
+     * truncates the raw JSON string.
+     */
+    private string function enforceMaxPayloadSize( required string jsonData ) {
+        var maxSize = com.raygun.environment.RaygunConfig::getMaxPayloadSize();
+
+        if ( len( arguments.jsonData ) <= maxSize ) {
+            return arguments.jsonData;
+        }
+
+        var payload = deserializeJSON( arguments.jsonData );
+
+        // Strip expendable fields in order of decreasing size/decreasing importance
+        var expendablePaths = [
+            [ "details", "request", "rawData" ],
+            [ "details", "userCustomData" ],
+            [ "details", "request", "data" ],
+            [ "details", "request", "headers" ],
+            [ "details", "request", "form" ]
+        ];
+
+        for ( var path in expendablePaths ) {
+            var target = payload;
+            var found  = true;
+
+            for ( var i = 1; i < path.len(); i++ ) {
+                if ( isStruct( target ) && target.keyExists( path[ i ] ) ) {
+                    target = target[ path[ i ] ];
+                } else {
+                    found = false;
+                    break;
+                }
+            }
+
+            if ( found && isStruct( target ) && target.keyExists( path[ path.len() ] ) ) {
+                target[ path[ path.len() ] ] = "[truncated]";
+
+                var reduced = serializeJSON( payload )
+                    .trim()
+                    .replaceNoCase( "//{", "{" )
+                    .replaceNoCase( "//[", "[" );
+
+                if ( len( reduced ) <= maxSize ) {
+                    return reduced;
+                }
+            }
+        }
+
+        return left( arguments.jsonData, maxSize );
     }
 
     /**

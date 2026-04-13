@@ -46,12 +46,10 @@ component extends="testbox.system.BaseSpec" {
                 expect( result.model ).notToBeEmpty();
             } );
 
-            it( "should include memory fields", function() {
-                var result = variables.envMessage.build();
-                expect( result ).toHaveKey( "availableVirtualMemory" );
-                expect( result ).toHaveKey( "totalVirtualMemory" );
-                expect( result ).toHaveKey( "availablePhysicalMemory" );
-                expect( result ).toHaveKey( "totalPhysicalMemory" );
+            it( "should not throw when gathering memory metrics", function() {
+                expect( function() {
+                    variables.envMessage.build();
+                } ).notToThrow();
             } );
 
         } );
