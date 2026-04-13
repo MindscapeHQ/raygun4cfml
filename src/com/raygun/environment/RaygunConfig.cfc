@@ -11,7 +11,7 @@ component {
 
         // Client identifiers used for error tracking and debugging
         RAYGUN_CLIENT_NAME    = "raygun4cfml";
-        RAYGUN_CLIENT_VERSION = "3.0.0-snapshot";
+        RAYGUN_CLIENT_VERSION = "3.0.0-rc.1";
         RAYGUN_CLIENT_URL     = "https://github.com/MindscapeHQ/raygun4cfml";
 
         // New default status code

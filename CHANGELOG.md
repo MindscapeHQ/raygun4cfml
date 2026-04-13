@@ -1,7 +1,7 @@
 History and Plan
 ================
 
-3.0.0 (Unreleased)
+3.0.0-rc.1 (April 13, 2026)
 
 New Features:
 
