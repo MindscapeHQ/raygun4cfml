@@ -11,15 +11,21 @@ component accessors="true" {
     property name="appVersion"    type="string"              default="";
     property name="settings"      type="RaygunSettings";
     property name="breadcrumbs"   type="array";
+    property name="onBeforeSend" type="any";
 
     public RaygunClient function init(
         required string apiKey,
         RaygunContentFilter contentFilter,
         string appVersion,
-        RaygunSettings settings
+        RaygunSettings settings,
+        any onBeforeSend
     ) {
         setApiKey( arguments.apiKey );
         setBreadcrumbs( [] );
+
+        if ( arguments.keyExists( "onBeforeSend" ) && isCustomFunction( arguments.onBeforeSend ) ) {
+            setOnBeforeSend( arguments.onBeforeSend );
+        }
 
         if ( arguments.keyExists( "contentFilter" ) ) {
             setContentFilter( arguments.contentFilter );
@@ -131,6 +137,27 @@ component accessors="true" {
 
         var payload = buildPayload( argumentCollection = payloadArgs );
 
+        // Allow the onBeforeSend callback to inspect, mutate, or cancel the payload
+        try {
+            var callback = getOnBeforeSend();
+            if ( !isNull( callback ) && isCustomFunction( callback ) ) {
+                var callbackResult = callback( deserializeJSON( payload ) );
+
+                if ( isBoolean( callbackResult ) && !callbackResult ) {
+                    return "";
+                }
+
+                if ( isStruct( callbackResult ) ) {
+                    payload = serializeJSON( callbackResult )
+                        .trim()
+                        .replaceNoCase( "//{", "{" )
+                        .replaceNoCase( "//[", "[" );
+                }
+            }
+        } catch ( any e ) {
+            // No callback set or callback errored — proceed with original payload
+        }
+
         if ( arguments.sendAsync ) {
             sendPayload( payload, arguments.sendAsync );
         } else {
@@ -199,7 +226,7 @@ component accessors="true" {
 
         var raygunSettings = {};
         // Only apply settings if they've been properly initialized
-        if ( isInstanceOf( getSettings(), "RaygunSettings" ) ) {
+        if ( !isNull( getSettings() ) && isInstanceOf( getSettings(), "RaygunSettings" ) ) {
             var raygunSettings = getSettings().getSettings();
         }
 
@@ -207,7 +234,7 @@ component accessors="true" {
 
         // Apply content filtering if configured to protect sensitive data
         if (
-            isInstanceOf(
+            !isNull( getContentFilter() ) && isInstanceOf(
                 getContentFilter(),
                 "RaygunContentFilter"
             )
