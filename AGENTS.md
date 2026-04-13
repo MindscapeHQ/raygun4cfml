@@ -206,6 +206,10 @@ Formatting covers `src/**/*.cfc`, `tests/**/*.cfc`, `tests/**/*.cfm`, `samples/*
 | `server-adobe-2025.json` | Adobe CF 2025 | 9198 |
 | `server-boxlang-1.json` | BoxLang 1 | 9197 |
 
+## Releasing
+
+See [RELEASING.md](RELEASING.md) for the full release process — version bumps, tagging, ForgeBox publishing, and post-release steps.
+
 ## Key Design Decisions
 
 - **API endpoint**: All payloads POST to `https://api.raygun.com/entries` with `X-ApiKey` header (configurable via `RaygunSettings.apiEndpoint`)
