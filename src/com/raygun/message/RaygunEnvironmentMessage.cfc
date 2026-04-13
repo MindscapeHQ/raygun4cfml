@@ -77,7 +77,8 @@ component {
         }
 
         try {
-            returnContent[ "utcOffset" ] = createObject( "java", "java.util.TimeZone" ).getDefault().getRawOffset() / 3600000;
+            var rawOffset = createObject( "java", "java.util.TimeZone" ).getDefault().getRawOffset();
+            returnContent[ "utcOffset" ] = javacast( "double", rawOffset / 3600000 );
         } catch ( any e ) {
             returnContent[ "utcOffset" ] = javacast( "null", "" );
         }

@@ -101,9 +101,21 @@ component accessors="true" {
      * Escapes regex-special characters and replaces * with .*
      */
     private string function globToRegex( required string pattern ) {
-        var escaped = arguments.pattern.reReplace( "([.+?^${}()|[\]\\])", "\\\1", "all" );
-        escaped = escaped.replace( "*", ".*", "all" );
-        return "^" & escaped & "$";
+        var result      = "";
+        var specialChars = ".+?^${}()|[]\";
+        var chars        = arguments.pattern.toCharArray();
+
+        for ( var c in chars ) {
+            if ( c == "*" ) {
+                result &= ".*";
+            } else if ( find( c, specialChars ) > 0 ) {
+                result &= "\" & c;
+            } else {
+                result &= c;
+            }
+        }
+
+        return "^" & result & "$";
     }
 
 }
