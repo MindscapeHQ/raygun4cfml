@@ -70,6 +70,37 @@ component extends="testbox.system.BaseSpec" {
                 expect( result ).toHaveKey( "httpTimeout" );
                 expect( result.httpTimeout ).toBe( 10 );
             } );
+
+            it( "should initialize with default max retries", function() {
+                expect( variables.settings.getMaxRetries() ).toBe( 2 );
+            } );
+
+            it( "should initialize with custom max retries", function() {
+                var settings = new com.raygun.environment.RaygunSettings( maxRetries = 5 );
+                expect( settings.getMaxRetries() ).toBe( 5 );
+            } );
+
+            it( "should initialize with default retry delay", function() {
+                expect( variables.settings.getRetryDelay() ).toBe( 1 );
+            } );
+
+            it( "should initialize with custom retry delay", function() {
+                var settings = new com.raygun.environment.RaygunSettings( retryDelay = 3 );
+                expect( settings.getRetryDelay() ).toBe( 3 );
+            } );
+
+            it( "should include retry settings in settings struct", function() {
+                var result = variables.settings.getSettings();
+                expect( result ).toHaveKey( "maxRetries" );
+                expect( result.maxRetries ).toBe( 2 );
+                expect( result ).toHaveKey( "retryDelay" );
+                expect( result.retryDelay ).toBe( 1 );
+            } );
+
+            it( "should allow disabling retries with maxRetries=0", function() {
+                var settings = new com.raygun.environment.RaygunSettings( maxRetries = 0 );
+                expect( settings.getMaxRetries() ).toBe( 0 );
+            } );
         } );
     }
 

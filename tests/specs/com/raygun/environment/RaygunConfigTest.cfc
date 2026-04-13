@@ -59,6 +59,14 @@ component extends="testbox.system.BaseSpec" {
             it( "should provide default HTTP timeout", function() {
                 expect( com.raygun.environment.RaygunConfig::getDefaultHttpTimeout() ).toBe( 10 );
             } );
+
+            it( "should provide default max retries", function() {
+                expect( com.raygun.environment.RaygunConfig::getDefaultMaxRetries() ).toBe( 2 );
+            } );
+
+            it( "should provide default retry delay", function() {
+                expect( com.raygun.environment.RaygunConfig::getDefaultRetryDelay() ).toBe( 1 );
+            } );
         } );
     }
 

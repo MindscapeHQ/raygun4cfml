@@ -327,16 +327,73 @@ component accessors="true" {
         var postResult   = "";
         var apiEndpoint  = resolveApiEndpoint();
         var httpTimeout  = resolveHttpTimeout();
+        var maxRetries   = resolveMaxRetries();
+        var retryDelay   = resolveRetryDelay();
 
         if ( arguments.sendAsync ) {
             // Use threading for async transmission to prevent blocking the main request
-            thread action="run" name="sendAsyncToRaygunThread_#createUUID()#" apiKey=getApiKey() payload=arguments.jsonData endpoint=apiEndpoint httpTimeoutSecs=httpTimeout {
+            thread action="run" name="sendAsyncToRaygunThread_#createUUID()#" apiKey=getApiKey() payload=arguments.jsonData endpoint=apiEndpoint httpTimeoutSecs=httpTimeout retries=maxRetries retryDelaySecs=retryDelay {
+                var attempts = 0;
+                var success  = false;
+
+                while ( !success && attempts <= attributes.retries ) {
+                    try {
+                        if ( attempts > 0 ) {
+                            sleep( attributes.retryDelaySecs * 1000 );
+                        }
+
+                        cfhttp(
+                            url     = attributes.endpoint,
+                            method  = "post",
+                            charset = "utf-8",
+                            timeout = attributes.httpTimeoutSecs
+                        ) {
+                            cfhttpparam(
+                                type  = "header",
+                                name  = "Content-Type",
+                                value = "application/json"
+                            );
+                            cfhttpparam(
+                                type  = "header",
+                                name  = "X-ApiKey",
+                                value = "#attributes.apiKey#"
+                            );
+                            cfhttpparam(
+                                type  = "body",
+                                value = "#attributes.payload#"
+                            );
+                        }
+
+                        success = true;
+                    } catch ( any e ) {
+                        attempts++;
+
+                        if ( attempts > attributes.retries ) {
+                            writeLog(
+                                text = "Error when trying to send to Raygun async (after #attempts# attempt(s)): #serializeJSON( e )#",
+                                type = "error",
+                                file = com.raygun.environment.RaygunConfig::getLogFileName()
+                            );
+                        }
+                    }
+                }
+            }
+        } else {
+            // Synchronous transmission with retry support
+            var attempts = 0;
+
+            while ( attempts <= maxRetries ) {
                 try {
+                    if ( attempts > 0 ) {
+                        sleep( retryDelay * 1000 );
+                    }
+
                     cfhttp(
-                        url     = attributes.endpoint,
+                        url     = apiEndpoint,
                         method  = "post",
                         charset = "utf-8",
-                        timeout = attributes.httpTimeoutSecs
+                        timeout = httpTimeout,
+                        result  = "postResult"
                     ) {
                         cfhttpparam(
                             type  = "header",
@@ -346,45 +403,22 @@ component accessors="true" {
                         cfhttpparam(
                             type  = "header",
                             name  = "X-ApiKey",
-                            value = "#attributes.apiKey#"
+                            value = getApiKey()
                         );
                         cfhttpparam(
                             type  = "body",
-                            value = "#attributes.payload#"
+                            value = "#arguments.jsonData#"
                         );
                     }
+
+                    return postResult;
                 } catch ( any e ) {
-                    // Log async failures since they can't be reported back to the caller
-                    writeLog(
-                        text = "Error when trying to send to Raygun async: #serializeJSON( e )#",
-                        type = "error",
-                        file = com.raygun.environment.RaygunConfig::getLogFileName()
-                    );
+                    attempts++;
+
+                    if ( attempts > maxRetries ) {
+                        rethrow;
+                    }
                 }
-            }
-        } else {
-            // Synchronous transmission allows error handling by the caller
-            cfhttp(
-                url     = apiEndpoint,
-                method  = "post",
-                charset = "utf-8",
-                timeout = httpTimeout,
-                result  = "postResult"
-            ) {
-                cfhttpparam(
-                    type  = "header",
-                    name  = "Content-Type",
-                    value = "application/json"
-                );
-                cfhttpparam(
-                    type  = "header",
-                    name  = "X-ApiKey",
-                    value = getApiKey()
-                );
-                cfhttpparam(
-                    type  = "body",
-                    value = "#arguments.jsonData#"
-                );
             }
         }
 
@@ -409,6 +443,26 @@ component accessors="true" {
             return getSettings().getHttpTimeout();
         }
         return com.raygun.environment.RaygunConfig::getDefaultHttpTimeout();
+    }
+
+    /**
+     * Resolves the max retry count from settings, falling back to the default.
+     */
+    private numeric function resolveMaxRetries() {
+        if ( !isNull( getSettings() ) && isInstanceOf( getSettings(), "RaygunSettings" ) ) {
+            return getSettings().getMaxRetries();
+        }
+        return com.raygun.environment.RaygunConfig::getDefaultMaxRetries();
+    }
+
+    /**
+     * Resolves the retry delay from settings, falling back to the default.
+     */
+    private numeric function resolveRetryDelay() {
+        if ( !isNull( getSettings() ) && isInstanceOf( getSettings(), "RaygunSettings" ) ) {
+            return getSettings().getRetryDelay();
+        }
+        return com.raygun.environment.RaygunConfig::getDefaultRetryDelay();
     }
 
     /**

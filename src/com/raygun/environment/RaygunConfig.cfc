@@ -25,6 +25,8 @@ component {
         FORM_FIELD_MAX_LENGTH = 256;
         MAX_PAYLOAD_SIZE     = 131072;
         DEFAULT_HTTP_TIMEOUT = 10;
+        DEFAULT_MAX_RETRIES  = 2;
+        DEFAULT_RETRY_DELAY  = 1;
     }
 
     /**
@@ -124,6 +126,20 @@ component {
      */
     public static function getDefaultHttpTimeout() {
         return static.DEFAULT_HTTP_TIMEOUT;
+    }
+
+    /**
+     * Returns the default maximum number of retry attempts for failed API requests.
+     */
+    public static function getDefaultMaxRetries() {
+        return static.DEFAULT_MAX_RETRIES;
+    }
+
+    /**
+     * Returns the default delay in seconds between retry attempts.
+     */
+    public static function getDefaultRetryDelay() {
+        return static.DEFAULT_RETRY_DELAY;
     }
 
 }
