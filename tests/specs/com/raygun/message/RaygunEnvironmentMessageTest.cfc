@@ -52,6 +52,24 @@ component extends="testbox.system.BaseSpec" {
                 } ).notToThrow();
             } );
 
+            it( "should include processorCount as a positive number", function() {
+                var result = variables.envMessage.build();
+                expect( result ).toHaveKey( "processorCount" );
+                expect( result.processorCount ).toBeGT( 0 );
+            } );
+
+            it( "should include locale as a non-empty string", function() {
+                var result = variables.envMessage.build();
+                expect( result ).toHaveKey( "locale" );
+                expect( result.locale ).notToBeEmpty();
+            } );
+
+            it( "should include utcOffset as a numeric value", function() {
+                var result = variables.envMessage.build();
+                expect( result ).toHaveKey( "utcOffset" );
+                expect( result.utcOffset ).toBeNumeric();
+            } );
+
         } );
     }
 
