@@ -44,7 +44,15 @@ component accessors="true" {
 
             // Handle the special case of rawData fields that may contain JSON
             // This ensures sensitive data nested in JSON payloads is also filtered
-            if ( !isNull( arguments.messageData.details.request.rawData ) && isJSON( arguments.messageData.details.request.rawData ) ) {
+            if (
+                arguments.messageData.keyExists( "details" )
+                && isStruct( arguments.messageData.details )
+                && arguments.messageData.details.keyExists( "request" )
+                && isStruct( arguments.messageData.details.request )
+                && arguments.messageData.details.request.keyExists( "rawData" )
+                && !isNull( arguments.messageData.details.request.rawData )
+                && isJSON( arguments.messageData.details.request.rawData )
+            ) {
                 var rawDataJSON = deserializeJSON( arguments.messageData.details.request.rawData );
 
                 if ( isWildcard ) {
@@ -81,7 +89,9 @@ component accessors="true" {
             var regex = globToRegex( arguments.pattern );
 
             for ( var key in arguments.data ) {
-                if ( reFindNoCase( regex, key ) > 0 && isSimpleValue( arguments.data[ key ] ) ) {
+                if ( isNull( arguments.data[ key ] ) ) {
+                    continue;
+                } else if ( reFindNoCase( regex, key ) > 0 && isSimpleValue( arguments.data[ key ] ) ) {
                     arguments.data[ key ] = arguments.replacement;
                 } else if ( isStruct( arguments.data[ key ] ) || isArray( arguments.data[ key ] ) ) {
                     filterStructByPattern( arguments.data[ key ], arguments.pattern, arguments.replacement );
