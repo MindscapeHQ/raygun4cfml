@@ -127,6 +127,32 @@ box server stop serverConfigFile=server-lucee-6-1.json
 
 > **Important:** Always stop servers when done. If a server is left running, its port will conflict with future test runs. Use `box server list` to check for running servers.
 
+### Testing samples against Raygun
+
+Samples load the API key automatically — no hardcoded keys in source files.
+
+**Resolution order:** `samples/.env.json` → `RAYGUN_API_KEY` env var → placeholder string.
+
+To set up:
+
+```bash
+cp samples/.env.json.sample samples/.env.json
+# Edit samples/.env.json and paste your Raygun API key
+```
+
+`samples/.env.json` is gitignored — **never commit API keys to the repo**.
+
+To test samples manually:
+
+```bash
+box server start serverConfigFile=server-lucee-6-1.json
+# Hit sample pages, e.g.:
+curl http://127.0.0.1:9195/samples/try-catch/catch_expression.cfm
+curl http://127.0.0.1:9195/samples/app-cfc-no-filter/catch_throw.cfm
+# Verify errors appear in the Raygun dashboard
+box server stop serverConfigFile=server-lucee-6-1.json
+```
+
 ## Commit Messages
 
 All commits must follow [Conventional Commits](https://www.conventionalcommits.org/). This is enforced by CI on PRs and direct pushes to `develop`.
