@@ -317,16 +317,18 @@ component accessors="true" {
         boolean sendAsync = false
     ) {
         var postResult   = "";
-        var apiEndpoint = resolveApiEndpoint();
+        var apiEndpoint  = resolveApiEndpoint();
+        var httpTimeout  = resolveHttpTimeout();
 
         if ( arguments.sendAsync ) {
             // Use threading for async transmission to prevent blocking the main request
-            thread action="run" name="sendAsyncToRaygunThread_#createUUID()#" apiKey=getApiKey() payload=arguments.jsonData endpoint=apiEndpoint {
+            thread action="run" name="sendAsyncToRaygunThread_#createUUID()#" apiKey=getApiKey() payload=arguments.jsonData endpoint=apiEndpoint httpTimeoutSecs=httpTimeout {
                 try {
                     cfhttp(
                         url     = attributes.endpoint,
                         method  = "post",
-                        charset = "utf-8"
+                        charset = "utf-8",
+                        timeout = attributes.httpTimeoutSecs
                     ) {
                         cfhttpparam(
                             type  = "header",
@@ -358,6 +360,7 @@ component accessors="true" {
                 url     = apiEndpoint,
                 method  = "post",
                 charset = "utf-8",
+                timeout = httpTimeout,
                 result  = "postResult"
             ) {
                 cfhttpparam(
@@ -388,6 +391,16 @@ component accessors="true" {
             return getSettings().getApiEndpoint();
         }
         return com.raygun.environment.RaygunConfig::getApiEndpoint();
+    }
+
+    /**
+     * Resolves the HTTP timeout from settings, falling back to the default.
+     */
+    private numeric function resolveHttpTimeout() {
+        if ( !isNull( getSettings() ) && isInstanceOf( getSettings(), "RaygunSettings" ) ) {
+            return getSettings().getHttpTimeout();
+        }
+        return com.raygun.environment.RaygunConfig::getDefaultHttpTimeout();
     }
 
 }

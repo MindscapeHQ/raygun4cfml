@@ -55,6 +55,10 @@ component extends="testbox.system.BaseSpec" {
             it( "should provide max payload size", function() {
                 expect( com.raygun.environment.RaygunConfig::getMaxPayloadSize() ).toBe( 131072 );
             } );
+
+            it( "should provide default HTTP timeout", function() {
+                expect( com.raygun.environment.RaygunConfig::getDefaultHttpTimeout() ).toBe( 10 );
+            } );
         } );
     }
 

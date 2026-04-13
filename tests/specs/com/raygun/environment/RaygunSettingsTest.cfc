@@ -55,6 +55,21 @@ component extends="testbox.system.BaseSpec" {
                 var result = settings.getSettings();
                 expect( result.apiEndpoint ).toBe( "https://custom.example.com/entries" );
             } );
+
+            it( "should initialize with default HTTP timeout", function() {
+                expect( variables.settings.getHttpTimeout() ).toBe( 10 );
+            } );
+
+            it( "should initialize with custom HTTP timeout", function() {
+                var settings = new com.raygun.environment.RaygunSettings( httpTimeout = 30 );
+                expect( settings.getHttpTimeout() ).toBe( 30 );
+            } );
+
+            it( "should include HTTP timeout in settings struct", function() {
+                var result = variables.settings.getSettings();
+                expect( result ).toHaveKey( "httpTimeout" );
+                expect( result.httpTimeout ).toBe( 10 );
+            } );
         } );
     }
 

@@ -10,15 +10,18 @@ component accessors="true" {
     property name="rawDataMaxLength" type="numeric";
     property name="statusCode"       type="numeric";
     property name="apiEndpoint"      type="string";
+    property name="httpTimeout"      type="numeric";
 
     public RaygunSettings function init(
         numeric rawDataMaxLength = com.raygun.environment.RaygunConfig::RAW_DATA_MAX_LENGTH_DEFAULT,
         numeric statusCode       = com.raygun.environment.RaygunConfig::getDefaultStatusCode(),
-        string apiEndpoint       = com.raygun.environment.RaygunConfig::getApiEndpoint()
+        string apiEndpoint       = com.raygun.environment.RaygunConfig::getApiEndpoint(),
+        numeric httpTimeout      = com.raygun.environment.RaygunConfig::getDefaultHttpTimeout()
     ) {
         setRawDataMaxLength( rawDataMaxLength );
         setStatusCode( statusCode );
         setApiEndpoint( apiEndpoint );
+        setHttpTimeout( httpTimeout );
         return this;
     }
 
@@ -26,7 +29,8 @@ component accessors="true" {
         return {
             "rawDataMaxLength" : getRawDataMaxLength(),
             "statusCode"       : getStatusCode(),
-            "apiEndpoint"      : getApiEndpoint()
+            "apiEndpoint"      : getApiEndpoint(),
+            "httpTimeout"      : getHttpTimeout()
         };
     }
 

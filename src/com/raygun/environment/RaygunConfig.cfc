@@ -24,6 +24,7 @@ component {
         HTTP_METHOD_GET      = "GET";
         FORM_FIELD_MAX_LENGTH = 256;
         MAX_PAYLOAD_SIZE     = 131072;
+        DEFAULT_HTTP_TIMEOUT = 10;
     }
 
     /**
@@ -116,6 +117,13 @@ component {
      */
     public static function getMaxPayloadSize() {
         return static.MAX_PAYLOAD_SIZE;
+    }
+
+    /**
+     * Returns the default HTTP timeout in seconds for API requests.
+     */
+    public static function getDefaultHttpTimeout() {
+        return static.DEFAULT_HTTP_TIMEOUT;
     }
 
 }
