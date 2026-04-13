@@ -96,6 +96,9 @@ All code must work on Adobe CF 2021+, Lucee 5.3+, and BoxLang 1+.
 - **Struct null values**: ACF treats `javacast("null","")` as key removal; avoid asserting key existence for potentially-null values in tests
 - **Thread attribute names**: ACF reserves `timeout` and `duration` as `cfthread` attributes — use alternative names (e.g. `httpTimeoutSecs`)
 - **Regex**: Avoid complex character class escaping in `reReplace()` — different engines parse differently. Use `find()` char-by-char for portability
+- **Inline closures in `new` constructors**: ACF cannot parse `new Foo(callback = function() {})` — assign the closure to a variable first, then pass it: `var cb = function() {}; new Foo(callback = cb)`
+- **Null values in structs**: Lucee keeps null-valued keys (e.g. from `javacast("null","")`) visible to `keyExists()` but accessing the value throws. Always guard with `isNull(struct[key])` before calling `isSimpleValue()`, `isStruct()`, or `isArray()` on potentially-null values
+- **`getCurrentTemplatePath()` in `super` calls**: When a child component calls `super.method()`, `getCurrentTemplatePath()` may resolve to the child's file path, not the parent's. Use `expandPath()` with known paths instead
 
 ## Testing
 
