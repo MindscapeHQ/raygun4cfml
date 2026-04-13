@@ -14,6 +14,7 @@ New Features:
 - **HTTP timeout**: All API requests now have a configurable timeout via `RaygunSettings.httpTimeout` (default: 10 seconds).
 - **Automatic retry**: Failed HTTP requests are retried with configurable `RaygunSettings.maxRetries` (default: 2) and `RaygunSettings.retryDelay` (default: 1 second). Set `maxRetries=0` to disable.
 - **Additional environment fields**: `processorCount`, `locale`, and `utcOffset` are now captured in every error report.
+- **Sample API key configuration**: Samples now load the Raygun API key automatically from `samples/.env.json` (gitignored) or the `RAYGUN_API_KEY` environment variable — no more manual copy-paste into each file.
 
 Bug Fixes:
 

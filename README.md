@@ -459,6 +459,44 @@ The `/samples` directory contains working examples for common integration patter
 | `samples/app-cfc-settings/` | Application.cfc with custom `RaygunSettings` (raw data length, status code) |
 | `samples/datasources-and-sql/` | Database error reporting with SQL exception details |
 
+### Configuring the API Key for Samples
+
+The samples load the Raygun API key automatically — no need to edit each file. The key is resolved in this order:
+
+1. **Local config file** — `samples/.env.json` (recommended for local development)
+2. **Environment variable** — `RAYGUN_API_KEY`
+3. **Placeholder** — falls back to `<YOUR API KEY>` if neither is set
+
+**Option 1: Local config file**
+
+Copy the template and add your key:
+
+```bash
+cp samples/.env.json.sample samples/.env.json
+```
+
+Then edit `samples/.env.json`:
+
+```json
+{
+    "RAYGUN_API_KEY": "your-api-key-here"
+}
+```
+
+This file is gitignored and will not be committed.
+
+**Option 2: Environment variable**
+
+```bash
+export RAYGUN_API_KEY="your-api-key-here"
+```
+
+Or pass it when starting a CommandBox server:
+
+```bash
+RAYGUN_API_KEY="your-api-key-here" box server start serverConfigFile=server-lucee-6-1.json
+```
+
 ## Development & Testing
 
 ### Dependencies
