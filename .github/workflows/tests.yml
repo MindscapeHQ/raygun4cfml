@@ -81,12 +81,25 @@ jobs:
             exit 1
           fi
 
-          # Extract JSON (ACF may append debug HTML)
+          # Extract JSON (ACF may append debug HTML after the JSON object)
           python3 -c "
           import sys
           raw = sys.stdin.read()
           depth = 0
+          in_string = False
+          escape = False
           for i, ch in enumerate(raw):
+              if escape:
+                  escape = False
+                  continue
+              if ch == '\\\\' and in_string:
+                  escape = True
+                  continue
+              if ch == '\"':
+                  in_string = not in_string
+                  continue
+              if in_string:
+                  continue
               if ch == '{': depth += 1
               elif ch == '}':
                   depth -= 1
