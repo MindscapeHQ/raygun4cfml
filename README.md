@@ -3,7 +3,7 @@ Raygun4CFML
 
 CFML client library for [Raygun Crash Reporting](https://raygun.com).
 
-**Current Version:** 2.1.0
+**Current Version:** 3.0.0
 
 **Supported Platforms:**
 
@@ -13,7 +13,7 @@ CFML client library for [Raygun Crash Reporting](https://raygun.com).
 
 ## Active Development
 
-2.0.0 was a complete rewrite of the project and is ready-to-use for the 3 major CFML engines and their crash reports.
+3.0.0 adds breadcrumbs, onBeforeSend hooks, ignore exceptions, wildcard content filtering, payload size enforcement, configurable API endpoint/timeout, automatic retry, and additional environment fields — plus numerous bug fixes and 160 test specs across 11 engines.
 
 Please be aware that no testing and work has *yet* gone into framework-specific crash reports, e.g. a deeper integration with Coldbox HMVC, Fusebox, CF on Wheels etc. This will be added over time in future releases.
 
@@ -81,10 +81,12 @@ The `RaygunClient` is the primary component for sending error reports to Raygun.
 
 ```cfml
 raygun = new com.raygun.RaygunClient(
-    apiKey        = "YOUR_API_KEY",
-    contentFilter = contentFilterInstance,  // optional RaygunContentFilter
-    appVersion    = "1.2.3",               // optional application version string
-    settings      = settingsInstance        // optional RaygunSettings
+    apiKey           = "YOUR_API_KEY",
+    contentFilter    = contentFilterInstance,  // optional RaygunContentFilter
+    appVersion       = "1.2.3",               // optional application version string
+    settings         = settingsInstance,       // optional RaygunSettings
+    onBeforeSend     = callbackClosure,        // optional closure to inspect/mutate/cancel payloads
+    ignoreExceptions = ["MissingInclude"]      // optional array of exception types to skip
 );
 ```
 
@@ -121,14 +123,107 @@ raygun.sendAsync(
 
 ---
 
+### Breadcrumbs
+
+Record a trail of events leading up to an error. Breadcrumbs are automatically included in subsequent `send()`/`sendAsync()` calls.
+
+```cfml
+raygun = new com.raygun.RaygunClient(apiKey = "YOUR_API_KEY");
+
+// Record breadcrumbs as your application executes
+raygun.recordBreadcrumb(message = "User logged in");
+raygun.recordBreadcrumb(
+    message    = "Query executed",
+    level      = "debug",        // debug, info, warning, error (default: info)
+    category   = "database",
+    className  = "UserDAO",
+    methodName = "findById",
+    lineNumber = 42,
+    customData = {"sql": "SELECT * FROM users WHERE id = ?"}
+);
+raygun.recordBreadcrumb(message = "Page rendered", level = "info");
+
+// Breadcrumbs are included when an error is sent
+try {
+    // application code
+} catch (any e) {
+    raygun.send(e);
+}
+
+// Clear breadcrumbs after sending if needed
+raygun.clearBreadcrumbs();
+```
+
+The `recordBreadcrumb()` method returns `this` for chaining:
+
+```cfml
+raygun
+    .recordBreadcrumb(message = "Step 1")
+    .recordBreadcrumb(message = "Step 2")
+    .recordBreadcrumb(message = "Step 3");
+```
+
+---
+
+### onBeforeSend Hook
+
+Register a callback to inspect, mutate, or cancel payloads before they are sent to Raygun.
+
+```cfml
+// Cancel sending for specific error types
+raygun = new com.raygun.RaygunClient(
+    apiKey = "YOUR_API_KEY",
+    onBeforeSend = function(payload) {
+        // Return false to cancel sending
+        if (payload.details.error.className == "AbortException") {
+            return false;
+        }
+        // Return the (optionally modified) payload to proceed
+        return payload;
+    }
+);
+```
+
+The callback receives the full deserialized payload struct. Return `false` to cancel, return a struct to send the (optionally modified) payload, or throw an exception to proceed with the original payload.
+
+You can also set the callback after construction:
+
+```cfml
+raygun.setOnBeforeSend(function(payload) {
+    payload.details.tags.append("extra-tag");
+    return payload;
+});
+```
+
+---
+
+### Ignore Exceptions
+
+Skip sending specific exception types entirely:
+
+```cfml
+raygun = new com.raygun.RaygunClient(
+    apiKey           = "YOUR_API_KEY",
+    ignoreExceptions = ["MissingInclude", "AbortException", "LockTimeout"]
+);
+```
+
+Matching is case-insensitive. Ignored exceptions cause `send()` to return an empty string without building or transmitting the payload. You can update the list at any time via `setIgnoreExceptions()`.
+
+---
+
 ### RaygunSettings
 
-Controls raw request body capture size and the default HTTP response status code reported to Raygun.
+Controls client behavior including raw data capture, HTTP status codes, API endpoint, timeout, and retry settings.
 
 ```cfml
 settings = new com.raygun.environment.RaygunSettings(
-    rawDataMaxLength = 10000,  // default: 4096
-    statusCode       = 418     // default: 500
+    rawDataMaxLength = 10000,                              // default: 4096
+    statusCode       = 418,                                // default: 500
+    apiEndpoint      = "https://custom.example.com/entries", // default: Raygun API
+    httpTimeout      = 30,                                 // default: 10 (seconds)
+    maxRetries       = 3,                                  // default: 2
+    retryDelay       = 2                                   // default: 1 (seconds)
 );
 
 raygun = new com.raygun.RaygunClient(
@@ -137,21 +232,43 @@ raygun = new com.raygun.RaygunClient(
 );
 ```
 
-- `rawDataMaxLength` — Maximum number of characters of the raw request body to capture (default: `4096`).
-- `statusCode` — Default HTTP status code sent with error reports (default: `500`). Overridden automatically to `404` for `MissingInclude` exceptions.
+| Setting | Type | Default | Description |
+|---|---|---|---|
+| `rawDataMaxLength` | numeric | `4096` | Maximum characters of raw request body to capture |
+| `statusCode` | numeric | `500` | Default HTTP status code (auto-overridden to 404 for `MissingInclude`) |
+| `apiEndpoint` | string | `https://api.raygun.com/entries` | Raygun API endpoint URL |
+| `httpTimeout` | numeric | `10` | HTTP request timeout in seconds |
+| `maxRetries` | numeric | `2` | Maximum retry attempts after initial failure (0 to disable) |
+| `retryDelay` | numeric | `1` | Delay in seconds between retry attempts |
 
 ---
 
 ### RaygunContentFilter
 
-Protects sensitive data from being sent to Raygun. Accepts an array of filter rules, each with a `filter` (field name to match) and a `replacement` (value to substitute). Filters are applied against both top-level payload keys and JSON content inside `rawData`.
+Protects sensitive data from being sent to Raygun. Accepts an array of filter rules, each with a `filter` (field name or glob pattern to match) and a `replacement` (value to substitute). Filters are applied against both top-level payload keys and JSON content inside `rawData`.
+
+**Exact match:**
 
 ```cfml
 contentFilter = new com.raygun.filter.RaygunContentFilter([
     {filter: "password", replacement: "[FILTERED]"},
     {filter: "creditCard", replacement: "[FILTERED]"}
 ]);
+```
 
+**Wildcard patterns** (using `*` as a glob):
+
+```cfml
+contentFilter = new com.raygun.filter.RaygunContentFilter([
+    {filter: "pass*", replacement: "[FILTERED]"},      // matches password, passphrase, passCode
+    {filter: "*token", replacement: "[FILTERED]"},     // matches authToken, refreshToken
+    {filter: "*secret*", replacement: "[FILTERED]"}    // matches mySecretKey, topSecret123
+]);
+```
+
+Wildcard matching is case-insensitive and works on nested structs and rawData JSON.
+
+```cfml
 raygun = new com.raygun.RaygunClient(
     apiKey        = "YOUR_API_KEY",
     contentFilter = contentFilter
@@ -249,25 +366,32 @@ component {
             .setIsAnonymous(false)
             .setFullName(session.userFullName);
 
-        // Content filtering to protect sensitive data
+        // Content filtering with wildcards to protect sensitive data
         var contentFilter = new com.raygun.filter.RaygunContentFilter([
-            {filter: "password", replacement: "[FILTERED]"},
+            {filter: "pass*", replacement: "[FILTERED]"},
+            {filter: "*token", replacement: "[FILTERED]"},
             {filter: "creditCard", replacement: "[FILTERED]"},
             {filter: "ssn", replacement: "[FILTERED]"}
         ]);
 
-        // Custom settings
+        // Custom settings with retry and timeout
         var settings = new com.raygun.environment.RaygunSettings(
-            rawDataMaxLength = 10000
+            rawDataMaxLength = 10000,
+            httpTimeout      = 15,
+            maxRetries       = 3
         );
 
-        // Initialize and send
+        // Initialize with hooks and ignore list
         var raygun = new com.raygun.RaygunClient(
-            apiKey        = "YOUR_API_KEY",
-            appVersion    = "1.0.0",
-            contentFilter = contentFilter,
-            settings      = settings
+            apiKey           = "YOUR_API_KEY",
+            appVersion       = "1.0.0",
+            contentFilter    = contentFilter,
+            settings         = settings,
+            ignoreExceptions = ["AbortException"]
         );
+
+        // Record breadcrumbs for context
+        raygun.recordBreadcrumb(message = "Error handler triggered", level = "error");
 
         raygun.send(
             issueData      = arguments.exception,
@@ -290,7 +414,7 @@ The following data is captured automatically with every error report — no addi
 - Query string
 - Request headers
 - CGI scope
-- Form data (FORM scope)
+- Form data (FORM scope, values truncated to 256 characters)
 - URL parameters (URL scope)
 - Client IP address
 - Raw request body (truncated to `rawDataMaxLength`, default 4096 characters; only for non-GET requests with non-form content types)
@@ -302,6 +426,9 @@ The following data is captured automatically with every error report — no addi
 - Heap memory (available and total)
 - Physical memory (available and total, where accessible)
 - CFML engine and version (e.g. "Lucee 6.1.0.243", "BoxLang 1.0.0")
+- Processor count
+- System locale
+- UTC offset (hours)
 
 **Response:**
 - HTTP status code (default 500, configurable via `RaygunSettings`)
@@ -315,6 +442,10 @@ The following data is captured automatically with every error report — no addi
 - Error code and extended info (where available)
 - Nested/chained exceptions (via `cause` field)
 - Database error details: SQL, query error, native error code, SQL state (for `database` type exceptions)
+
+**Payload Safety:**
+- Total payload automatically capped at 128KB
+- Oversized payloads are reduced by progressively stripping expendable fields
 
 ## Samples
 
@@ -349,12 +480,12 @@ box run-script format:check    # check formatting without modifying files
 
 ### Running Tests
 
-1. Start a test server:
-   ```
-   box server start serverConfigFile=server-lucee-6-1.json
-   ```
-
-2. Navigate to `tests/runner.cfm` on the server's port (e.g. `http://localhost:9195/tests/runner.cfm`).
+```bash
+./run-tests.sh server-lucee-6-1.json    # single engine
+./run-tests.sh                           # all 11 engines sequentially
+box run-script test                      # shortcut: Lucee 6.1
+box run-script test:all                  # shortcut: all engines
+```
 
 ### Available Test Servers
 

@@ -1,7 +1,21 @@
 History and Plan
 ================
 
-2.2.0 (Unreleased)
+3.0.0 (Unreleased)
+
+New Features:
+
+- **Breadcrumbs**: Record a trail of events leading up to an error via `recordBreadcrumb()` and `clearBreadcrumbs()`. Breadcrumbs are automatically included in subsequent `send()`/`sendAsync()` calls with timestamp, level, type, category, message, className, methodName, lineNumber, and customData fields (#46).
+- **onBeforeSend hook**: Register a callback via constructor or `setOnBeforeSend()` to inspect, mutate, or cancel payloads before sending. Return `false` to cancel, return a modified struct to mutate, or throw to proceed with the original payload.
+- **Ignore exceptions list**: Skip specific exception types via `ignoreExceptions` constructor argument or `setIgnoreExceptions()`. Case-insensitive matching (e.g. `["MissingInclude", "AbortException"]`).
+- **Wildcard content filter keys**: `RaygunContentFilter` now supports glob-style `*` wildcards in filter patterns (e.g. `"pass*"` matches `password`, `passphrase`, `passCode`). Exact-match filters continue to work as before.
+- **Payload size enforcement**: Payloads exceeding 128KB are automatically reduced by progressively stripping expendable fields (rawData, userCustomData, CGI data, headers, form). Form field values are truncated to 256 characters.
+- **Configurable API endpoint**: Set a custom Raygun API endpoint via `RaygunSettings.apiEndpoint` (default: `https://api.raygun.com/entries`).
+- **HTTP timeout**: All API requests now have a configurable timeout via `RaygunSettings.httpTimeout` (default: 10 seconds).
+- **Automatic retry**: Failed HTTP requests are retried with configurable `RaygunSettings.maxRetries` (default: 2) and `RaygunSettings.retryDelay` (default: 1 second). Set `maxRetries=0` to disable.
+- **Additional environment fields**: `processorCount`, `locale`, and `utcOffset` are now captured in every error report.
+
+Bug Fixes:
 
 - Fixed settings not propagating to RaygunRequestMessage and RaygunResponseMessage
 - Fixed empty stackTrace when Java stack trace is empty but CFML tag context is available
@@ -10,9 +24,14 @@ History and Plan
 - Fixed sync/async HTTP error handling inconsistency in RaygunClient
 - Fixed thread name typo in async sending
 - Fixed typed property defaults (`default=""` on non-string typed properties)
-- Centralized magic strings and constants in RaygunConfig
+- Added `isNull()` guards on `getSettings()`/`getContentFilter()` to prevent NPE on strict engines
+
+Code Quality:
+
+- Centralized all magic strings and constants in `RaygunConfig` (API endpoint, log file name, content types, HTTP methods, size limits, timeout/retry defaults)
+- Replaced `isClosure()` with `isCustomFunction()` for cross-engine compatibility
+- 160 test specs (up from 70), covering all components
 - Added Lucee 6.2, 7.0, and 7.1 to test matrix (11 engines total)
-- Added comprehensive test coverage for RaygunMessageDetails, RaygunRequestMessage, and RaygunResponseMessage
 
 2.1.0 (Jan 21 2025)
 

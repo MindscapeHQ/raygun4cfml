@@ -2,13 +2,13 @@
 
 ## Project Overview
 
-Raygun4CFML (v2.1.0) is a CFML library for sending crash reports to the [Raygun API](https://raygun.com). It supports:
+Raygun4CFML (v3.0.0) is a CFML library for sending crash reports to the [Raygun API](https://raygun.com). It supports:
 
 - **Adobe ColdFusion** 2021, 2023, 2025
-- **Lucee** 5.3, 5.4, 6.0, 6.1
+- **Lucee** 5.3, 5.4, 6.0, 6.1, 6.2, 7.0, 7.1
 - **BoxLang** 1+
 
-Package management via CommandBox (`box.json`). Code formatting via cfformat (`.cfformat.json`). Tests via TestBox.
+Package management via CommandBox (`box.json`). Code formatting via cfformat (`.cfformat.json`). Tests via TestBox (160 specs across 11 engines).
 
 ## Repository Layout
 
@@ -19,10 +19,11 @@ src/com/raygun/
 │   ├── RaygunConfig.cfc          # Static config (version, constants)
 │   └── RaygunSettings.cfc        # User-configurable settings
 ├── filter/
-│   └── RaygunContentFilter.cfc   # Sensitive data filtering
+│   └── RaygunContentFilter.cfc   # Sensitive data filtering (exact + wildcard)
 ├── message/
 │   ├── RaygunMessage.cfc         # Top-level message wrapper
 │   ├── RaygunMessageDetails.cfc  # Message detail builder
+│   ├── RaygunBreadcrumbMessage.cfc # Breadcrumb entries
 │   ├── RaygunClientMessage.cfc   # Client metadata
 │   ├── RaygunEnvironmentMessage.cfc
 │   ├── RaygunExceptionMessage.cfc
@@ -36,9 +37,13 @@ src/com/raygun/
     └── RaygunUserCustomData.cfc  # Custom diagnostic data (public API)
 
 tests/specs/com/raygun/           # Mirrors src structure
+├── RaygunClientPayloadTest.cfc
+├── RaygunClientBreadcrumbTest.cfc
+├── RaygunClientOnBeforeSendTest.cfc
+├── RaygunClientIgnoreExceptionsTest.cfc
 ├── environment/                  # RaygunConfigTest.cfc, RaygunSettingsTest.cfc
-├── filter/                       # RaygunContentFilterTest.cfc
-├── message/                      # RaygunIdentifierMessageTest.cfc, RaygunExceptionMessageTest.cfc
+├── filter/                       # RaygunContentFilterTest.cfc, RaygunContentFilterWildcardTest.cfc
+├── message/                      # All message component tests
 └── user/                         # RaygunUserCustomDataTest.cfc
 
 samples/                          # Usage examples (app-cfc-*, try-catch, datasources-and-sql)
@@ -52,16 +57,17 @@ server-*.json                     # CommandBox server configs for each engine
 
 | Component | Package | Purpose |
 |---|---|---|
-| `RaygunClient` | `com.raygun` | Main client — `init(apiKey)`, `send()`, `sendAsync()` |
-| `RaygunSettings` | `com.raygun.environment` | Optional behavior settings |
-| `RaygunContentFilter` | `com.raygun.filter` | Filters sensitive keys from payloads |
+| `RaygunClient` | `com.raygun` | Main client — `init(apiKey)`, `send()`, `sendAsync()`, `recordBreadcrumb()`, `clearBreadcrumbs()` |
+| `RaygunSettings` | `com.raygun.environment` | Optional behavior settings (rawDataMaxLength, statusCode, apiEndpoint, httpTimeout, maxRetries, retryDelay) |
+| `RaygunContentFilter` | `com.raygun.filter` | Filters sensitive keys from payloads (exact match + wildcard globs) |
 | `RaygunUserCustomData` | `com.raygun.user` | Attach custom data/tags to reports |
 | `RaygunIdentifierMessage` | `com.raygun.message` | Identify affected user |
 
 **Internal components** (not intended for direct consumer use):
 
 - `message/Raygun*Message.cfc` (except `RaygunIdentifierMessage`) — payload construction
-- `environment/RaygunConfig.cfc` — static constants (version, defaults)
+- `message/RaygunBreadcrumbMessage.cfc` — individual breadcrumb entries (created by `recordBreadcrumb()`)
+- `environment/RaygunConfig.cfc` — static constants (version, defaults, limits)
 - `tools/ProductCheck.cfc` — engine detection
 - `tools/RaygunInternalTools.cfc` — internal utilities
 
@@ -74,6 +80,8 @@ server-*.json                     # CommandBox server configs for each engine
 - **Builder-style APIs**: `init()` returns `this`, `build()` constructs payloads, accessor-based setters/getters via `accessors="true"`
 - **Static component patterns**: use `static {}` blocks for constants and `public static function` for config/tool detection (see `RaygunConfig.cfc`, `ProductCheck.cfc`)
 - **No new dependencies** unless absolutely necessary — the library has zero runtime dependencies
+- **Use `isCustomFunction()` not `isClosure()`** — `isClosure()` is not available on all engines
+- **Use `isNull()` guards** before `isInstanceOf()` — null values passed to `isInstanceOf()` throw NPE on strict engines
 
 ## Cross-Engine Compatibility
 
@@ -85,6 +93,9 @@ All code must work on Adobe CF 2021+, Lucee 5.3+, and BoxLang 1+.
 - **Java integration** (MXBeans, `InetAddress`, etc.): Wrap in try/catch — Java class availability varies by engine and OS
 - **Type checks**: Use case-insensitive comparisons (e.g., `compareNoCase()`) for engine-dependent type names — engines differ in casing
 - **JSON serialization**: Handle ACF's `//` prefix quirk (see `buildPayload()` in `RaygunClient.cfc`)
+- **Struct null values**: ACF treats `javacast("null","")` as key removal; avoid asserting key existence for potentially-null values in tests
+- **Thread attribute names**: ACF reserves `timeout` and `duration` as `cfthread` attributes — use alternative names (e.g. `httpTimeoutSecs`)
+- **Regex**: Avoid complex character class escaping in `reReplace()` — different engines parse differently. Use `find()` char-by-char for portability
 
 ## Testing
 
@@ -92,6 +103,7 @@ All code must work on Adobe CF 2021+, Lucee 5.3+, and BoxLang 1+.
 - Test files are named `*Test.cfc` and extend `testbox.system.BaseSpec`
 - TestBox is a dev dependency (`"testbox": "6"` in `box.json`)
 - Test any behavior change; verify against multiple engines when touching engine-dependent code
+- **160 specs** across all components — run all 11 engines before pushing
 
 ### Running tests locally
 
@@ -167,8 +179,14 @@ Formatting covers `src/**/*.cfc`, `tests/**/*.cfc`, `tests/**/*.cfm`, `samples/*
 
 ## Key Design Decisions
 
-- **API endpoint**: All payloads POST to `https://api.raygun.com/entries` with `X-ApiKey` header
+- **API endpoint**: All payloads POST to `https://api.raygun.com/entries` with `X-ApiKey` header (configurable via `RaygunSettings.apiEndpoint`)
 - **Version tracking**: Version is defined in both `RaygunConfig.cfc` (`RAYGUN_CLIENT_VERSION`) and `box.json` (`version`) — **keep these in sync**
-- **Content filtering**: `RaygunContentFilter.apply()` runs against the fully built `RaygunMessage` struct *before* JSON serialization — this is the last chance to strip sensitive data
+- **Content filtering**: `RaygunContentFilter.apply()` runs against the fully built `RaygunMessage` struct *before* JSON serialization — this is the last chance to strip sensitive data. Supports both exact key matches and `*` glob wildcards.
 - **Raw data limit**: Payloads are capped at 4096 chars by default (`RaygunConfig.RAW_DATA_MAX_LENGTH_DEFAULT`)
+- **Payload size limit**: Total JSON payload is capped at 128KB (`RaygunConfig.MAX_PAYLOAD_SIZE`). Oversized payloads are progressively reduced by stripping expendable fields.
+- **Form field truncation**: Form field values are truncated to 256 chars (`RaygunConfig.FORM_FIELD_MAX_LENGTH`)
 - **Async sending**: Uses `cfthread` for non-blocking sends; errors are logged to `Raygun4CFML` log file
+- **Retry**: Failed HTTP requests are retried up to `maxRetries` times (default: 2) with `retryDelay` seconds between attempts (default: 1)
+- **Breadcrumbs**: Stored on the `RaygunClient` instance as an array of `RaygunBreadcrumbMessage` objects, built and included in `details.breadcrumbs[]` at send time
+- **onBeforeSend**: Closure receives deserialized payload struct; return `false` to cancel, return modified struct to mutate, throw to proceed unchanged
+- **Ignore exceptions**: Array of exception type strings checked case-insensitively against `issueData.type` before payload construction
