@@ -6,9 +6,7 @@ component extends="testbox.system.BaseSpec" {
 
     function run() {
         describe( "RaygunExceptionMessage bugs", function() {
-
             describe( "BUG: stackTrace should be populated from tagcontext when stacktrace string is empty", function() {
-
                 it( "should populate stackTrace from tagcontext when stacktrace is empty", function() {
                     // BUG: When a CFML exception has an empty stacktrace string but a populated
                     // tagcontext array, the Raygun API field error.stackTrace ends up as an empty
@@ -48,7 +46,6 @@ component extends="testbox.system.BaseSpec" {
                         expect( result.stackTrace[ 1 ] ).toHaveKey( "fileName" );
                     }
                 } );
-
             } );
 
             describe( "BUG: case-sensitive type check for database errors", function() {
@@ -68,7 +65,8 @@ component extends="testbox.system.BaseSpec" {
 
                     var result = variables.exceptionMessage.build( dbException );
 
-                    expect( result.data ).toHaveKey( "database",
+                    expect( result.data ).toHaveKey(
+                        "database",
                         "Database errors should be detected regardless of type casing"
                     );
                     expect( result.data.database.sql ).toBe( "SELECT * FROM users" );
@@ -86,13 +84,12 @@ component extends="testbox.system.BaseSpec" {
 
                     var result = variables.exceptionMessage.build( dbException );
 
-                    expect( result.data ).toHaveKey( "database",
+                    expect( result.data ).toHaveKey(
+                        "database",
                         "DATABASE (uppercase) should be detected as a database error"
                     );
                 } );
-
             } );
-
         } );
     }
 

@@ -52,14 +52,19 @@ component accessors="true" {
 
         // Build core request data using safe local copies, defaulting to null for missing values
         var cgiVal = function( required string key ) {
-            return ( localCGI.keyExists( arguments.key ) && len( localCGI[ arguments.key ] ) ) ? localCGI[ arguments.key ] : javacast( "null", "" );
+            return ( localCGI.keyExists( arguments.key ) && len( localCGI[ arguments.key ] ) ) ? localCGI[ arguments.key ] : javacast(
+                "null",
+                ""
+            );
         };
 
         var truncatedForm = truncateFormFields( localForm );
 
         returnContent = {
-            "hostName"    : cgiVal( "HTTP_HOST" ),
-            "url"         : ( !isNull( cgiVal( "SCRIPT_NAME" ) ) ? cgiVal( "SCRIPT_NAME" ) : "" ) & ( !isNull( cgiVal( "PATH_INFO" ) ) ? cgiVal( "PATH_INFO" ) : "" ),
+            "hostName" : cgiVal( "HTTP_HOST" ),
+            "url"      : ( !isNull( cgiVal( "SCRIPT_NAME" ) ) ? cgiVal( "SCRIPT_NAME" ) : "" ) & (
+                !isNull( cgiVal( "PATH_INFO" ) ) ? cgiVal( "PATH_INFO" ) : ""
+            ),
             "httpMethod"  : cgiVal( "REQUEST_METHOD" ),
             "iPAddress"   : cgiVal( "REMOTE_ADDR" ),
             "queryString" : cgiVal( "QUERY_STRING" ),
@@ -76,8 +81,8 @@ component accessors="true" {
 
         // Only include raw request data for non-standard content types to avoid duplicating form data
         // Also enforces a max length to prevent oversized payloads
-        var contentType    = localCGI.keyExists( "CONTENT_TYPE" ) ? localCGI[ "CONTENT_TYPE" ] : "";
-        var requestMethod  = localCGI.keyExists( "REQUEST_METHOD" ) ? localCGI[ "REQUEST_METHOD" ] : "";
+        var contentType   = localCGI.keyExists( "CONTENT_TYPE" ) ? localCGI[ "CONTENT_TYPE" ] : "";
+        var requestMethod = localCGI.keyExists( "REQUEST_METHOD" ) ? localCGI[ "REQUEST_METHOD" ] : "";
         if (
             len( contentType ) && len( requestMethod ) && contentType != com.raygun.environment.RaygunConfig::getContentTypeHtml() && contentType != com.raygun.environment.RaygunConfig::getContentTypeForm() && requestMethod != com.raygun.environment.RaygunConfig::getHttpMethodGet()
         ) {

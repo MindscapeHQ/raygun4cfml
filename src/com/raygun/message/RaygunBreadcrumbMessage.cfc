@@ -51,13 +51,13 @@ component accessors="true" {
 
     public struct function build() {
         var result = {
-            "timestamp" : getTimestamp(),
-            "level"     : getLevel(),
-            "type"      : getType(),
-            "category"  : getCategory(),
-            "message"   : getMessage(),
-            "className" : getClassName(),
-            "methodName": getMethodName()
+            "timestamp"  : getTimestamp(),
+            "level"      : getLevel(),
+            "type"       : getType(),
+            "category"   : getCategory(),
+            "message"    : getMessage(),
+            "className"  : getClassName(),
+            "methodName" : getMethodName()
         };
 
         try {

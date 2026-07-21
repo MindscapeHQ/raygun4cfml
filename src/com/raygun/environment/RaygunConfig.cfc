@@ -11,22 +11,22 @@ component {
 
         // Client identifiers used for error tracking and debugging
         RAYGUN_CLIENT_NAME    = "raygun4cfml";
-        RAYGUN_CLIENT_VERSION = "3.0.0-rc.1";
+        RAYGUN_CLIENT_VERSION = "3.0.0";
         RAYGUN_CLIENT_URL     = "https://github.com/MindscapeHQ/raygun4cfml";
 
         // New default status code
         DEFAULT_STATUS_CODE = 500;
 
-        API_ENDPOINT         = "https://api.raygun.com/entries";
-        LOG_FILE_NAME        = "Raygun4CFML";
-        CONTENT_TYPE_HTML    = "text/html";
-        CONTENT_TYPE_FORM    = "application/x-www-form-urlencoded";
-        HTTP_METHOD_GET      = "GET";
+        API_ENDPOINT          = "https://api.raygun.com/entries";
+        LOG_FILE_NAME         = "Raygun4CFML";
+        CONTENT_TYPE_HTML     = "text/html";
+        CONTENT_TYPE_FORM     = "application/x-www-form-urlencoded";
+        HTTP_METHOD_GET       = "GET";
         FORM_FIELD_MAX_LENGTH = 256;
-        MAX_PAYLOAD_SIZE     = 131072;
-        DEFAULT_HTTP_TIMEOUT = 10;
-        DEFAULT_MAX_RETRIES  = 2;
-        DEFAULT_RETRY_DELAY  = 1;
+        MAX_PAYLOAD_SIZE      = 131072;
+        DEFAULT_HTTP_TIMEOUT  = 10;
+        DEFAULT_MAX_RETRIES   = 2;
+        DEFAULT_RETRY_DELAY   = 1;
     }
 
     /**

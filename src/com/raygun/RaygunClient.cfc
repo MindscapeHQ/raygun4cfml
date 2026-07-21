@@ -6,11 +6,11 @@
 component accessors="true" {
 
     // Core configuration properties required for Raygun integration
-    property name="apiKey"        type="string"              default="";
+    property name="apiKey" type="string" default="";
     property name="contentFilter" type="RaygunContentFilter";
-    property name="appVersion"    type="string"              default="";
-    property name="settings"      type="RaygunSettings";
-    property name="breadcrumbs"       type="array";
+    property name="appVersion" type="string" default="";
+    property name="settings"         type="RaygunSettings";
+    property name="breadcrumbs"      type="array";
     property name="onBeforeSend"     type="any";
     property name="ignoreExceptions" type="array";
 
@@ -85,9 +85,7 @@ component accessors="true" {
             crumbArgs[ "customData" ] = arguments.customData;
         }
 
-        getBreadcrumbs().append(
-            new message.RaygunBreadcrumbMessage( argumentCollection = crumbArgs )
-        );
+        getBreadcrumbs().append( new message.RaygunBreadcrumbMessage( argumentCollection = crumbArgs ) );
 
         return this;
     }
@@ -324,17 +322,25 @@ component accessors="true" {
         required string jsonData,
         boolean sendAsync = false
     ) {
-        var postResult   = "";
-        var apiEndpoint  = resolveApiEndpoint();
-        var httpTimeout  = resolveHttpTimeout();
-        var maxRetries   = resolveMaxRetries();
-        var retryDelay   = resolveRetryDelay();
+        var postResult  = "";
+        var apiEndpoint = resolveApiEndpoint();
+        var httpTimeout = resolveHttpTimeout();
+        var maxRetries  = resolveMaxRetries();
+        var retryDelay  = resolveRetryDelay();
 
         if ( arguments.sendAsync ) {
             // Use threading for async transmission to prevent blocking the main request
-            thread action="run" name="sendAsyncToRaygunThread_#createUUID()#" apiKey=getApiKey() payload=arguments.jsonData endpoint=apiEndpoint httpTimeoutSecs=httpTimeout retries=maxRetries retryDelaySecs=retryDelay {
-                var attempts = 0;
-                var success  = false;
+            thread
+                action         ="run"
+                name           ="sendAsyncToRaygunThread_#createUUID()#"
+                apiKey         =getApiKey()
+                payload        =arguments.jsonData
+                endpoint       =apiEndpoint
+                httpTimeoutSecs=httpTimeout
+                retries        =maxRetries
+                retryDelaySecs =retryDelay {
+                var attempts   = 0;
+                var success    = false;
 
                 while ( !success && attempts <= attributes.retries ) {
                     try {

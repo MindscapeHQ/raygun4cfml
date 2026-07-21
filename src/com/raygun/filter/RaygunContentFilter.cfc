@@ -30,7 +30,11 @@ component accessors="true" {
 
             if ( isWildcard ) {
                 // Wildcard patterns require recursive key walking
-                filterStructByPattern( arguments.messageData, matcher.filter, matcher.replacement );
+                filterStructByPattern(
+                    arguments.messageData,
+                    matcher.filter,
+                    matcher.replacement
+                );
             } else {
                 // Exact match uses the efficient built-in findKey
                 var findKeysByFilter = arguments.messageData.findKey( matcher.filter, "all" );
@@ -56,7 +60,11 @@ component accessors="true" {
                 var rawDataJSON = deserializeJSON( arguments.messageData.details.request.rawData );
 
                 if ( isWildcard ) {
-                    filterStructByPattern( rawDataJSON, matcher.filter, matcher.replacement );
+                    filterStructByPattern(
+                        rawDataJSON,
+                        matcher.filter,
+                        matcher.replacement
+                    );
                 } else {
                     var findRawDataKeysByFilter = rawDataJSON.findKey( matcher.filter, "all" );
 
@@ -94,13 +102,21 @@ component accessors="true" {
                 } else if ( reFindNoCase( regex, key ) > 0 && isSimpleValue( arguments.data[ key ] ) ) {
                     arguments.data[ key ] = arguments.replacement;
                 } else if ( isStruct( arguments.data[ key ] ) || isArray( arguments.data[ key ] ) ) {
-                    filterStructByPattern( arguments.data[ key ], arguments.pattern, arguments.replacement );
+                    filterStructByPattern(
+                        arguments.data[ key ],
+                        arguments.pattern,
+                        arguments.replacement
+                    );
                 }
             }
         } else if ( isArray( arguments.data ) ) {
             for ( var item in arguments.data ) {
                 if ( isStruct( item ) || isArray( item ) ) {
-                    filterStructByPattern( item, arguments.pattern, arguments.replacement );
+                    filterStructByPattern(
+                        item,
+                        arguments.pattern,
+                        arguments.replacement
+                    );
                 }
             }
         }
@@ -111,7 +127,7 @@ component accessors="true" {
      * Escapes regex-special characters and replaces * with .*
      */
     private string function globToRegex( required string pattern ) {
-        var result      = "";
+        var result       = "";
         var specialChars = ".+?^${}()|[]\";
         var chars        = arguments.pattern.toCharArray();
 

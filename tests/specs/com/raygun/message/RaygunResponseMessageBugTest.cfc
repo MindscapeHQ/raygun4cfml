@@ -2,7 +2,6 @@ component extends="testbox.system.BaseSpec" {
 
     function run() {
         describe( "RaygunResponseMessage bugs", function() {
-
             describe( "BUG: case-sensitive MissingInclude check", function() {
                 // NOTE: On Lucee, == is case-insensitive so these pass by accident.
                 // On ACF, == is case-sensitive so these would fail without a fix.
@@ -12,7 +11,8 @@ component extends="testbox.system.BaseSpec" {
                     var msg    = new com.raygun.message.RaygunResponseMessage( { "statusCode" : 500 } );
                     var result = msg.build( { "type" : "missinginclude" } );
 
-                    expect( result.statusCode ).toBe( 404,
+                    expect( result.statusCode ).toBe(
+                        404,
                         "missinginclude (lowercase) should map to 404"
                     );
                 } );
@@ -21,13 +21,12 @@ component extends="testbox.system.BaseSpec" {
                     var msg    = new com.raygun.message.RaygunResponseMessage( { "statusCode" : 500 } );
                     var result = msg.build( { "type" : "MISSINGINCLUDE" } );
 
-                    expect( result.statusCode ).toBe( 404,
+                    expect( result.statusCode ).toBe(
+                        404,
                         "MISSINGINCLUDE (uppercase) should map to 404"
                     );
                 } );
-
             } );
-
         } );
     }
 

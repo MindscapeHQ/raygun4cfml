@@ -1,7 +1,7 @@
 History and Plan
 ================
 
-3.0.0-rc.1 (April 13, 2026)
+3.0.0 (July 21, 2026)
 
 New Features:
 
@@ -26,13 +26,14 @@ Bug Fixes:
 - Fixed thread name typo in async sending
 - Fixed typed property defaults (`default=""` on non-string typed properties)
 - Added `isNull()` guards on `getSettings()`/`getContentFilter()` to prevent NPE on strict engines
+- Fixed `RaygunContentFilter` initialization on Adobe ColdFusion 2025 Update 11, where the engine's built-in `setFilter()` function collided with the generated property setter
 
 Code Quality:
 
 - Centralized all magic strings and constants in `RaygunConfig` (API endpoint, log file name, content types, HTTP methods, size limits, timeout/retry defaults)
 - Replaced `isClosure()` with `isCustomFunction()` for cross-engine compatibility
-- 160 test specs (up from 70), covering all components
-- Added Lucee 6.2, 7.0, and 7.1 to test matrix (11 engines total)
+- 174 test specs (up from 70), covering all components
+- Expanded the test matrix to 20 engines, including Lucee 8 Alpha and matching Lucee Light configurations for every supported Lucee line
 
 2.1.0 (Jan 21 2025)
 

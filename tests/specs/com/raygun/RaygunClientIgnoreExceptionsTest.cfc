@@ -2,7 +2,6 @@ component extends="testbox.system.BaseSpec" {
 
     function run() {
         describe( "RaygunClient ignoreExceptions", function() {
-
             it( "should initialize with empty ignore list by default", function() {
                 var rgClient = new com.raygun.RaygunClient( apiKey = "test-key" );
                 expect( rgClient.getIgnoreExceptions() ).toBeArray();
@@ -23,12 +22,14 @@ component extends="testbox.system.BaseSpec" {
                     ignoreExceptions = [ "MissingInclude" ]
                 );
 
-                var result = rgClient.send( issueData = {
-                    message    : "File not found",
-                    type       : "MissingInclude",
-                    stacktrace : "",
-                    tagcontext : []
-                } );
+                var result = rgClient.send(
+                    issueData = {
+                        message    : "File not found",
+                        type       : "MissingInclude",
+                        stacktrace : "",
+                        tagcontext : []
+                    }
+                );
 
                 expect( result ).toBe( "" );
             } );
@@ -39,12 +40,14 @@ component extends="testbox.system.BaseSpec" {
                     ignoreExceptions = [ "missinginclude" ]
                 );
 
-                var result = rgClient.send( issueData = {
-                    message    : "File not found",
-                    type       : "MissingInclude",
-                    stacktrace : "",
-                    tagcontext : []
-                } );
+                var result = rgClient.send(
+                    issueData = {
+                        message    : "File not found",
+                        type       : "MissingInclude",
+                        stacktrace : "",
+                        tagcontext : []
+                    }
+                );
 
                 expect( result ).toBe( "" );
             } );
@@ -75,12 +78,14 @@ component extends="testbox.system.BaseSpec" {
                 rgClient.setIgnoreExceptions( [ "CustomError" ] );
                 expect( rgClient.getIgnoreExceptions() ).toHaveLength( 1 );
 
-                var result = rgClient.send( issueData = {
-                    message    : "Custom",
-                    type       : "CustomError",
-                    stacktrace : "",
-                    tagcontext : []
-                } );
+                var result = rgClient.send(
+                    issueData = {
+                        message    : "Custom",
+                        type       : "CustomError",
+                        stacktrace : "",
+                        tagcontext : []
+                    }
+                );
 
                 expect( result ).toBe( "" );
             } );
@@ -91,21 +96,35 @@ component extends="testbox.system.BaseSpec" {
                     ignoreExceptions = [ "MissingInclude", "AbortException", "LockTimeout" ]
                 );
 
-                var result1 = rgClient.send( issueData = {
-                    message : "a", type : "MissingInclude", stacktrace : "", tagcontext : []
-                } );
-                var result2 = rgClient.send( issueData = {
-                    message : "b", type : "AbortException", stacktrace : "", tagcontext : []
-                } );
-                var result3 = rgClient.send( issueData = {
-                    message : "c", type : "LockTimeout", stacktrace : "", tagcontext : []
-                } );
+                var result1 = rgClient.send(
+                    issueData = {
+                        message    : "a",
+                        type       : "MissingInclude",
+                        stacktrace : "",
+                        tagcontext : []
+                    }
+                );
+                var result2 = rgClient.send(
+                    issueData = {
+                        message    : "b",
+                        type       : "AbortException",
+                        stacktrace : "",
+                        tagcontext : []
+                    }
+                );
+                var result3 = rgClient.send(
+                    issueData = {
+                        message    : "c",
+                        type       : "LockTimeout",
+                        stacktrace : "",
+                        tagcontext : []
+                    }
+                );
 
                 expect( result1 ).toBe( "" );
                 expect( result2 ).toBe( "" );
                 expect( result3 ).toBe( "" );
             } );
-
         } );
     }
 

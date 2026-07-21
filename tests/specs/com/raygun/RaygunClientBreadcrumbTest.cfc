@@ -2,7 +2,6 @@ component extends="testbox.system.BaseSpec" {
 
     function run() {
         describe( "RaygunClient breadcrumbs", function() {
-
             beforeEach( function() {
                 variables.rgClient = new com.raygun.RaygunClient( apiKey = "test-key" );
             } );
@@ -54,9 +53,7 @@ component extends="testbox.system.BaseSpec" {
             } );
 
             it( "should clear all breadcrumbs", function() {
-                variables.rgClient
-                    .recordBreadcrumb( message = "first" )
-                    .recordBreadcrumb( message = "second" );
+                variables.rgClient.recordBreadcrumb( message = "first" ).recordBreadcrumb( message = "second" );
 
                 expect( variables.rgClient.getBreadcrumbs() ).toHaveLength( 2 );
 
@@ -64,15 +61,16 @@ component extends="testbox.system.BaseSpec" {
                 expect( result ).toBeInstanceOf( "com.raygun.RaygunClient" );
                 expect( variables.rgClient.getBreadcrumbs() ).toHaveLength( 0 );
             } );
-
         } );
 
         describe( "RaygunMessageDetails breadcrumbs integration", function() {
-
             it( "should include breadcrumbs in payload when provided", function() {
                 var crumbs = [
                     new com.raygun.message.RaygunBreadcrumbMessage( message = "Step 1" ),
-                    new com.raygun.message.RaygunBreadcrumbMessage( message = "Step 2", level = "warning" )
+                    new com.raygun.message.RaygunBreadcrumbMessage(
+                        message = "Step 2",
+                        level   = "warning"
+                    )
                 ];
 
                 var details = new com.raygun.message.RaygunMessageDetails();
@@ -103,7 +101,6 @@ component extends="testbox.system.BaseSpec" {
 
                 expect( structKeyExists( result, "breadcrumbs" ) ).toBeFalse();
             } );
-
         } );
     }
 

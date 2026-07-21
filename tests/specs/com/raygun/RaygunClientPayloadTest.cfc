@@ -2,7 +2,6 @@ component extends="testbox.system.BaseSpec" {
 
     function run() {
         describe( "RaygunClient payload size enforcement", function() {
-
             it( "should have a max payload size constant of 131072", function() {
                 expect( com.raygun.environment.RaygunConfig::getMaxPayloadSize() ).toBe( 131072 );
             } );
@@ -10,9 +9,7 @@ component extends="testbox.system.BaseSpec" {
             it( "should build a payload that does not exceed max payload size", function() {
                 var largeData = repeatString( "x", 200000 );
 
-                var customData = new com.raygun.user.RaygunUserCustomData(
-                    { "bigField" : largeData }
-                );
+                var customData = new com.raygun.user.RaygunUserCustomData( { "bigField" : largeData } );
 
                 var client = new com.raygun.RaygunClient( apiKey = "test-key" );
 
@@ -34,7 +31,10 @@ component extends="testbox.system.BaseSpec" {
                 messageContent.details[ "userCustomData" ] = { "bigField" : largeData };
 
                 var jsonData = serializeJSON( messageContent );
-                expect( len( jsonData ) ).toBeGT( 131072, "Test setup: payload should exceed max size" );
+                expect( len( jsonData ) ).toBeGT(
+                    131072,
+                    "Test setup: payload should exceed max size"
+                );
             } );
 
             it( "should initialize RaygunClient without error", function() {
@@ -47,12 +47,14 @@ component extends="testbox.system.BaseSpec" {
                 var rgClient = new com.raygun.RaygunClient( apiKey = "" );
 
                 expect( function() {
-                    rgClient.send( issueData = {
-                        message    : "Test",
-                        type       : "Application",
-                        stacktrace : "",
-                        tagcontext : []
-                    } );
+                    rgClient.send(
+                        issueData = {
+                            message    : "Test",
+                            type       : "Application",
+                            stacktrace : "",
+                            tagcontext : []
+                        }
+                    );
                 } ).toThrow();
             } );
 
@@ -67,7 +69,10 @@ component extends="testbox.system.BaseSpec" {
 
             it( "should accept contentFilter in constructor", function() {
                 var filter = new com.raygun.filter.RaygunContentFilter( [
-                    { filter : "password", replacement : "[filtered]" }
+                    {
+                        filter      : "password",
+                        replacement : "[filtered]"
+                    }
                 ] );
 
                 var rgClient = new com.raygun.RaygunClient(
@@ -88,7 +93,6 @@ component extends="testbox.system.BaseSpec" {
 
                 expect( rgClient.getSettings() ).toBeInstanceOf( "com.raygun.environment.RaygunSettings" );
             } );
-
         } );
     }
 
