@@ -50,25 +50,41 @@ component accessors="true" {
             var localUrl = {};
         }
 
-        // Build core request data, defaulting to null for missing values to maintain API compatibility
+        // Build core request data using safe local copies, defaulting to null for missing values
+        var cgiVal = function( required string key ) {
+            return ( localCGI.keyExists( arguments.key ) && len( localCGI[ arguments.key ] ) ) ? localCGI[ arguments.key ] : javacast(
+                "null",
+                ""
+            );
+        };
+
+        var truncatedForm = truncateFormFields( localForm );
+
         returnContent = {
-            "hostName" : ( len( CGI.HTTP_HOST ) ? CGI.HTTP_HOST : javacast( "null", "" ) ),
-            "url"      : ( len( CGI.SCRIPT_NAME ) ? CGI.SCRIPT_NAME : javacast( "null", "" ) ) & (
-                len( CGI.PATH_INFO ) ? CGI.PATH_INFO : javacast( "null", "" )
+            "hostName" : cgiVal( "HTTP_HOST" ),
+            "url"      : ( !isNull( cgiVal( "SCRIPT_NAME" ) ) ? cgiVal( "SCRIPT_NAME" ) : "" ) & (
+                !isNull( cgiVal( "PATH_INFO" ) ) ? cgiVal( "PATH_INFO" ) : ""
             ),
-            "httpMethod"  : ( len( CGI.REQUEST_METHOD ) ? CGI.REQUEST_METHOD : javacast( "null", "" ) ),
-            "iPAddress"   : ( len( CGI.REMOTE_ADDR ) ? CGI.REMOTE_ADDR : javacast( "null", "" ) ),
-            "queryString" : ( len( CGI.QUERY_STRING ) ? CGI.QUERY_STRING : javacast( "null", "" ) ),
+            "httpMethod"  : cgiVal( "REQUEST_METHOD" ),
+            "iPAddress"   : cgiVal( "REMOTE_ADDR" ),
+            "queryString" : cgiVal( "QUERY_STRING" ),
             "headers"     : ( httpRequest.keyExists( "headers" ) ? httpRequest.headers : javacast( "null", "" ) ),
             "data"        : localCGI,
-            "form"        : localForm,
+            "form"        : truncatedForm,
             "params"      : localUrl
         };
 
+        // Normalize url to null if empty
+        if ( !len( returnContent[ "url" ] ) ) {
+            returnContent[ "url" ] = javacast( "null", "" );
+        }
+
         // Only include raw request data for non-standard content types to avoid duplicating form data
         // Also enforces a max length to prevent oversized payloads
+        var contentType   = localCGI.keyExists( "CONTENT_TYPE" ) ? localCGI[ "CONTENT_TYPE" ] : "";
+        var requestMethod = localCGI.keyExists( "REQUEST_METHOD" ) ? localCGI[ "REQUEST_METHOD" ] : "";
         if (
-            len( CGI.CONTENT_TYPE ) && len( CGI.REQUEST_METHOD ) && CGI.CONTENT_TYPE != "text/html" && CGI.CONTENT_TYPE != "application/x-www-form-urlencoded" && CGI.REQUEST_METHOD != "GET"
+            len( contentType ) && len( requestMethod ) && contentType != com.raygun.environment.RaygunConfig::getContentTypeHtml() && contentType != com.raygun.environment.RaygunConfig::getContentTypeForm() && requestMethod != com.raygun.environment.RaygunConfig::getHttpMethodGet()
         ) {
             var maxLength = (
                 getSettings().keyExists( "rawDataMaxLength" ) ? getSettings().rawDataMaxLength : com.raygun.environment.RaygunConfig::getRawDataMaxLengthDefault()
@@ -82,6 +98,25 @@ component accessors="true" {
         }
 
         return returnContent;
+    }
+
+    /**
+     * Truncates form field values to the configured maximum length
+     * to prevent oversized payloads per the Raygun API spec.
+     */
+    private struct function truncateFormFields( required struct formData ) {
+        var maxLen = com.raygun.environment.RaygunConfig::getFormFieldMaxLength();
+        var result = {};
+
+        for ( var key in arguments.formData ) {
+            if ( isSimpleValue( arguments.formData[ key ] ) && len( arguments.formData[ key ] ) > maxLen ) {
+                result[ key ] = left( arguments.formData[ key ], maxLen );
+            } else {
+                result[ key ] = arguments.formData[ key ];
+            }
+        }
+
+        return result;
     }
 
 }

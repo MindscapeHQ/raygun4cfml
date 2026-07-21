@@ -3,7 +3,7 @@
     "profile":"development",
     "name":"boxlang-1",
     "app":{
-        "cfengine":"boxlang@1.0.0-snapshot"
+        "cfengine":"boxlang@1"
     },
     "web":{
         "http":{

@@ -1,0 +1,14 @@
+{
+    "trayEnable":false,
+    "profile":"development",
+    "name":"lucee-7-1",
+    "app":{
+        "cfengine":"lucee@7.1.0-BETA"
+    },
+    "web":{
+        "http":{
+            "port":"9201"
+        }
+    },
+    "openbrowser":false
+}

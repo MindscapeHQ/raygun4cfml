@@ -1,7 +1,7 @@
 {
     "name":"raygun4cfml",
-    "version":"2.1.0",
-    "location":"MindscapeHQ/raygun4cfml#2.1.0",
+    "version":"3.0.0",
+    "location":"MindscapeHQ/raygun4cfml#3.0.0",
     "author":"Kai Koenig <kai@ventego-creative.co.nz>",
     "homepage":"https://github.com/MindscapeHQ/raygun4cfml/",
     "documentation":"https://github.com/MindscapeHQ/raygun4cfml/blob/master/README.md",
@@ -13,7 +13,7 @@
     "slug":"raygun4cfml",
     "shortDescription":"Provides integration with the Raygun CrashReporting API",
     "description":"API provider to send error information to Raygun crash reporting for tracking and analysis.",
-    "instructions":"Install this module and follow the guidelines in README.me as well as in /samples.",
+    "instructions":"Install this module and follow the guidelines in README.md as well as in /samples.",
     "changelog":"https://github.com/MindscapeHQ/raygun4cfml/blob/master/CHANGELOG.md",
     "keywords":[
         "error",
@@ -49,6 +49,8 @@
         "testbox":"6"
     },
     "scripts":{
+        "test":"bash run-tests.sh server-lucee-6-1.json",
+        "test:all":"bash run-tests.sh",
         "format":"cfformat run src/**/*.cfc,tests/**/*.cfc,tests/**/*.cfm,samples/**/*.cfc,samples/**/*.cfm --overwrite",
         "format:watch":"cfformat watch src/**/*.cfc,tests/**/*.cfc,tests/**/*.cfm,samples/**/*.cfc,samples/**/*.cfm --overwrite",
         "format:check":"cfformat check src/**/*.cfc,tests/**/*.cfc,tests/**/*.cfm,samples/**/*.cfc,samples/**/*.cfm"

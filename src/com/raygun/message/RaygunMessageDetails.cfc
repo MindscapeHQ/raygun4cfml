@@ -32,7 +32,7 @@ component accessors="true" {
             !isNull( arguments.raygunRequestMessage ) && isInstanceOf(
                 arguments.raygunRequestMessage,
                 "RaygunRequestMessage"
-            ) ? arguments.raygunRequestMessage : new RaygunRequestMessage()
+            ) ? arguments.raygunRequestMessage : new RaygunRequestMessage( settings = getSettings() )
         );
         setRaygunClientMessage(
             !isNull( arguments.raygunClientMessage ) && isInstanceOf(
@@ -78,16 +78,20 @@ component accessors="true" {
             returnContent[ "version" ] = javacast( "null", "" );
         }
 
-        // Attempt to get the real IP address, fallback to SERVER_NAME if Java networking is unavailable
+        // Attempt to get the real IP address, with safe fallbacks for non-web contexts
         try {
             returnContent[ "machineName" ] = createObject( "java", "java.net.InetAddress" ).getLocalHost().getHostAddress();
         } catch ( any e ) {
-            returnContent[ "machineName" ] = CGI.SERVER_NAME;
+            try {
+                returnContent[ "machineName" ] = CGI.SERVER_NAME;
+            } catch ( any e2 ) {
+                returnContent[ "machineName" ] = "";
+            }
         }
 
         // Build the core components of the error report
         returnContent[ "error" ]       = raygunExceptionMessage.build( arguments.issueData );
-        returnContent[ "request" ]     = raygunRequestMessage.build( getSettings() );
+        returnContent[ "request" ]     = raygunRequestMessage.build();
         returnContent[ "client" ]      = raygunClientMessage.build();
         returnContent[ "environment" ] = raygunEnvironmentMessage.build();
         returnContent[ "response" ]    = raygunResponseMessage.build( arguments.issueData );
@@ -111,6 +115,15 @@ component accessors="true" {
             returnContent[ "user" ] = arguments.issueData.user.build();
         } else {
             returnContent[ "user" ] = javacast( "null", "" );
+        }
+
+        // Breadcrumbs provide a trail of events leading up to the error
+        if ( arguments.issueData.keyExists( "breadcrumbs" ) && isArray( arguments.issueData.breadcrumbs ) ) {
+            var builtCrumbs = [];
+            for ( var crumb in arguments.issueData.breadcrumbs ) {
+                builtCrumbs.append( crumb.build() );
+            }
+            returnContent[ "breadcrumbs" ] = builtCrumbs;
         }
 
         return returnContent;
