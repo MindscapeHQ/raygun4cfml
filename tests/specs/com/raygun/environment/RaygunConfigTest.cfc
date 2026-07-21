@@ -11,13 +11,11 @@ component extends="testbox.system.BaseSpec" {
             } );
 
             it( "should provide client version", function() {
-                expect( com.raygun.environment.RaygunConfig::getRaygunClientVersion() ).toBe( "3.0.0-rc.1" );
+                expect( com.raygun.environment.RaygunConfig::getRaygunClientVersion() ).toBe( "3.0.0" );
             } );
 
             it( "should provide client URL", function() {
-                expect( com.raygun.environment.RaygunConfig::getRaygunClientUrl() ).toBe(
-                    "https://github.com/MindscapeHQ/raygun4cfml"
-                );
+                expect( com.raygun.environment.RaygunConfig::getRaygunClientUrl() ).toBe( "https://github.com/MindscapeHQ/raygun4cfml" );
             } );
 
             it( "should provide default status code", function() {
@@ -25,9 +23,7 @@ component extends="testbox.system.BaseSpec" {
             } );
 
             it( "should provide API endpoint", function() {
-                expect( com.raygun.environment.RaygunConfig::getApiEndpoint() ).toBe(
-                    "https://api.raygun.com/entries"
-                );
+                expect( com.raygun.environment.RaygunConfig::getApiEndpoint() ).toBe( "https://api.raygun.com/entries" );
             } );
 
             it( "should provide log file name", function() {
@@ -39,9 +35,7 @@ component extends="testbox.system.BaseSpec" {
             } );
 
             it( "should provide form content type", function() {
-                expect( com.raygun.environment.RaygunConfig::getContentTypeForm() ).toBe(
-                    "application/x-www-form-urlencoded"
-                );
+                expect( com.raygun.environment.RaygunConfig::getContentTypeForm() ).toBe( "application/x-www-form-urlencoded" );
             } );
 
             it( "should provide HTTP GET method", function() {

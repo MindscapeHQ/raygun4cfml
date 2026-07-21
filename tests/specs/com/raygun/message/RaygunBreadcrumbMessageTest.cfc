@@ -2,7 +2,6 @@ component extends="testbox.system.BaseSpec" {
 
     function run() {
         describe( "RaygunBreadcrumbMessage", function() {
-
             it( "should initialize with required message", function() {
                 var crumb = new com.raygun.message.RaygunBreadcrumbMessage( message = "User clicked button" );
                 expect( crumb.getMessage() ).toBe( "User clicked button" );
@@ -45,34 +44,24 @@ component extends="testbox.system.BaseSpec" {
             } );
 
             it( "should validate level and default invalid levels to info", function() {
-                var crumb = new com.raygun.message.RaygunBreadcrumbMessage(
-                    message = "test",
-                    level   = "critical"
-                );
+                var crumb = new com.raygun.message.RaygunBreadcrumbMessage( message = "test", level = "critical" );
                 expect( crumb.getLevel() ).toBe( "info" );
             } );
 
             it( "should accept all valid levels", function() {
                 var levels = [ "debug", "info", "warning", "error" ];
                 for ( var lvl in levels ) {
-                    var crumb = new com.raygun.message.RaygunBreadcrumbMessage(
-                        message = "test",
-                        level   = lvl
-                    );
+                    var crumb = new com.raygun.message.RaygunBreadcrumbMessage( message = "test", level = lvl );
                     expect( crumb.getLevel() ).toBe( lvl );
                 }
             } );
 
             it( "should handle case-insensitive level validation", function() {
-                var crumb = new com.raygun.message.RaygunBreadcrumbMessage(
-                    message = "test",
-                    level   = "WARNING"
-                );
+                var crumb = new com.raygun.message.RaygunBreadcrumbMessage( message = "test", level = "WARNING" );
                 expect( crumb.getLevel() ).toBe( "warning" );
             } );
 
             describe( "build()", function() {
-
                 it( "should return a struct with required fields", function() {
                     var crumb  = new com.raygun.message.RaygunBreadcrumbMessage( message = "test" );
                     var result = crumb.build();
@@ -88,10 +77,7 @@ component extends="testbox.system.BaseSpec" {
                 } );
 
                 it( "should include lineNumber when set", function() {
-                    var crumb  = new com.raygun.message.RaygunBreadcrumbMessage(
-                        message    = "test",
-                        lineNumber = 99
-                    );
+                    var crumb  = new com.raygun.message.RaygunBreadcrumbMessage( message = "test", lineNumber = 99 );
                     var result = crumb.build();
                     expect( result ).toHaveKey( "lineNumber" );
                     expect( result.lineNumber ).toBe( 99 );
@@ -104,7 +90,7 @@ component extends="testbox.system.BaseSpec" {
                 } );
 
                 it( "should include customData when set", function() {
-                    var crumb  = new com.raygun.message.RaygunBreadcrumbMessage(
+                    var crumb = new com.raygun.message.RaygunBreadcrumbMessage(
                         message    = "test",
                         customData = { "key" : "value" }
                     );
@@ -118,9 +104,7 @@ component extends="testbox.system.BaseSpec" {
                     var result = crumb.build();
                     expect( structKeyExists( result, "customData" ) ).toBeFalse();
                 } );
-
             } );
-
         } );
     }
 

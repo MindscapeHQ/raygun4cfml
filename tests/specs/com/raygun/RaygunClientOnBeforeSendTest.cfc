@@ -2,7 +2,6 @@ component extends="testbox.system.BaseSpec" {
 
     function run() {
         describe( "RaygunClient onBeforeSend hook", function() {
-
             it( "should accept onBeforeSend closure in constructor", function() {
                 var cb = function( payload ) {
                     return payload;
@@ -23,7 +22,7 @@ component extends="testbox.system.BaseSpec" {
 
             it( "should allow setting onBeforeSend via setter", function() {
                 var rgClient = new com.raygun.RaygunClient( apiKey = "test-key" );
-                var cb = function( payload ) {
+                var cb       = function( payload ) {
                     return payload;
                 };
                 rgClient.setOnBeforeSend( cb );
@@ -32,7 +31,7 @@ component extends="testbox.system.BaseSpec" {
 
             it( "should pass the payload struct to the callback", function() {
                 var capturedPayload = {};
-                var cb = function( payload ) {
+                var cb              = function( payload ) {
                     capturedPayload = payload;
                     return false;
                 };
@@ -42,12 +41,14 @@ component extends="testbox.system.BaseSpec" {
                     onBeforeSend = cb
                 );
 
-                rgClient.send( issueData = {
-                    message    : "Test error",
-                    type       : "Application",
-                    stacktrace : "",
-                    tagcontext : []
-                } );
+                rgClient.send(
+                    issueData = {
+                        message    : "Test error",
+                        type       : "Application",
+                        stacktrace : "",
+                        tagcontext : []
+                    }
+                );
 
                 expect( capturedPayload ).toBeStruct();
                 expect( capturedPayload ).toHaveKey( "occurredOn" );
@@ -66,12 +67,14 @@ component extends="testbox.system.BaseSpec" {
                     onBeforeSend = cb
                 );
 
-                var result = rgClient.send( issueData = {
-                    message    : "Test error",
-                    type       : "Application",
-                    stacktrace : "",
-                    tagcontext : []
-                } );
+                var result = rgClient.send(
+                    issueData = {
+                        message    : "Test error",
+                        type       : "Application",
+                        stacktrace : "",
+                        tagcontext : []
+                    }
+                );
 
                 expect( result ).toBe( "" );
             } );
@@ -122,7 +125,6 @@ component extends="testbox.system.BaseSpec" {
                     );
                 } ).notToThrow();
             } );
-
         } );
     }
 

@@ -2,7 +2,6 @@ component extends="testbox.system.BaseSpec" {
 
     function run() {
         describe( "RaygunRequestMessage form field truncation", function() {
-
             it( "should have a form field max length constant of 256", function() {
                 expect( com.raygun.environment.RaygunConfig::getFormFieldMaxLength() ).toBe( 256 );
             } );
@@ -14,7 +13,6 @@ component extends="testbox.system.BaseSpec" {
                 expect( result ).toHaveKey( "form" );
                 expect( result.form ).toBeStruct();
             } );
-
         } );
     }
 

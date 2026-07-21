@@ -6,7 +6,6 @@ component extends="testbox.system.BaseSpec" {
 
     function run() {
         describe( "RaygunEnvironmentMessage", function() {
-
             it( "should initialize without error", function() {
                 expect( variables.envMessage ).toBeInstanceOf( "com.raygun.message.RaygunEnvironmentMessage" );
             } );
@@ -69,7 +68,6 @@ component extends="testbox.system.BaseSpec" {
                     variables.envMessage.build();
                 } ).notToThrow();
             } );
-
         } );
     }
 

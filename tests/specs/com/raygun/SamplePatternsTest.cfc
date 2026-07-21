@@ -7,10 +7,9 @@ component extends="testbox.system.BaseSpec" {
 
     function run() {
         describe( "Sample pattern: try-catch (samples/try-catch)", function() {
-
             it( "should capture a division-by-zero error with correct payload structure", function() {
                 var capturedPayload = {};
-                var cb = function( payload ) {
+                var cb              = function( payload ) {
                     capturedPayload = payload;
                     return false;
                 };
@@ -41,14 +40,12 @@ component extends="testbox.system.BaseSpec" {
                 expect( capturedPayload.details.error ).toHaveKey( "message" );
                 expect( capturedPayload.details.error ).toHaveKey( "className" );
             } );
-
         } );
 
         describe( "Sample pattern: app-cfc-no-filter (samples/app-cfc-no-filter)", function() {
-
             it( "should include custom user data in the payload", function() {
                 var capturedPayload = {};
-                var cb = function( payload ) {
+                var cb              = function( payload ) {
                     capturedPayload = payload;
                     return false;
                 };
@@ -72,7 +69,7 @@ component extends="testbox.system.BaseSpec" {
                 );
 
                 raygun.send(
-                    issueData      = {
+                    issueData = {
                         message    : "variable [TEST5678] doesn't exist",
                         type       : "Expression",
                         stacktrace : "",
@@ -90,7 +87,7 @@ component extends="testbox.system.BaseSpec" {
 
             it( "should include tags in the payload", function() {
                 var capturedPayload = {};
-                var cb = function( payload ) {
+                var cb              = function( payload ) {
                     capturedPayload = payload;
                     return false;
                 };
@@ -119,7 +116,7 @@ component extends="testbox.system.BaseSpec" {
 
             it( "should include user identification in the payload", function() {
                 var capturedPayload = {};
-                var cb = function( payload ) {
+                var cb              = function( payload ) {
                     capturedPayload = payload;
                     return false;
                 };
@@ -154,21 +151,25 @@ component extends="testbox.system.BaseSpec" {
                 expect( capturedPayload.details.user.fullName ).toBe( "Tester" );
                 expect( capturedPayload.details.user.uuid ).toBe( "47e432fff11" );
             } );
-
         } );
 
         describe( "Sample pattern: app-cfc-content-filter (samples/app-cfc-content-filter)", function() {
-
             it( "should filter sensitive fields from the payload", function() {
                 var capturedPayload = {};
-                var cb = function( payload ) {
+                var cb              = function( payload ) {
                     capturedPayload = payload;
                     return false;
                 };
 
                 var filterRaw = [
-                    { filter : "password", replacement : "__password__" },
-                    { filter : "creditcard", replacement : "__ccnumber__" }
+                    {
+                        filter      : "password",
+                        replacement : "__password__"
+                    },
+                    {
+                        filter      : "creditcard",
+                        replacement : "__ccnumber__"
+                    }
                 ];
                 var contentFilter = new com.raygun.filter.RaygunContentFilter( filterRaw );
 
@@ -203,14 +204,20 @@ component extends="testbox.system.BaseSpec" {
 
             it( "should filter with wildcard patterns", function() {
                 var capturedPayload = {};
-                var cb = function( payload ) {
+                var cb              = function( payload ) {
                     capturedPayload = payload;
                     return false;
                 };
 
                 var contentFilter = new com.raygun.filter.RaygunContentFilter( [
-                    { filter : "pass*", replacement : "[FILTERED]" },
-                    { filter : "*token", replacement : "[FILTERED]" }
+                    {
+                        filter      : "pass*",
+                        replacement : "[FILTERED]"
+                    },
+                    {
+                        filter      : "*token",
+                        replacement : "[FILTERED]"
+                    }
                 ] );
 
                 var customUserData = new com.raygun.user.RaygunUserCustomData( {
@@ -243,14 +250,12 @@ component extends="testbox.system.BaseSpec" {
                 expect( capturedPayload.details.userCustomData.refreshtoken ).toBe( "[FILTERED]" );
                 expect( capturedPayload.details.userCustomData.username ).toBe( "visible" );
             } );
-
         } );
 
         describe( "Sample pattern: app-cfc-settings (samples/app-cfc-settings)", function() {
-
             it( "should use custom settings for status code", function() {
                 var capturedPayload = {};
-                var cb = function( payload ) {
+                var cb              = function( payload ) {
                     capturedPayload = payload;
                     return false;
                 };
@@ -295,7 +300,7 @@ component extends="testbox.system.BaseSpec" {
 
             it( "should auto-set 404 status for MissingInclude exceptions", function() {
                 var capturedPayload = {};
-                var cb = function( payload ) {
+                var cb              = function( payload ) {
                     capturedPayload = payload;
                     return false;
                 };
@@ -316,14 +321,12 @@ component extends="testbox.system.BaseSpec" {
 
                 expect( capturedPayload.details.response.statusCode ).toBe( 404 );
             } );
-
         } );
 
         describe( "Sample pattern: breadcrumbs (README example)", function() {
-
             it( "should include breadcrumbs in the payload", function() {
                 var capturedPayload = {};
-                var cb = function( payload ) {
+                var cb              = function( payload ) {
                     capturedPayload = payload;
                     return false;
                 };
@@ -343,7 +346,10 @@ component extends="testbox.system.BaseSpec" {
                     lineNumber = 42,
                     customData = { "sql" : "SELECT * FROM users WHERE id = ?" }
                 );
-                raygun.recordBreadcrumb( message = "Page rendered", level = "info" );
+                raygun.recordBreadcrumb(
+                    message = "Page rendered",
+                    level   = "info"
+                );
 
                 raygun.send(
                     issueData = {
@@ -375,14 +381,12 @@ component extends="testbox.system.BaseSpec" {
                 var crumb3 = capturedPayload.details.breadcrumbs[ 3 ];
                 expect( crumb3.message ).toBe( "Page rendered" );
             } );
-
         } );
 
         describe( "Sample pattern: ignore exceptions (README example)", function() {
-
             it( "should skip ignored exception types", function() {
                 var callbackInvoked = false;
-                var cb = function( payload ) {
+                var cb              = function( payload ) {
                     callbackInvoked = true;
                     return false;
                 };
@@ -408,7 +412,7 @@ component extends="testbox.system.BaseSpec" {
 
             it( "should send non-ignored exception types normally", function() {
                 var callbackInvoked = false;
-                var cb = function( payload ) {
+                var cb              = function( payload ) {
                     callbackInvoked = true;
                     return false;
                 };
@@ -430,14 +434,12 @@ component extends="testbox.system.BaseSpec" {
 
                 expect( callbackInvoked ).toBeTrue();
             } );
-
         } );
 
         describe( "Sample pattern: full onError (README full example)", function() {
-
             it( "should produce a complete payload with all features combined", function() {
                 var capturedPayload = {};
-                var cb = function( payload ) {
+                var cb              = function( payload ) {
                     capturedPayload = payload;
                     return false;
                 };
@@ -454,8 +456,14 @@ component extends="testbox.system.BaseSpec" {
                     .setFullName( "Jane Smith" );
 
                 var contentFilter = new com.raygun.filter.RaygunContentFilter( [
-                    { filter : "pass*", replacement : "[FILTERED]" },
-                    { filter : "creditCard", replacement : "[FILTERED]" }
+                    {
+                        filter      : "pass*",
+                        replacement : "[FILTERED]"
+                    },
+                    {
+                        filter      : "creditCard",
+                        replacement : "[FILTERED]"
+                    }
                 ] );
 
                 var settings = new com.raygun.environment.RaygunSettings(
@@ -473,7 +481,10 @@ component extends="testbox.system.BaseSpec" {
                     onBeforeSend     = cb
                 );
 
-                raygun.recordBreadcrumb( message = "Error handler triggered", level = "error" );
+                raygun.recordBreadcrumb(
+                    message = "Error handler triggered",
+                    level   = "error"
+                );
 
                 raygun.send(
                     issueData = {
@@ -519,14 +530,12 @@ component extends="testbox.system.BaseSpec" {
                 expect( details ).toHaveKey( "environment" );
                 expect( details ).toHaveKey( "request" );
             } );
-
         } );
 
         describe( "Sample pattern: grouping key", function() {
-
             it( "should include a custom grouping key in the payload", function() {
                 var capturedPayload = {};
-                var cb = function( payload ) {
+                var cb              = function( payload ) {
                     capturedPayload = payload;
                     return false;
                 };
@@ -549,7 +558,6 @@ component extends="testbox.system.BaseSpec" {
                 expect( capturedPayload.details ).toHaveKey( "groupingKey" );
                 expect( capturedPayload.details.groupingKey ).toBe( "my-custom-grouping-key" );
             } );
-
         } );
     }
 

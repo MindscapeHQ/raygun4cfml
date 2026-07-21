@@ -2,7 +2,6 @@ component extends="testbox.system.BaseSpec" {
 
     function run() {
         describe( "RaygunMessage", function() {
-
             it( "should initialize without error", function() {
                 var msg = new com.raygun.message.RaygunMessage();
                 expect( msg ).toBeInstanceOf( "com.raygun.message.RaygunMessage" );
@@ -35,9 +34,7 @@ component extends="testbox.system.BaseSpec" {
             } );
 
             it( "should propagate settings to RaygunMessageDetails", function() {
-                var msg    = new com.raygun.message.RaygunMessage(
-                    settings = { "statusCode" : 418 }
-                );
+                var msg    = new com.raygun.message.RaygunMessage( settings = { "statusCode" : 418 } );
                 var result = msg.build( {
                     message    : "Test error",
                     type       : "Application",
@@ -63,7 +60,6 @@ component extends="testbox.system.BaseSpec" {
                 expect( result.details ).toHaveKey( "environment" );
                 expect( result.details ).toHaveKey( "response" );
             } );
-
         } );
     }
 

@@ -2,10 +2,12 @@ component extends="testbox.system.BaseSpec" {
 
     function run() {
         describe( "RaygunContentFilter wildcard filtering", function() {
-
             it( "should filter keys matching a prefix wildcard pattern", function() {
                 var filter = new com.raygun.filter.RaygunContentFilter( [
-                    { filter : "pass*", replacement : "[FILTERED]" }
+                    {
+                        filter      : "pass*",
+                        replacement : "[FILTERED]"
+                    }
                 ] );
 
                 var messageData = {
@@ -25,7 +27,10 @@ component extends="testbox.system.BaseSpec" {
 
             it( "should filter keys matching a suffix wildcard pattern", function() {
                 var filter = new com.raygun.filter.RaygunContentFilter( [
-                    { filter : "*token", replacement : "[FILTERED]" }
+                    {
+                        filter      : "*token",
+                        replacement : "[FILTERED]"
+                    }
                 ] );
 
                 var messageData = {
@@ -43,15 +48,18 @@ component extends="testbox.system.BaseSpec" {
 
             it( "should filter keys matching a contains wildcard pattern", function() {
                 var filter = new com.raygun.filter.RaygunContentFilter( [
-                    { filter : "*secret*", replacement : "[FILTERED]" }
+                    {
+                        filter      : "*secret*",
+                        replacement : "[FILTERED]"
+                    }
                 ] );
 
                 var messageData = {
-                    mySecretKey   : "hidden",
-                    secretValue   : "hidden",
-                    topSecret123  : "hidden",
-                    publicData    : "visible",
-                    details       : { request : {} }
+                    mySecretKey  : "hidden",
+                    secretValue  : "hidden",
+                    topSecret123 : "hidden",
+                    publicData   : "visible",
+                    details      : { request : {} }
                 };
 
                 var result = filter.apply( messageData );
@@ -63,11 +71,18 @@ component extends="testbox.system.BaseSpec" {
 
             it( "should filter nested struct keys with wildcards", function() {
                 var filter = new com.raygun.filter.RaygunContentFilter( [
-                    { filter : "api*", replacement : "[FILTERED]" }
+                    {
+                        filter      : "api*",
+                        replacement : "[FILTERED]"
+                    }
                 ] );
 
                 var messageData = {
-                    nested  : { apiKey : "hidden", apiSecret : "hidden", name : "visible" },
+                    nested : {
+                        apiKey    : "hidden",
+                        apiSecret : "hidden",
+                        name      : "visible"
+                    },
                     details : { request : {} }
                 };
 
@@ -79,7 +94,10 @@ component extends="testbox.system.BaseSpec" {
 
             it( "should match wildcards case-insensitively", function() {
                 var filter = new com.raygun.filter.RaygunContentFilter( [
-                    { filter : "credit*", replacement : "[FILTERED]" }
+                    {
+                        filter      : "credit*",
+                        replacement : "[FILTERED]"
+                    }
                 ] );
 
                 var messageData = {
@@ -97,7 +115,10 @@ component extends="testbox.system.BaseSpec" {
 
             it( "should not filter complex values with wildcards", function() {
                 var filter = new com.raygun.filter.RaygunContentFilter( [
-                    { filter : "pass*", replacement : "[FILTERED]" }
+                    {
+                        filter      : "pass*",
+                        replacement : "[FILTERED]"
+                    }
                 ] );
 
                 var complexValue = { nested : "data" };
@@ -112,7 +133,10 @@ component extends="testbox.system.BaseSpec" {
 
             it( "should filter wildcard patterns in rawData JSON", function() {
                 var filter = new com.raygun.filter.RaygunContentFilter( [
-                    { filter : "api*", replacement : "[FILTERED]" }
+                    {
+                        filter      : "api*",
+                        replacement : "[FILTERED]"
+                    }
                 ] );
 
                 var jsonData = {
@@ -121,9 +145,7 @@ component extends="testbox.system.BaseSpec" {
                     username  : "test"
                 };
 
-                var messageData = {
-                    details : { request : { rawData : serializeJSON( jsonData ) } }
-                };
+                var messageData = { details : { request : { rawData : serializeJSON( jsonData ) } } };
 
                 var result        = filter.apply( messageData );
                 var processedJson = deserializeJSON( result.details.request.rawData );
@@ -134,8 +156,14 @@ component extends="testbox.system.BaseSpec" {
 
             it( "should still support exact match filters alongside wildcards", function() {
                 var filter = new com.raygun.filter.RaygunContentFilter( [
-                    { filter : "password", replacement : "[exact]" },
-                    { filter : "api*", replacement : "[wildcard]" }
+                    {
+                        filter      : "password",
+                        replacement : "[exact]"
+                    },
+                    {
+                        filter      : "api*",
+                        replacement : "[wildcard]"
+                    }
                 ] );
 
                 var messageData = {
@@ -148,7 +176,6 @@ component extends="testbox.system.BaseSpec" {
                 expect( result.password ).toBe( "[exact]" );
                 expect( result.apiKey ).toBe( "[wildcard]" );
             } );
-
         } );
     }
 

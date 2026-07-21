@@ -2,14 +2,13 @@ component extends="testbox.system.BaseSpec" {
 
     function run() {
         describe( "RaygunMessageDetails", function() {
-
             it( "should initialize without error", function() {
                 var details = new com.raygun.message.RaygunMessageDetails();
                 expect( details ).toBeInstanceOf( "com.raygun.message.RaygunMessageDetails" );
             } );
 
             it( "should build a complete payload struct from minimal issue data", function() {
-                var details = new com.raygun.message.RaygunMessageDetails();
+                var details   = new com.raygun.message.RaygunMessageDetails();
                 var issueData = {
                     message    : "Test error",
                     type       : "Application",
@@ -73,7 +72,10 @@ component extends="testbox.system.BaseSpec" {
 
             it( "should propagate settings to sub-components", function() {
                 var details = new com.raygun.message.RaygunMessageDetails(
-                    settings = { "rawDataMaxLength" : 200, "statusCode" : 503 }
+                    settings = {
+                        "rawDataMaxLength" : 200,
+                        "statusCode"       : 503
+                    }
                 );
 
                 // Response should use the custom status code
@@ -99,7 +101,6 @@ component extends="testbox.system.BaseSpec" {
                     } );
                 } ).notToThrow();
             } );
-
         } );
     }
 

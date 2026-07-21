@@ -49,7 +49,7 @@ Replace the current version in all three locations:
 Change the `(Unreleased)` marker to the version and date:
 
 ```
-3.0.0 (April 15, 2026)
+3.0.0 (July 21, 2026)
 ```
 
 ### 3. Run the full test matrix
@@ -62,28 +62,42 @@ All 20 engines must pass. Do not proceed if any engine fails.
 
 ### 4. Commit the release
 
+Review and stage every intended release-preparation change, including formatting corrections:
+
 ```bash
-git add src/com/raygun/environment/RaygunConfig.cfc box.json CHANGELOG.md tests/specs/com/raygun/environment/RaygunConfigTest.cfc
+git status --short
+git diff
+git add -u
+git diff --cached --check
+git diff --cached --stat
 git commit -m "chore: release x.y.z"
 ```
 
-### 5. Tag the release
+### 5. Merge the release preparation to `develop`
+
+Push the release branch, open a pull request targeting `develop`, wait for all required checks, and merge it.
+
+### 6. Promote `develop` to `master`
+
+Open a release pull request from `develop` to `master`. Wait for all required checks and merge it. The resulting `master` commit is the source of the public release.
+
+### 7. Tag the release
+
+Fetch the merged `master` branch, verify its version strings, and tag that exact commit:
 
 ```bash
+git fetch origin
+git switch master
+git pull --ff-only origin master
 git tag -a x.y.z -m "Release x.y.z"
+git push origin x.y.z
 ```
 
-### 6. Push to remote
+### 8. Verify CI
 
-```bash
-git push origin develop --tags
-```
+Confirm that the `master` release PR passed all 20 engine checks and that the tag points to its merged commit before proceeding.
 
-### 7. Verify CI
-
-Wait for the GitHub Actions CI to pass on all 20 engines before proceeding.
-
-### 8. Publish to ForgeBox
+### 9. Publish to ForgeBox
 
 ```bash
 # Log in if not already authenticated
@@ -95,7 +109,7 @@ box publish
 
 Verify the package at https://www.forgebox.io/view/raygun4cfml
 
-### 9. Create a GitHub Release (optional)
+### 10. Create a GitHub Release
 
 Go to https://github.com/MindscapeHQ/raygun4cfml/releases and create a release from the tag. Copy the relevant section from `CHANGELOG.md` as the release notes.
 
@@ -103,10 +117,19 @@ Go to https://github.com/MindscapeHQ/raygun4cfml/releases and create a release f
 
 After a final release:
 
-1. Bump version to the next snapshot (e.g., `3.1.0-snapshot`) in `RaygunConfig.cfc`, `box.json`, and the test
-2. Add a new `(Unreleased)` section to `CHANGELOG.md`
-3. Commit: `git commit -m "chore: bump version to x.y.z-snapshot"`
-4. Push: `git push origin develop`
+1. Create a post-release branch from the latest `origin/develop`
+2. Bump version to the next snapshot (e.g., `3.1.0-snapshot`) in `RaygunConfig.cfc`, `box.json`, and the test
+3. Add a new `(Unreleased)` section to `CHANGELOG.md`
+4. Commit: `git commit -m "chore: bump version to x.y.z-snapshot"`
+5. Push the branch and merge a pull request targeting `develop`
+
+```bash
+git fetch origin
+git switch -c chore/next-snapshot origin/develop
+# Update the version locations and CHANGELOG.md, then validate the changes.
+git commit -am "chore: bump version to x.y.z-snapshot"
+git push -u origin chore/next-snapshot
+```
 
 ## Promoting RC to Final
 
