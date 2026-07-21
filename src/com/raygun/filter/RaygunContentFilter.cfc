@@ -11,7 +11,7 @@ component accessors="true" {
     property name="filter" type="array";
 
     public RaygunContentFilter function init( array filter = [] ) {
-        setFilter( filter );
+        variables.filter = arguments.filter;
         return this;
     }
 
