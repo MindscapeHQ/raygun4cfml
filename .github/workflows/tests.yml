@@ -10,10 +10,15 @@ jobs:
   tests:
     name: ${{ matrix.engine }}
     runs-on: ubuntu-latest
+    env:
+      BOX_CONFIG_MODULESEXCLUDE: '["commandbox-cfconfig"]'
     strategy:
       fail-fast: false
       matrix:
         include:
+          - engine: Lucee 8.0 Alpha
+            config: server-lucee-8-0.json
+            port: 9202
           - engine: Lucee 7.1
             config: server-lucee-7-1.json
             port: 9201
@@ -35,6 +40,30 @@ jobs:
           - engine: Lucee 5.3
             config: server-lucee-5-3.json
             port: 9196
+          - engine: Lucee Light 8.0 Alpha
+            config: server-lucee-light-8-0.json
+            port: 9210
+          - engine: Lucee Light 7.1
+            config: server-lucee-light-7-1.json
+            port: 9209
+          - engine: Lucee Light 7.0
+            config: server-lucee-light-7-0.json
+            port: 9208
+          - engine: Lucee Light 6.2
+            config: server-lucee-light-6-2.json
+            port: 9207
+          - engine: Lucee Light 6.1
+            config: server-lucee-light-6-1.json
+            port: 9206
+          - engine: Lucee Light 6.0
+            config: server-lucee-light-6-0.json
+            port: 9205
+          - engine: Lucee Light 5.4
+            config: server-lucee-light-5-4.json
+            port: 9204
+          - engine: Lucee Light 5.3
+            config: server-lucee-light-5-3.json
+            port: 9203
           - engine: Adobe CF 2025
             config: server-adobe-2025.json
             port: 9198

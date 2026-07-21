@@ -11,7 +11,7 @@ Before starting the release process:
 - [ ] `README.md` reflects the current API and features
 - [ ] Samples in `samples/` are updated for any new features
 - [ ] `box run-script format:check` passes with no issues
-- [ ] All tests pass on all 11 engines: `./run-tests.sh`
+- [ ] All tests pass on all 20 engines: `./run-tests.sh`
 
 ## Version Locations
 
@@ -58,7 +58,7 @@ Change the `(Unreleased)` marker to the version and date:
 ./run-tests.sh
 ```
 
-All 11 engines must pass. Do not proceed if any engine fails.
+All 20 engines must pass. Do not proceed if any engine fails.
 
 ### 4. Commit the release
 
@@ -81,7 +81,7 @@ git push origin develop --tags
 
 ### 7. Verify CI
 
-Wait for the GitHub Actions CI to pass on all 11 engines before proceeding.
+Wait for the GitHub Actions CI to pass on all 20 engines before proceeding.
 
 ### 8. Publish to ForgeBox
 

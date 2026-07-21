@@ -13,7 +13,7 @@ CFML client library for [Raygun Crash Reporting](https://raygun.com).
 
 ## Active Development
 
-3.0.0 adds breadcrumbs, onBeforeSend hooks, ignore exceptions, wildcard content filtering, payload size enforcement, configurable API endpoint/timeout, automatic retry, and additional environment fields — plus numerous bug fixes and 160 test specs across 11 engines.
+3.0.0 adds breadcrumbs, onBeforeSend hooks, ignore exceptions, wildcard content filtering, payload size enforcement, configurable API endpoint/timeout, automatic retry, and additional environment fields — plus numerous bug fixes and 174 test specs across 20 engines.
 
 Please be aware that no testing and work has *yet* gone into framework-specific crash reports, e.g. a deeper integration with Coldbox HMVC, Fusebox, CF on Wheels etc. This will be added over time in future releases.
 
@@ -520,7 +520,7 @@ box run-script format:check    # check formatting without modifying files
 
 ```bash
 ./run-tests.sh server-lucee-6-1.json    # single engine
-./run-tests.sh                           # all 11 engines sequentially
+./run-tests.sh                           # all 20 engines sequentially
 box run-script test                      # shortcut: Lucee 6.1
 box run-script test:all                  # shortcut: all engines
 ```
@@ -529,6 +529,7 @@ box run-script test:all                  # shortcut: all engines
 
 | Server Config | Engine | Port |
 |---|---|---|
+| `server-lucee-8-0.json` | Lucee 8.0 Alpha | 9202 |
 | `server-lucee-5-3.json` | Lucee 5.3 | 9196 |
 | `server-lucee-5-4.json` | Lucee 5.4 | 9191 |
 | `server-lucee-6-0.json` | Lucee 6.0 | 9194 |
@@ -536,6 +537,14 @@ box run-script test:all                  # shortcut: all engines
 | `server-lucee-6-2.json` | Lucee 6.2 | 9199 |
 | `server-lucee-7-0.json` | Lucee 7.0 | 9200 |
 | `server-lucee-7-1.json` | Lucee 7.1 | 9201 |
+| `server-lucee-light-5-3.json` | Lucee Light 5.3 | 9203 |
+| `server-lucee-light-5-4.json` | Lucee Light 5.4 | 9204 |
+| `server-lucee-light-6-0.json` | Lucee Light 6.0 | 9205 |
+| `server-lucee-light-6-1.json` | Lucee Light 6.1 | 9206 |
+| `server-lucee-light-6-2.json` | Lucee Light 6.2 | 9207 |
+| `server-lucee-light-7-0.json` | Lucee Light 7.0 | 9208 |
+| `server-lucee-light-7-1.json` | Lucee Light 7.1 | 9209 |
+| `server-lucee-light-8-0.json` | Lucee Light 8.0 Alpha | 9210 |
 | `server-adobe-2021.json` | Adobe ColdFusion 2021 | 9192 |
 | `server-adobe-2023.json` | Adobe ColdFusion 2023 | 9193 |
 | `server-adobe-2025.json` | Adobe ColdFusion 2025 | 9198 |
