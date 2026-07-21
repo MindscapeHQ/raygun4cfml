@@ -1,12 +1,39 @@
 History and Plan
 ================
 
-2.1+ Plan
+3.0.0 (July 21, 2026)
 
-- Making Raygun4CFML a Coldbox module OR building a Coldbox module wrapper using Raygun4CFML as a dependency.
-- Add breadcrumbs (#46)
-- Integration and adaptation to Coldbox error reporting, adding CB HMVC app/API samples
-- Cleanup `legacy` directory
+New Features:
+
+- **Breadcrumbs**: Record a trail of events leading up to an error via `recordBreadcrumb()` and `clearBreadcrumbs()`. Breadcrumbs are automatically included in subsequent `send()`/`sendAsync()` calls with timestamp, level, type, category, message, className, methodName, lineNumber, and customData fields (#46).
+- **onBeforeSend hook**: Register a callback via constructor or `setOnBeforeSend()` to inspect, mutate, or cancel payloads before sending. Return `false` to cancel, return a modified struct to mutate, or throw to proceed with the original payload.
+- **Ignore exceptions list**: Skip specific exception types via `ignoreExceptions` constructor argument or `setIgnoreExceptions()`. Case-insensitive matching (e.g. `["MissingInclude", "AbortException"]`).
+- **Wildcard content filter keys**: `RaygunContentFilter` now supports glob-style `*` wildcards in filter patterns (e.g. `"pass*"` matches `password`, `passphrase`, `passCode`). Exact-match filters continue to work as before.
+- **Payload size enforcement**: Payloads exceeding 128KB are automatically reduced by progressively stripping expendable fields (rawData, userCustomData, CGI data, headers, form). Form field values are truncated to 256 characters.
+- **Configurable API endpoint**: Set a custom Raygun API endpoint via `RaygunSettings.apiEndpoint` (default: `https://api.raygun.com/entries`).
+- **HTTP timeout**: All API requests now have a configurable timeout via `RaygunSettings.httpTimeout` (default: 10 seconds).
+- **Automatic retry**: Failed HTTP requests are retried with configurable `RaygunSettings.maxRetries` (default: 2) and `RaygunSettings.retryDelay` (default: 1 second). Set `maxRetries=0` to disable.
+- **Additional environment fields**: `processorCount`, `locale`, and `utcOffset` are now captured in every error report.
+- **Sample API key configuration**: Samples now load the Raygun API key automatically from `samples/.env.json` (gitignored) or the `RAYGUN_API_KEY` environment variable — no more manual copy-paste into each file.
+
+Bug Fixes:
+
+- Fixed settings not propagating to RaygunRequestMessage and RaygunResponseMessage
+- Fixed empty stackTrace when Java stack trace is empty but CFML tag context is available
+- Fixed case-sensitive exception type checks (e.g. "database" vs "Database")
+- Fixed unsafe CGI scope access in RaygunRequestMessage and RaygunMessageDetails
+- Fixed sync/async HTTP error handling inconsistency in RaygunClient
+- Fixed thread name typo in async sending
+- Fixed typed property defaults (`default=""` on non-string typed properties)
+- Added `isNull()` guards on `getSettings()`/`getContentFilter()` to prevent NPE on strict engines
+- Fixed `RaygunContentFilter` initialization on Adobe ColdFusion 2025 Update 11, where the engine's built-in `setFilter()` function collided with the generated property setter
+
+Code Quality:
+
+- Centralized all magic strings and constants in `RaygunConfig` (API endpoint, log file name, content types, HTTP methods, size limits, timeout/retry defaults)
+- Replaced `isClosure()` with `isCustomFunction()` for cross-engine compatibility
+- 174 test specs (up from 70), covering all components
+- Expanded the test matrix to 20 engines, including Lucee 8 Alpha and matching Lucee Light configurations for every supported Lucee line
 
 2.1.0 (Jan 21 2025)
 

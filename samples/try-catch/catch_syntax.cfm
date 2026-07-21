@@ -1,6 +1,6 @@
 <cfscript>
-    // API key for Raygun error tracking service
-    RAYGUNAPIKEY = "<YOUR API KEY>";
+    // API key is loaded automatically by Application.cfc
+    // from samples/.env.json or the RAYGUN_API_KEY environment variable
 
     // This code demonstrates a key difference in how Adobe CF and Lucee handle syntax errors:
     // Adobe ColdFusion compiles this code and then fails at runtime. So, ACF will log this to Raygun just fine.
@@ -13,7 +13,7 @@
     } catch(any e) {
         // Initialize Raygun client to track this error
         raygun = new com.raygun.RaygunClient(
-            apiKey = RAYGUNAPIKEY,
+            apiKey = request.RAYGUNAPIKEY,
             appVersion = "3.4.5"
         );
         // Send error details to Raygun for monitoring and debugging

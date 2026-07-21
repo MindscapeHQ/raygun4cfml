@@ -1,6 +1,6 @@
 <cfscript>
-    // API key for Raygun error tracking service
-    RAYGUNAPIKEY = "<YOUR API KEY>";
+    // API key is loaded automatically by Application.cfc
+    // from samples/.env.json or the RAYGUN_API_KEY environment variable
 
     // Deliberately trigger a division by zero error to demonstrate 
     // error handling and reporting to Raygun in a simple scenario
@@ -11,7 +11,7 @@
     } catch(any e) {
         // Initialize Raygun client to track production errors
         raygun = new com.raygun.RaygunClient(
-            apiKey = RAYGUNAPIKEY,
+            apiKey = request.RAYGUNAPIKEY,
             appVersion = "3.4.5"
         );
         // Send error details to Raygun for monitoring and alerting

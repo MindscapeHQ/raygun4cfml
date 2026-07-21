@@ -1,2 +1,5 @@
 # Testbox dependency
 /testbox
+
+# Local API key config for samples
+samples/.env.json

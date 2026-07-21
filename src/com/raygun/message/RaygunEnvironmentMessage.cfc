@@ -62,6 +62,27 @@ component {
         // Include CFML engine details for runtime context
         returnContent[ "model" ] = com.raygun.tools.ProductCheck::getServerProductInfo().cfmlEngine & " " & com.raygun.tools.ProductCheck::getServerProductInfo().serverVersion;
 
+        // Processor count for capacity context
+        try {
+            returnContent[ "processorCount" ] = createObject( "java", "java.lang.Runtime" ).getRuntime().availableProcessors();
+        } catch ( any e ) {
+            returnContent[ "processorCount" ] = javacast( "null", "" );
+        }
+
+        // Locale and UTC offset for regional context
+        try {
+            returnContent[ "locale" ] = createObject( "java", "java.util.Locale" ).getDefault().toString();
+        } catch ( any e ) {
+            returnContent[ "locale" ] = javacast( "null", "" );
+        }
+
+        try {
+            var rawOffset                = createObject( "java", "java.util.TimeZone" ).getDefault().getRawOffset();
+            returnContent[ "utcOffset" ] = javacast( "double", rawOffset / 3600000 );
+        } catch ( any e ) {
+            returnContent[ "utcOffset" ] = javacast( "null", "" );
+        }
+
         return returnContent;
     }
 

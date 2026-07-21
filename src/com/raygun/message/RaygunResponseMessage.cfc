@@ -81,7 +81,7 @@ component accessors="true" {
      * @param errorData The error structure from the crash report
      */
     private numeric function determineStatusCode( required struct errorData ) {
-        if ( errorData.type == "MissingInclude" ) {
+        if ( compareNoCase( errorData.type, "MissingInclude" ) == 0 ) {
             return 404;
         }
 
