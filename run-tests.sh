@@ -40,6 +40,7 @@ SYM_ARROW="${C_DIM}→${C_RESET}"
 # ── Config ───────────────────────────────────────────────────────────────────
 
 ALL_SERVERS=(
+    server-lucee-8-0.json
     server-lucee-7-1.json
     server-lucee-7-0.json
     server-lucee-6-2.json
@@ -47,6 +48,14 @@ ALL_SERVERS=(
     server-lucee-6-0.json
     server-lucee-5-4.json
     server-lucee-5-3.json
+    server-lucee-light-8-0.json
+    server-lucee-light-7-1.json
+    server-lucee-light-7-0.json
+    server-lucee-light-6-2.json
+    server-lucee-light-6-1.json
+    server-lucee-light-6-0.json
+    server-lucee-light-5-4.json
+    server-lucee-light-5-3.json
     server-adobe-2025.json
     server-adobe-2023.json
     server-adobe-2021.json
@@ -100,6 +109,19 @@ get_engine() {
     grep '"cfengine"' "$1" | head -1 | sed 's/.*"cfengine"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/'
 }
 
+box_server() {
+    local action=$1
+    local config=$2
+    shift 2
+
+    if [[ "$(get_engine "$config")" == lucee*@8.* ]]; then
+        BOX_CONFIG_MODULESEXCLUDE='["commandbox-cfconfig"]' \
+            box server "$action" serverConfigFile="$config" "$@"
+    else
+        box server "$action" serverConfigFile="$config" "$@"
+    fi
+}
+
 # Pretty name: "Lucee 6.1" from "lucee@6.1"
 pretty_engine() {
     local engine
@@ -108,10 +130,11 @@ pretty_engine() {
     vendor=$(echo "$engine" | cut -d@ -f1)
     version=$(echo "$engine" | cut -d@ -f2)
     case "$vendor" in
-        lucee)   echo "Lucee $version" ;;
-        adobe)   echo "Adobe CF $version" ;;
-        boxlang) echo "BoxLang $version" ;;
-        *)       echo "$engine" ;;
+        lucee)       echo "Lucee $version" ;;
+        lucee-light) echo "Lucee Light $version" ;;
+        adobe)       echo "Adobe CF $version" ;;
+        boxlang)     echo "BoxLang $version" ;;
+        *)           echo "$engine" ;;
     esac
 }
 
@@ -150,7 +173,7 @@ cleanup() {
     if [ -n "$CURRENT_SERVER" ]; then
         echo ""
         log "${C_YELLOW}Stopping server (cleanup)...${C_RESET}"
-        box server stop serverConfigFile="$CURRENT_SERVER" 2>/dev/null || true
+        box_server stop "$CURRENT_SERVER" 2>/dev/null || true
         CURRENT_SERVER=""
     fi
 }
@@ -184,12 +207,12 @@ run_single() {
     # Start server
     log "${SYM_DOT} Starting server..."
     CURRENT_SERVER="$config"
-    box server start serverConfigFile="$config" --!verbose --!openBrowser > /dev/null 2>&1
+    box_server start "$config" --!verbose --!openBrowser > /dev/null 2>&1
 
     # Wait for it
     if ! wait_for_server "$port"; then
         log "${SYM_FAIL} Server failed to start within ${MAX_WAIT}s"
-        box server stop serverConfigFile="$config" 2>/dev/null || true
+        box_server stop "$config" 2>/dev/null || true
         CURRENT_SERVER=""
         local elapsed=$(( $(date +%s) - start_time ))
         RESULT_NAMES+=("$engine_pretty")
@@ -275,7 +298,7 @@ print('\n'.join(lines))
 
     # Stop server
     log "${SYM_DOT} Stopping server..."
-    box server stop serverConfigFile="$config" > /dev/null 2>&1 || true
+    box_server stop "$config" > /dev/null 2>&1 || true
     CURRENT_SERVER=""
 
     local elapsed=$(( $(date +%s) - start_time ))

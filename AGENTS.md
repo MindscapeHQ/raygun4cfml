@@ -8,7 +8,7 @@ Raygun4CFML (v3.0.0) is a CFML library for sending crash reports to the [Raygun 
 - **Lucee** 5.3, 5.4, 6.0, 6.1, 6.2, 7.0, 7.1
 - **BoxLang** 1+
 
-Package management via CommandBox (`box.json`). Code formatting via cfformat (`.cfformat.json`). Tests via TestBox (160 specs across 11 engines).
+Package management via CommandBox (`box.json`). Code formatting via cfformat (`.cfformat.json`). Tests via TestBox (174 specs across 20 engines).
 
 ## Repository Layout
 
@@ -106,7 +106,7 @@ All code must work on Adobe CF 2021+, Lucee 5.3+, and BoxLang 1+.
 - Test files are named `*Test.cfc` and extend `testbox.system.BaseSpec`
 - TestBox is a dev dependency (`"testbox": "6"` in `box.json`)
 - Test any behavior change; verify against multiple engines when touching engine-dependent code
-- **160 specs** across all components — run all 11 engines before pushing
+- **174 specs** across all components — run all 20 engines before pushing
 
 ### Running tests locally
 
@@ -194,6 +194,7 @@ Formatting covers `src/**/*.cfc`, `tests/**/*.cfc`, `tests/**/*.cfm`, `samples/*
 
 | File | Engine | Port |
 |---|---|---|
+| `server-lucee-8-0.json` | Lucee 8.0 Alpha | 9202 |
 | `server-lucee-5-3.json` | Lucee 5.3 | 9196 |
 | `server-lucee-5-4.json` | Lucee 5.4 | 9191 |
 | `server-lucee-6-0.json` | Lucee 6.0 | 9194 |
@@ -201,6 +202,14 @@ Formatting covers `src/**/*.cfc`, `tests/**/*.cfc`, `tests/**/*.cfm`, `samples/*
 | `server-lucee-6-2.json` | Lucee 6.2 | 9199 |
 | `server-lucee-7-0.json` | Lucee 7.0 | 9200 |
 | `server-lucee-7-1.json` | Lucee 7.1 | 9201 |
+| `server-lucee-light-5-3.json` | Lucee Light 5.3 | 9203 |
+| `server-lucee-light-5-4.json` | Lucee Light 5.4 | 9204 |
+| `server-lucee-light-6-0.json` | Lucee Light 6.0 | 9205 |
+| `server-lucee-light-6-1.json` | Lucee Light 6.1 | 9206 |
+| `server-lucee-light-6-2.json` | Lucee Light 6.2 | 9207 |
+| `server-lucee-light-7-0.json` | Lucee Light 7.0 | 9208 |
+| `server-lucee-light-7-1.json` | Lucee Light 7.1 | 9209 |
+| `server-lucee-light-8-0.json` | Lucee Light 8.0 Alpha | 9210 |
 | `server-adobe-2021.json` | Adobe CF 2021 | 9192 |
 | `server-adobe-2023.json` | Adobe CF 2023 | 9193 |
 | `server-adobe-2025.json` | Adobe CF 2025 | 9198 |
